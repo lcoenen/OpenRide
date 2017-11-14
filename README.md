@@ -116,9 +116,9 @@ professional activity.
 
 Three main models of shared transportation have been established thorough history: 
 
-* The car-to-hire model is traditionnaly known as the taxi/cab services across the globe. It's the model follow by new players like (Uber)[https://www.uber.com/] or (LibreTaxi)[http://libretaxi.org/]. 
-* Traditional carsharing like (BlaBlacar)[https://www.blablacar.be/] or (AmigoExpress)[https://www.amigoexpress.com/].  
-* (Hitchiking)[https://en.wikipedia.org/wiki/Hitchhiking], a free, yet unprevisible way to travel
+* The car-to-hire model is traditionnaly known as the taxi/cab services across the globe. It's the model follow by new players like [Uber](https://www.uber.com/) or [LibreTaxi](http://libretaxi.org/). 
+* Traditional carsharing like [BlaBlacar](https://www.blablacar.be/) or [AmigoExpress](https://www.amigoexpress.com/).  
+* [Hitchiking](https://en.wikipedia.org/wiki/Hitchhiking), a free, yet unprevisible way to travel
 
 | Model        | Distance      | Time        | Cost      |
 |--------------|---------------|-------------|-----------|
@@ -323,9 +323,9 @@ already proposed or reserved (open or closed).
 
 | Milestone                      | Deadline             | Status   |
 |--------------------------------|----------------------|----------|
-| Whitepaper	                 | November 2017        | Pending  |
-| UX design                      | Mid-november 2017    | Pending  |
-| Front-end skeleton             | Mid-december 2017    |          |
+| Whitepaper	                 | November 2017        | Finished |
+| UX design                      | Mid-november 2017    | Finished |
+| Front-end skeleton             | Mid-december 2017    | Pending  |
 | Basic backend                  | January 2018         |          |
 | Geolocalisation                | February 2018        |          |
 | Payment system                 | March 2018           |          |
