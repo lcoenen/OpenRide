@@ -8,6 +8,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
+import { ViewChild } from '@angular/core';
+import { Slides } from 'ionic-angular';
+
 @IonicPage()
 @Component({
   selector: 'page-offerride',
@@ -20,6 +23,39 @@ export class OfferRidePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad OfferridePage');
+  }
+
+  @ViewChild(Slides) slides: Slides;
+
+  previous() {
+  
+    this.slides.slidePrev();
+
+  }
+
+  next() {
+  
+    this.slides.slideNext();
+
+  }
+
+  isFirst(){
+
+    return this.slides.isBeginning()
+
+  }
+
+
+  isLast(){
+
+    return this.slides.isEnd()
+
+  }
+
+  isValid(){
+  
+    return this.slides.isEnd()
+  
   }
 
 }
