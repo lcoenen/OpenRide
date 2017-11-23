@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { RequestRidePage } from '../requestride/requestride.ts'
-import { OfferRidePage } from '../offerride/offerride.ts'
+import { RequestRidePage } from '../requestride/requestride'
+import { OfferRidePage } from '../offerride/offerride'
 
 @Component({
 	selector: 'page-home',
