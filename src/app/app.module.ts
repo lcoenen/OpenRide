@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { RequestRidePage } from '../pages/requestride/requestride';
 import { OfferRidePage } from '../pages/offerride/offerride';
+import { AddressModalPage} from '../pages/address-modal/address-modal'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,7 +18,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     ListPage,
     RequestRidePage,
-    OfferRidePage
+    OfferRidePage,
+    AddressModalPage 
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     RequestRidePage,
     OfferRidePage,
-    ListPage
+    ListPage,
+    AddressModalPage 
   ],
   providers: [
     StatusBar,

@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { OfferridePage } from './offerride';
+import { OfferRidePage } from './offerride';
+
+import { AddressModalPage } from '../address-modal/address-modal';
 
 @NgModule({
   declarations: [
-    OfferridePage,
+    OfferRidePage,
   ],
   imports: [
-    IonicPageModule.forChild(OfferridePage),
-  ],
+    IonicPageModule.forChild(OfferRidePage),
+  ]
 })
-export class OfferridePageModule {}
+export class OfferRidePageModule {}

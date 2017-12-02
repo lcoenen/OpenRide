@@ -41,7 +41,7 @@ Ionic pages and navigation.
 
 	    <ion-select [(ngModel)]="origin">
 	      <ion-option value="here">Here</ion-option>
-	      <ion-option value="address">Pick an address
+	      <ion-option (click)="address_modal()" value="address">Pick an address
 					<ion-icon name="arrow-dropdown" icon-right></ion-icon>
 					</ion-option>
 
@@ -75,7 +75,14 @@ Ionic pages and navigation.
 		    <ion-icon range-left small name="cash"></ion-icon>
 		    <ion-icon range-right name="cash"></ion-icon>
 	  </ion-range>
+
     </ion-item>
+    Amount: {{payement}} €
+
+    <p style="color: green;" *ngIf="philosophy == 0">It's free!</p>
+    <p style="color: yellow;" *ngIf="philosophy == 1">You're paying your part</p>
+    <p style="color: orange;" *ngIf="philosophy == 2">Your trip is refunded</p>
+    <p style="color: red" *ngIf="philosophy == 3">You're getting paid</p>
   </ion-slide>
 
 </ion-slides>
