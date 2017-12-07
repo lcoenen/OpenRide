@@ -1,6 +1,3 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-// import { Input, OnChanges, SimpleChange } from '@angular/core';
 
 /**
  * Generated class for the OfferridePage page.
@@ -11,9 +8,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
-import { ModalController, NavParams } from 'ionic-angular';
+import { ModalController, NavParams, IonicPage, NavController } from 'ionic-angular';
+
+import { Component } from '@angular/core';
+// import { Input, OnChanges, SimpleChange } from '@angular/core';
+
+import { OfferInvitePage } from '../offer-invite/offer-invite'; 
 
 import { AddressModalPage } from '../address-modal/address-modal'; 
+
 
 enum PayementPhilosophy {
 
@@ -39,6 +42,9 @@ export class OfferRidePage  {
   private _payement: string;
 
   private _next: boolean;
+
+  public destination_address: string;
+  public origin_address: string;
 
   constructor(
         public navCtrl: NavController, 
@@ -124,6 +130,9 @@ export class OfferRidePage  {
     if(theDestination == 'address'){
 
       let addressModal = this.modalCtrl.create(AddressModalPage);
+      addressModal.onDidDismiss(data => {
+        this.destination_address = data.address
+      });
       addressModal.present();
 
     }
@@ -140,6 +149,16 @@ export class OfferRidePage  {
   }
 
   set origin(theOrigin: string){
+
+    if(theOrigin == 'address'){
+
+      let addressModal = this.modalCtrl.create(AddressModalPage);
+      addressModal.onDidDismiss(data => {
+        this.origin_address = data.address
+      });
+      addressModal.present();
+
+    }
 
     this._origin = theOrigin
     this.refresh_allow_next()
@@ -165,6 +184,22 @@ export class OfferRidePage  {
 
   }
 
+
+  set asap(theAsap: boolean){
+
+    if(theAsap)
+      this.riding_time = 'asap';
+    else
+      this.riding_time = '';
+  }
+
+
+
+  get asap(): boolean {
+
+    return this.riding_time == 'asap';
+
+  }
 
   set payement(thePayement: string){
 
@@ -196,6 +231,12 @@ export class OfferRidePage  {
 
     return this._payement
 
+  }
+
+  valid() {
+  
+    this.navCtrl.push(OfferInvitePage);
+  
   }
 
 }

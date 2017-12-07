@@ -7,12 +7,20 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>AddressModal</ion-title>
+    <ion-title>Pick an address</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+
+  <ion-item>
+    <ion-label fixed>Address:</ion-label>
+    <ion-input name="address" [(ngModel)]="address" type="text"></ion-input>
+  </ion-item>
+
+<button ion-button (click)="pick()">Pick</button>
 
 </ion-content>
