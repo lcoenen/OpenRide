@@ -17,7 +17,7 @@
 
   <ion-card *ngFor="let rider of riders">
   <ion-item>
-    <ion-avatar item-start>{{rider.id}}
+    <ion-avatar item-start>
       <img src="assets/imgs/avatar_{{rider.id}}.png">
     </ion-avatar>
     <h2>{{rider.name}}</h2>
@@ -48,3 +48,14 @@
 
 </ion-card>
 </ion-content>
+
+	<ion-footer>
+		<ion-toolbar>
+					<ion-buttons end>
+							<button (click)="continue()" ion-button icon-right color="royal">
+							Continue
+							<ion-icon name="arrow-forward"></ion-icon>
+							</button>	
+					</ion-buttons>
+		</ion-toolbar>
+	</ion-footer>
