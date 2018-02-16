@@ -25700,6 +25700,10 @@ page-home .card-subtitle {
   color: #fff;
 }
 
+page-offerride .wizard_step_caption {
+  height: 2cm;
+}
+
 page-home ion-card {
   position: relative;
   text-align: center;

@@ -4,6 +4,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Rider } from './rider';
 import { RidersMockData } from './rider-mock';
 
+import { RideBoardPage } from '../ride-board/ride-board'; 
+
 /**
  * Generated class for the OfferInvitePage page.
  *
@@ -30,6 +32,12 @@ export class OfferInvitePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad OfferInvitePage');
+  }
+
+  continue() {
+  
+    this.navCtrl.push(RideBoardPage);
+  
   }
 
 }
