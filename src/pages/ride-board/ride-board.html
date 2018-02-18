@@ -14,5 +14,37 @@
 
 
 <ion-content padding>
+ 
+  <ion-segment [(ngModel)]="boardpage">
+    <ion-segment-button value="summary">
+      Summary
+    </ion-segment-button>
+    <ion-segment-button value="riders">
+      Riders
+    </ion-segment-button>
+    <ion-segment-button value="chat">
+      Chat <ion-badge color="primary">3</ion-badge>
+    </ion-segment-button>
+  </ion-segment>
+
+
+	<div [ngSwitch]="boardpage">
+	  <div *ngSwitchCase="'summary'">
+
+	  From Paris to Berlin,
+	  In a few weeks
+
+	  </div>
+
+	  <div *ngSwitchCase="'riders'">
+
+	  Machin
+
+	  </div>
+	<div *ngSwitchCase="'chat'">
+          Hey ca va?
+	
+	</div>
+	</div>
 
 </ion-content>
