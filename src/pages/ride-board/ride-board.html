@@ -30,20 +30,88 @@
 
 	<div [ngSwitch]="boardpage">
 	  <div *ngSwitchCase="'summary'">
+            <ion-list no-border>
+              <ion-item>
+                <ion-icon name='arrow-dropleft-circle' item-start></ion-icon>
+		  Departure
+                <ion-note item-end>
+                 Rue du Decibel, 22, Paris
+                </ion-note>
+              </ion-item>
+	      
+	      <ion-item>
+                <ion-icon name='arrow-dropright-circle' item-start></ion-icon>
+	          Destination	 
+                <ion-note item-end>
+                   Rue du son, 67, Liege
+                </ion-note>
+              </ion-item>
 
-	  From Paris to Berlin,
-	  In a few weeks
+              <ion-item>
+                <ion-icon name='time' item-start></ion-icon>
+	           Riding time
+                <ion-note item-end>
+                   ASAP 
+                </ion-note>
+              </ion-item>
 
+              <ion-item>
+                <ion-icon name='cash' item-start></ion-icon>
+	           Payement
+                <ion-note item-end>
+                   50$ 
+                </ion-note>
+              </ion-item>
+              
+	      <ion-item>
+                <button ion-button>Edit</button>
+                <button ion-button color="danger">Cancel</button>
+	      </ion-item>
+            </ion-list>
 	  </div>
 
 	  <div *ngSwitchCase="'riders'">
 
-	  Machin
+         <ion-list>
+	  <ion-item>
+	    <ion-avatar item-start>
+	      <img src="assets/imgs/avatar_Rick.png">
+	    </ion-avatar>
+
+	    <h2>Rick</h2>
+	  </ion-item>
+
+	  <ion-item>
+
+            <ion-avatar item-start>
+	      <img src="assets/imgs/avatar_Stephane.png">
+	    </ion-avatar>
+	    <h2>Stephane</h2>
+	  </ion-item>
+	</ion-list>
 
 	  </div>
 	<div *ngSwitchCase="'chat'">
-          Hey ca va?
-	
+          <ion-list>
+	  <ion-item>
+	    <ion-avatar item-start>
+	      <img src="assets/imgs/avatar_Rick.png">
+	    </ion-avatar>
+
+	    <h2>Rick</h2>
+	    <p>Near the swimming-pool?</p>
+	  </ion-item>
+
+	  <ion-item>
+
+            <ion-avatar item-start>
+	      <img src="assets/imgs/avatar_Stephane.png">
+	    </ion-avatar>
+	    <h2>Stephane</h2>
+	    <p>Hey where do we meet?</p>
+	  </ion-item>
+	</ion-list>
+
 	</div>
 	</div>
 
