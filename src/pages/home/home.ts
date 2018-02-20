@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { RequestRidePage } from '../requestride/requestride'
 import { OfferRidePage } from '../offerride/offerride'
+import { MyRidesPage } from '../my-rides/my-rides'
 
 @Component({
 	selector: 'page-home',
@@ -10,13 +11,19 @@ import { OfferRidePage } from '../offerride/offerride'
 })
 export class HomePage {
 
-	constructor(	public navCtrl: NavController) {
+	constructor(public navCtrl: NavController) {
 		
 	}
 
 	request_a_ride() {
 	
 		this.navCtrl.push(RequestRidePage);
+
+	}
+
+	my_rides() {
+	
+		this.navCtrl.push(MyRidesPage);
 
 	}
 

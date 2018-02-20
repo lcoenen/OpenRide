@@ -4,13 +4,13 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { RequestRidePage } from '../pages/requestride/requestride';
 import { OfferRidePage } from '../pages/offerride/offerride';
 import { AddressModalPage} from '../pages/address-modal/address-modal'
 import { OfferInvitePage } from '../pages/offer-invite/offer-invite'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
 import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
+import { MyRidesPage } from '../pages/my-rides/my-rides'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,13 +19,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     RequestRidePage,
     OfferRidePage,
     AddressModalPage, 
     OfferInvitePage,
     RideBoardPage,
-    RequestFindRidePage
+    RequestFindRidePage,
+    MyRidesPage
   ],
   imports: [
     BrowserModule,
@@ -37,11 +37,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     RequestRidePage,
     OfferRidePage,
-    ListPage,
     AddressModalPage,
     OfferInvitePage,
     RideBoardPage,
-    RequestFindRidePage
+    RequestFindRidePage,
+    MyRidesPage
   ],
   providers: [
     StatusBar,
