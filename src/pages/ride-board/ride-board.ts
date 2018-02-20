@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+
+import { Rider } from './rider';
+import { RidersMockData } from './rider-mock';
+
 /**
  * Generated class for the RideBoardPage page.
  *
@@ -16,11 +20,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class RideBoardPage {
 
   boardpage: string;
+  riders: Rider[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
     this.boardpage = 'riders';
-
+    this.riders = RidersMockData;
 
   }
 
