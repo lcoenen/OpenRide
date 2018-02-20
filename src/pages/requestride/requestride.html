@@ -1,14 +1,101 @@
+<!--
+Generated template for the RequestridePage page.
+
+See http://ionicframework.com/docs/components/#navigation for more info on
+Ionic pages and navigation.
+-->
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Request a ride</ion-title>
-  </ion-navbar>
+
+	<ion-navbar>
+		<ion-title>Request a ride</ion-title>
+	</ion-navbar>
+
 </ion-header>
+
 
 <ion-content padding>
 
-	<p>This is the request a ride page!</p>
+<ion-slides pager>
+
+  <ion-slide>
+    <img class="wizard_step_caption" src="assets/imgs/destination.png"/>
+    <h2>Destination</h2>
+    <ion-item>
+    <ion-label floating>Where are you going?</ion-label>
+    <ion-select [(ngModel)]="destination">
+      <ion-option value="here">Here</ion-option>
+      <ion-option value="address">Pick an address
+				<ion-icon name="arrow-dropdown" icon-right></ion-icon>
+				</ion-option>
+
+      <ion-option value="anywherenearby">Anywhere nearby</ion-option>
+    </ion-select>
+    </ion-item>
+
+    <p *ngIf="destination == 'address'">You're going to {{destination_address}}</p>
+
+  </ion-slide>
+
+  <ion-slide>
+    <img class="wizard_step_caption" src="assets/imgs/origin.png"/>
+    <h2>Origin</h2>
+    <ion-item>
+	    <ion-label floating>From where will you depart?</ion-label>
+
+	    <ion-select [(ngModel)]="origin">
+	      <ion-option value="here">Here</ion-option>
+	      <ion-option (click)="address_modal()" value="address">Pick an address
+					<ion-icon name="arrow-dropdown" icon-right></ion-icon>
+					</ion-option>
+
+	      <ion-option value="anywherenearby">Anywhere nearby</ion-option>
+	    </ion-select>
+    </ion-item>
+
+    <p *ngIf="origin == 'address'">You're going from {{origin_address}}</p>
+
+  </ion-slide>
+
+  <ion-slide>
+    <img class="wizard_step_caption" src="assets/imgs/riding_time.png"/>
+    <h2>Riding time</h2>
+
+    <ion-item>
+	    <ion-label>Do you want to ride ASAP?</ion-label>
+	    <ion-toggle [(ngModel)]="asap" checked="false"></ion-toggle>
+    </ion-item>
+
+    <ion-item *ngIf="!asap">
+         <ion-label floating>When will you ride?</ion-label>
+	 <ion-datetime displayFormat="DD MMM YYYY HH:mm" [(ngModel)]="riding_time"></ion-datetime>
+    </ion-item>
+
+  </ion-slide>
+
+</ion-slides>
+
+	<ion-footer>
+		<ion-toolbar>
+					<ion-buttons *ngIf="!isFirst()">
+							<button (click)="previous()" ion-button icon-left color="royal">
+							<ion-icon name="arrow-back"></ion-icon>
+							Back
+							</button>	
+					</ion-buttons>
+					<ion-buttons *ngIf="!isLast()" end>
+							<button (click)="next()" ion-button icon-right color="royal">
+								Next
+								<ion-icon name="arrow-forward"></ion-icon>
+							</button>	
+					</ion-buttons>
+
+					<ion-buttons *ngIf="isValid()" end>
+							<button (click)="valid()" ion-button icon-right color="royal">
+								Request the ride	
+								<ion-icon name="send"></ion-icon>
+							</button>	
+					</ion-buttons>
+		</ion-toolbar>
+	</ion-footer>
 
 </ion-content>
