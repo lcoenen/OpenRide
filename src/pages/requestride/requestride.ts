@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
 // import { Input, OnChanges, SimpleChange } from '@angular/core';
 
 import { AddressModalPage } from '../address-modal/address-modal'; 
+import { RequestFindRidePage } from '../request-find-ride/request-find-ride'; 
 
 @IonicPage()
 @Component({
@@ -35,7 +36,6 @@ export class RequestRidePage  {
         public navCtrl: NavController, 
         public navParams: NavParams,
 	public modalCtrl: ModalController) {
-    this.philosophy = 0
     this._next = false;
   }
 
@@ -187,7 +187,8 @@ export class RequestRidePage  {
 
   valid() {
   
-	  console.log('Afficher la liste des rides');
+    this.navCtrl.push(RequestFindRidePage);
+
   
   }
 

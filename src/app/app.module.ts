@@ -10,6 +10,7 @@ import { OfferRidePage } from '../pages/offerride/offerride';
 import { AddressModalPage} from '../pages/address-modal/address-modal'
 import { OfferInvitePage } from '../pages/offer-invite/offer-invite'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
+import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -23,7 +24,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     OfferRidePage,
     AddressModalPage, 
     OfferInvitePage,
-    RideBoardPage
+    RideBoardPage,
+    RequestFindRidePage
   ],
   imports: [
     BrowserModule,
@@ -38,7 +40,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ListPage,
     AddressModalPage,
     OfferInvitePage,
-    RideBoardPage
+    RideBoardPage,
+    RequestFindRidePage
   ],
   providers: [
     StatusBar,
