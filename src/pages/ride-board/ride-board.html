@@ -63,10 +63,6 @@ Ionic pages and navigation.
 					</ion-note>
 				</ion-item>
 
-				<ion-item>
-					<button ion-button full>Edit</button>
-					<button ion-button full color="danger">Cancel</button>
-				</ion-item>
 			</ion-list>
 		</div>
 
@@ -144,6 +140,12 @@ Ionic pages and navigation.
 		</div>
 	</div>
 
+<ion-fab *ngIf="boardpage == 'summary'" left bottom>
+    <button ion-fab color="danger"><ion-icon name="close"></ion-icon></button>
+</ion-fab>
+<ion-fab *ngIf="boardpage == 'summary'" right bottom>
+    <button ion-fab color="secondary"><ion-icon name="create"></ion-icon></button>
+</ion-fab>
 </ion-content>
 
 <ion-footer *ngIf="boardpage == 'chat'">
