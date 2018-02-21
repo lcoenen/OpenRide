@@ -11,6 +11,7 @@ import { OfferInvitePage } from '../pages/offer-invite/offer-invite'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
 import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
 import { MyRidesPage } from '../pages/my-rides/my-rides'
+import { ProfilePage } from '../pages/profile/profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,7 +26,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     OfferInvitePage,
     RideBoardPage,
     RequestFindRidePage,
-    MyRidesPage
+    MyRidesPage,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     OfferInvitePage,
     RideBoardPage,
     RequestFindRidePage,
-    MyRidesPage
+    MyRidesPage,
+    ProfilePage
   ],
   providers: [
     StatusBar,

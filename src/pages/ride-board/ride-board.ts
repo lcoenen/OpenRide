@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-
 import { Rider } from './rider';
 import { RidersMockData } from './rider-mock';
+
+import { ProfilePage } from '../profile/profile';
 
 /**
  * Generated class for the RideBoardPage page.
@@ -31,6 +32,12 @@ export class RideBoardPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RideBoardPage');
+  }
+
+  profile() {
+
+    this.navCtrl.push(ProfilePage);
+
   }
 
 }

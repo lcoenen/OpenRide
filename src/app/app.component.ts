@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { RequestRidePage } from '../pages/requestride/requestride';
 import { OfferRidePage } from '../pages/offerride/offerride';
 import { MyRidesPage } from '../pages/my-rides/my-rides'
+import { ProfilePage } from '../pages/profile/profile'
 
 @Component({
   templateUrl: 'app.html'
@@ -26,8 +27,8 @@ export class MyApp {
       { title: 'Home', component: HomePage },
       { title: 'My rides', component: OfferRidePage },
       { title: 'Request a ride', component: RequestRidePage },
-      { title: 'Offer a ride', component: MyRidesPage }/* ,
-      { title: 'Profile', component: ProfilePage }
+      { title: 'Offer a ride', component: MyRidesPage },
+      { title: 'Profile', component: ProfilePage} /*, 
       { title: 'Preferences', component: PreferencesPage }
 */
     ];
