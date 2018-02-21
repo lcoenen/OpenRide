@@ -1,4 +1,4 @@
-<!--
+<--
   Generated template for the MyRidesPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
@@ -7,12 +7,43 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>myRides</ion-title>
+    <ion-title>My rides</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-card *ngFor="let rider of riders">
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="assets/imgs/avatar_{{rider.id}}.png">
+    </ion-avatar>
+    <h2>{{rider.name}}</h2>
+    <p>{{rider.age}} years old, from {{rider.place_of_origin}}</p>
+  </ion-item>
 
+  <ion-card-content>
+
+  <p>From {{rider.origin}} to {{rider.destination}}</p>
+  <p>{{rider.riding_time}}</p>
+  
+  </ion-card-content>
+
+  <ion-row>
+    <ion-col>
+      <button (click)="open_board(rider)" ion-button icon-left clear small>
+        <ion-icon name="log-in"></ion-icon>
+        <div>Enter</div>
+      </button>
+    </ion-col>
+    <ion-col center text-center>
+      <ion-note>
+        Reputation: 
+	<ion-badge item-end>{{rider.reputation}}</ion-badge>
+      </ion-note>
+    </ion-col>
+  </ion-row>
+
+</ion-card>
 </ion-content>
