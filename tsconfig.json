@@ -20,7 +20,7 @@
       "../node_modules/@types"
     ],
     "skipLibCheck": true,
-    "stropInternal": true,
+    "stripInternal": true,
     "noImplicitAny": false,
     "types": [
       "@types/meteor"
