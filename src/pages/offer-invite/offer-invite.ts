@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Rider } from './rider';
-import { RidersMockData } from './rider-mock';
+import { Users } from 'api/collections';
+import { User } from 'api/models';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
 
@@ -20,12 +20,11 @@ import { RideBoardPage } from '../ride-board/ride-board';
 })
 export class OfferInvitePage {
 
-  public riders: Rider[];
+  public riders: User[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    this.riders = RidersMockData; 
-
+    this.riders = Users.find({}).fetch();
     console.log(this.riders)
 
   }
