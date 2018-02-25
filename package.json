@@ -11,7 +11,7 @@
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
     "serve": "ionic serve -f firefox",
-    "meteor-client:bundle": "meteor-client bundle -s api"
+    "meteor-client:bundle": "meteor-client bundle -s api --url localhost:8101"
   },
   "dependencies": {
     "@angular/common": "5.0.0",

@@ -24,6 +24,7 @@ export class OfferInvitePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
 
+    console.log("Trying to fetch riders");
     this.riders = Users.find({}).fetch();
     console.log(this.riders)
 
