@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Rider } from './rider';
-import { RidersMockData } from './rider-mock';
+import { Rider } from 'shared/models/rider';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
+
+import { RidersProvider } from '../../providers/riders/riders';
 
 /**
  * Generated class for the OfferInvitePage page.
@@ -22,11 +23,13 @@ export class OfferInvitePage {
 
   public riders: Rider[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public ridersProvider: RidersProvider) {
 
-    this.riders = RidersMockData; 
+      this.riders = ridersProvider.invitable_riders();
 
-    console.log(this.riders)
+      console.log(this.riders)
 
   }
 

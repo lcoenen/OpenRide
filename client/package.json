@@ -1,7 +1,7 @@
 {
   "name": "openride",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Loïc Coenen",
   "homepage": "http://ionicframework.com/",
   "private": true,
   "scripts": {
@@ -35,5 +35,10 @@
     "@ionic/app-scripts": "3.1.0",
     "typescript": "2.4.2"
   },
-  "description": "An Ionic project"
+  "description": "FOSS ride-sharing application",
+  "config": {
+
+    "ionic_webpack": "./webpack.config.js"
+
+  }
 }
