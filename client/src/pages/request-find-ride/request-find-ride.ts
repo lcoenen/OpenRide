@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Rider } from './rider';
-import { RidersMockData } from './rider-mock';
+import { Rider } from 'shared/models/rider';
+
+import { RidersProvider } from '../../providers/riders/riders';
 
 /**
  * Generated class for the RequestFindRidePage page.
@@ -20,9 +21,11 @@ export class RequestFindRidePage {
 
   drivers: Rider[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public ridersProvider: RidersProvider) {
 
-    this.drivers = RidersMockData;
+    this.drivers = this.ridersProvider.request_find_ride();
 
   }
 

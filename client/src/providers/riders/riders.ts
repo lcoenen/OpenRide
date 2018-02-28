@@ -17,12 +17,27 @@ export class RidersProvider {
     console.log('Hello RidersProvider Provider');
   }
 
+  /*
+    Used when a driver is offering a ride, to invite riders
+  */
   invitable_riders(): Rider[] {
 
     console.log('Fetching invitable riders');
     return RidersMock;
 
+  }
+
+  /*
+    Used when a rider request a ride, to show him matches
+  */
+  request_find_ride(): Rider[] {
+
+    console.log('Fetching invitable riders');
+    return RidersMock;
 
   }
 
+  /*
+      
+  */
 }
