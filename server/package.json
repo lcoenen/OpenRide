@@ -1,0 +1,36 @@
+{
+  "name": "openride-server",
+  "version": "1.0.0",
+  "description": "OpenRide server",
+  "main": "app.js",
+  "scripts": {
+    "compile": "node_modules/.bin/tsc",
+    "start": "node built/app.js"
+  },
+  "keywords": [
+    "typescript",
+    "restify"
+  ],
+  "author": "Loïc Coenen",
+  "license": "MIT",
+  "dependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.45",
+    "@types/restify": "^2.0.33",
+    "@types/sinon": "^1.16.31",
+    "@types/supertest": "^1.1.31",
+    "restify": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/node": "^6.0.101",
+    "@types/restify": "^2.0.42",
+    "@types/supertest": "^1.1.32",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.3"
+  }
+}
