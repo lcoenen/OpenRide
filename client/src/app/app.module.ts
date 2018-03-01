@@ -15,7 +15,7 @@ import { ProfilePage } from '../pages/profile/profile';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { RidersProvider } from '../providers/riders/riders';
 
@@ -55,7 +55,7 @@ import { RidersProvider } from '../providers/riders/riders';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     RidersProvider,
-    HttpClient
+    HttpClientModule
   ]
 })
 export class AppModule {}
