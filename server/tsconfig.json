@@ -4,12 +4,15 @@
     "target": "es2015",
     "sourceMap": true,
     "module": "commonjs",
+    "baseUrl": ".",
     "removeComments": false,
     "noImplicitReturns": true,
+    "paths": 
+      {"shared/*": ["../shared/*"]},
     "noImplicitAny": true,
     "preserveConstEnums": true,
     "types": ["node", "restify", "chai"],
-    "outDir": "built",
+    "outDir": "built"
   },
   "exclude": [
     "logs",

@@ -1,12 +1,12 @@
-export interface Rider {
+
+import { Link } from './link';
+
+export interface User {
   id?: string;
   name: string;
   age: number;
   place_of_origin: string;
-  origin: string;
-  destination: string;
-  riding_time: string;
   reputation: number;
-
+  rides: Link[];
 }
 
