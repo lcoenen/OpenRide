@@ -1,5 +1,5 @@
 
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 import { logger } from './logger'
 
 import { settings } from '../config/config';
@@ -7,6 +7,7 @@ import { settings } from '../config/config';
 export namespace db {
 
   export let connection: MongoClient;
+  export let db: Db;
 
   export function connect() {
 
@@ -15,8 +16,9 @@ export namespace db {
       .then((client:MongoClient) => {
      
         logger.info(`INFO: ${settings.name} is connected to database ${settings.mongoUrl}`);
-        db.connection = client;
-        return client
+        connection = client;
+	db = client.db(settings.dbName);
+        return client;
 
     });
 
