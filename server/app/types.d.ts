@@ -3,4 +3,6 @@ export interface Config {
   port: number;
   env: string;
   version: string;
+  mongoUrl: string;
+  dbName: string;
 }

@@ -1,7 +1,9 @@
 import * as fs from 'fs';
 import * as restify from 'restify';
 import { settings } from './config/config';
+
 import { logger } from './services/logger';
+import { db } from './services/db';
 
 export let api = restify.createServer({
   name: settings.name
@@ -16,14 +18,21 @@ api.use(restify.queryParser());
 api.use(restify.authorizationParser());
 api.use(restify.fullResponse());
 
+db.connect().then( () => {
 
-fs.readdirSync(__dirname + '/routes').forEach(function (routeConfig: string) {
-  if (routeConfig.substr(-3) === '.js') {
-    let route = require(__dirname + '/routes/' + routeConfig);
-    route.routes(api);
-  }
-});
+  fs.readdirSync(__dirname + '/routes').forEach(function (routeConfig: string) {
+    if (routeConfig.substr(-3) === '.js') {
+      let route = require(__dirname + '/routes/' + routeConfig);
+      route.routes(api);
+    }
+  });
 
-api.listen(settings.port, function () {
-  logger.info(`INFO: ${settings.name} is running at ${api.url}`);
+  api.listen(settings.port, function () {
+    logger.info(`INFO: ${settings.name} is running at ${api.url}`);
+  });
+
+}).catch((err:any) => {
+
+  logger.error(`ERROR: ${settings.name} couldn\'t connect to MongoDB: ${err.message}`);
+
 });

@@ -3,10 +3,12 @@ import {Config} from '../types';
 let env = process.env.NODE_ENV || 'development';
 
 export let settings: Config = {
-  name: 'restify-typescript-seed',
+  name: 'openride-server',
   version: '2.0.0',
   port: 3000,
-  env: 'dev'
+  env: 'dev',
+  mongoUrl: 'mongodb://localhost:27017',
+  dbName: 'openride'
 };
 
 if (env === 'production') {
