@@ -2,6 +2,8 @@ import * as restify from 'restify';
 import { logger } from '../services/logger';
 import { db } from '../services/db';
 
+import { ObjectID } from 'mongodb';
+
 import { Ride } from '../../../shared/models/ride';
 import { RideMock } from '../../../shared/mocks/ride';
 
@@ -9,10 +11,12 @@ export default class ridesController {
 
 	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
 
+                logger.info(`Catching a /rides/:id request. Id is ${req.params.id}`)
+
 		db
 		  .db
 		  .collection('rides')
-		  .findOne(req.params.id)
+		  .findOne({_id: new ObjectID(req.params.id)})
 		  .then((ans:any) => {
 		
 		    res.json(200, ans);
