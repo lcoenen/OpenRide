@@ -5,13 +5,14 @@ import { db } from '../services/db';
 
 import { ObjectID } from 'mongodb';
 
-import { Ride } from '../../../shared/models/ride';
+import { Message } from '../../../shared/models/message';
 
 export default class messagesController {
 
 	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-		logger.info(`Catching a /rides/:id/messages request. Id is ${req.params.id}`)
+		logger.info(`INFO: Catching a /rides/:id/messages request. Id is ${req.params.id}`)
+
 		db
 			.db
 			.collection('rides')
@@ -54,7 +55,29 @@ export default class messagesController {
 
 
 	public post(req: restify.Request, res: restify.Response, next: restify.Next) {
+	
+		logger.info(`INFO: Catching a POST /rides/:id/messages request. Id is ${req.params.id}`)
 
+
+
+		let toinsert: Message = {
+			ride: {'@id': `/api/rides/${req.params.id}`},
+			message: req.params.message,
+			author: {'@id': `/api/rides/${req.params.author}`},
+			date: req.params.date
+		};
+
+		db.db.collection('messages').insertOne(toinsert).then((ans) => {
+
+			res.json(201, ans);  
+
+		}).catch((err) => {
+		
+			res.json(400, {message: err});
+		
+		});
+
+		return next();
 
 	}
 

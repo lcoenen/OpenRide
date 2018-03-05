@@ -56,6 +56,10 @@ export default class ridesController {
 
 			res.json(201, ans);  
 
+		}).catch((err) => {
+		
+			res.json(400, {message: err});
+		
 		});
 
 		return next();
