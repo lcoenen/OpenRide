@@ -23,13 +23,13 @@ export class RidersProvider {
   invitable_riders(): Rider[] {
 
     console.log('Trying the API call');
-
+/*
     this.httpClient.get('localhost:3000/api/ping').subscribe( data => {
 
       console.log('Answer from the API', data);
 
     }); 
-
+*/
     console.log('Fetching invitable riders');
     return RidersMock;
 

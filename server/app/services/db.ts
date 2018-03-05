@@ -1,3 +1,4 @@
+import * as restify from 'restify';
 
 import { MongoClient, Db } from 'mongodb';
 import { logger } from './logger'
@@ -23,5 +24,13 @@ export namespace db {
     });
 
   }
+
+	export function answeror404(res:restify.Response, ans:any, id:string){
+
+				if(ans)	res.json(200, ans);
+				else res.json(404, { message: `ERROR: I could not find the ID ${id}`} );
+
+
+	}
 
 };

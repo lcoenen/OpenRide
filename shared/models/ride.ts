@@ -3,7 +3,7 @@ import { Link } from './link';
 import { Place } from './place';
 
 export interface Ride {
-  id?: string;
+  _id?: string;
   origin: Place;
   destination: Place;
   riding_time: string;

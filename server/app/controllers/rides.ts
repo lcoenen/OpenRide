@@ -5,7 +5,6 @@ import { db } from '../services/db';
 import { ObjectID } from 'mongodb';
 
 import { Ride } from '../../../shared/models/ride';
-import { RideMock } from '../../../shared/mocks/ride';
 
 export default class ridesController {
 
@@ -16,11 +15,9 @@ export default class ridesController {
 		db
 			.db
 			.collection('rides')
-			.findOne({_id: new ObjectID(req.params.id)})
+			.findOne({_id: req.params.id})
 			.then((ans:any) => {
-
-				res.json(200, ans);
-
+				db.answeror404(res, ans, req.params.id);
 			});
 
 		return next();
@@ -70,5 +67,18 @@ export default class ridesController {
 
 
 	}
+
+	public head(req: restify.Request, res: restify.Response, next: restify.Next) {
+
+		db
+			.db
+			.collection('rides')
+			.findOne({_id: req.params.id})
+			.then((ans:any) => {
+				if(ans)	res.send(200);
+				else res.send(404);
+			});
+	}
+
 
 }

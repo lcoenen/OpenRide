@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
 		"link": "ln -s ../server/node_modules node_modules",
 		"compile": "tsc",
-		"start": "node built/shared/bin/resetmock.js"
+		"start": "node built/shared/bin/resetmock.js",
+    "refresh": "node run compile && node start"
   },
   "repository": {
     "type": "git",

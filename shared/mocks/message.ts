@@ -1,36 +1,40 @@
-import { Rider } from '../models/rider';
+import { Message } from '../models/message';
 
-let RidersMock: Rider[] = [
-    {
-      name: 'Marc',
-      age: 32,
-      place_of_origin: 'Dirty Village',
-      origin: '22 Dirty street, Dirty Village',
-      destination: '45 Dirtier street, Paris',
-      riding_time: 'Tomorrow 23:32',
-      reputation: 12 
-    },
+let MessagesMock: Message[] = [
+	{
+		"ride": { '@id' : "/api/rides/LiegeLiege" },
+		"message": "Hey les gars, on se retrouve ou?",
+		"author": { '@id' : "/api/users/Moe"},
+		"date": 43214124
+	},
 
-    {
-      name: 'Stephane',
-      age: 54 ,
-      place_of_origin: 'Hellroad',
-      origin: '43 Concil street, Dirty Village',
-      destination: '20 Champs Elizee, Paris',
-      riding_time: 'Tomorrow 23:32',
-      reputation: 32 
-    },
+	{
+		"ride": { '@id' : "/api/rides/LiegeLiege"},
+		"message": "Au pot au lait?",
+		"author": { '@id' : "/api/users/Rick"},
+		"date": 43214124
+	},
 
-    {
-      name: 'Rick Duboi',
-      age: 34,
-      place_of_origin: 'Dirty Village',
-      origin: '312 Nextroad, Beside place',
-      destination: '323 Event street, St-Germain',
-      riding_time:'In two days, 9:32',
-      reputation: 54
-    }
-    
+	{
+		"ride": { '@id' : "/api/rides/MaastrichtBruxelles"},
+		"message": "Bonjour! Je serais un petit peu en retard ou?",
+		"author": { '@id' : "/api/users/PB"},
+		"date": 43214124
+	},
+
+	{
+		"ride": { '@id' : "/api/rides/MaastrichtBruxelles"},
+		"message": "Pas de soucis, PB! :)",
+		"author": { '@id' : "/api/users/Moe"},
+		"date": 43214124
+	},
+
+	{
+		"ride":  { '@id' : "/api/rides/BruxellesLiege" },
+		"message": "Pourquoi personne ne veut que je conduise?",
+		"author":  { '@id' : "/api/users/Louise" },
+		"date": 43214124
+	}
 ]
 
-export { RidersMock };
+export { MessagesMock };

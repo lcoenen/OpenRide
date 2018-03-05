@@ -8,6 +8,7 @@ function rides_routes(api:restify.Server) {
   api.get('/api/rides/:id', routeCtrl.get);
   api.post('/api/rides', routeCtrl.post);
   api.del('/api/rides/:id', routeCtrl.del);
+  api.head('/api/rides/:id', routeCtrl.head);
 }
 
 module.exports.routes = rides_routes;

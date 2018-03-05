@@ -5,6 +5,7 @@ import { settings } from '../../server/app/config/config';
 
 import { UsersMock } from '../mocks/user';
 import { RidesMock } from '../mocks/ride';
+import { MessagesMock } from '../mocks/message';
 
 MongoClient.connect(settings.mongoUrl).then((client: MongoClient) => {
 
@@ -17,13 +18,29 @@ MongoClient.connect(settings.mongoUrl).then((client: MongoClient) => {
 	db.collection('users').insert(UsersMock.map((element) => {
 		element._id = element.name;	
 		return element;
-	
-	}));
 
-	db.collection('rides').insert(RidesMock);
+	})).then( () => {
+
+		return db.collection('rides').insert(RidesMock);
+			
+	}).then( () => {
+		
+		return db.collection('messages').insert(MessagesMock);
+
+	}).then( () => { 
+
+    console.log(`INFO: Mock inserted inside database`);
+		process.exit();
+
+	}).catch( (err) => {
+		
+		console.log(`ERROR: I could not insert the mocks. ${err}`);
+		process.exit();	
+		
+	});
 
 }).catch((err) => {
-	
-  console.log(`ERROR: Could not connect to Mongo. ${err}`);	
-	
+
+	console.log(`ERROR: Could not connect to Mongo. ${err}`);	
+
 });
