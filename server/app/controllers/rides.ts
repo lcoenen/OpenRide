@@ -11,17 +11,17 @@ export default class ridesController {
 
 	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-                logger.info(`Catching a /rides/:id request. Id is ${req.params.id}`)
+		logger.info(`Catching a /rides/:id request. Id is ${req.params.id}`)
 
 		db
-		  .db
-		  .collection('rides')
-		  .findOne({_id: new ObjectID(req.params.id)})
-		  .then((ans:any) => {
-		
-		    res.json(200, ans);
-		
-		});
+			.db
+			.collection('rides')
+			.findOne({_id: new ObjectID(req.params.id)})
+			.then((ans:any) => {
+
+				res.json(200, ans);
+
+			});
 
 		return next();
 
@@ -30,15 +30,15 @@ export default class ridesController {
 	public getAll(req: restify.Request, res: restify.Response, next: restify.Next) {
 
 		db
-		  .db
-		  .collection('rides')
-		  .find()
-		  .toArray()
-		  .then((ans:any) => {
-		
-		    res.json(200, ans);
-		
-		});
+			.db
+			.collection('rides')
+			.find()
+			.toArray()
+			.then((ans:any) => {
+
+				res.json(200, ans);
+
+			});
 
 		return next();
 
@@ -46,26 +46,26 @@ export default class ridesController {
 
 	public post(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-                let toinsert: Ride = {
-		  origin: req.params.origin,
-		  destination: req.params.destination,
-		  riding_time: req.params.riding_time,
-		  payement: req.params.payement,
-		  driver: {'@id': 'mememe'},
-		  riders: []
+		let toinsert: Ride = {
+			origin: req.params.origin,
+			destination: req.params.destination,
+			riding_time: req.params.riding_time,
+			payement: req.params.payement,
+			driver: {'@id': 'mememe'},
+			riders: []
 		};
 
-                db.db.collection('rides').insertOne(toinsert).then((ans) => {
-		
-		    res.json(201, ans);  
-		
+		db.db.collection('rides').insertOne(toinsert).then((ans) => {
+
+			res.json(201, ans);  
+
 		});
 
 		return next();
 
 	}
 
-        public del(req: restify.Request, res: restify.Response, next: restify.Next) {
+	public del(req: restify.Request, res: restify.Response, next: restify.Next) {
 
 
 

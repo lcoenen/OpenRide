@@ -8,7 +8,6 @@ function rides_routes(api:restify.Server) {
   api.get('/api/rides/:id', routeCtrl.get);
   api.post('/api/rides', routeCtrl.post);
   api.del('/api/rides/:id', routeCtrl.del);
-  api.del('/api/rides/:id/invitable', usersController.invitables);
 }
 
 module.exports.routes = rides_routes;
