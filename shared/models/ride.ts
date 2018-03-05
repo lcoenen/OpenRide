@@ -1,10 +1,11 @@
 import { User } from './user';
 import { Link } from './link';
+import { Place } from './place';
 
 export interface Ride {
   id?: string;
-  origin: string;
-  destination: string;
+  origin: Place;
+  destination: Place;
   riding_time: string;
   payement?: number;
   driver?: Link;

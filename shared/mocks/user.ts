@@ -1,13 +1,10 @@
-import { Rider } from '../models/rider';
+import { User } from '../models/user';
 
-let RidersMock: Rider[] = [
+let UsersMock: User[] = [
     {
       name: 'Marc',
       age: 32,
       place_of_origin: 'Dirty Village',
-      origin: '22 Dirty street, Dirty Village',
-      destination: '45 Dirtier street, Paris',
-      riding_time: 'Tomorrow 23:32',
       reputation: 12 
     },
 
@@ -15,22 +12,34 @@ let RidersMock: Rider[] = [
       name: 'Stephane',
       age: 54 ,
       place_of_origin: 'Hellroad',
-      origin: '43 Concil street, Dirty Village',
-      destination: '20 Champs Elizee, Paris',
-      riding_time: 'Tomorrow 23:32',
       reputation: 32 
     },
 
     {
-      name: 'Rick Duboi',
+      name: 'Rick',
       age: 34,
-      place_of_origin: 'Dirty Village',
-      origin: '312 Nextroad, Beside place',
-      destination: '323 Event street, St-Germain',
-      riding_time:'In two days, 9:32',
+      place_of_origin: 'Liege',
       reputation: 54
-    }
+    },
     
+    {
+      name: 'Louise',
+      age: 12,
+      place_of_origin: 'Ocean side',
+      reputation: 47
+    },
+    {
+      name: 'PB',
+      age: 17,
+      place_of_origin: 'Bubblegum castle',
+      reputation: 92
+    },
+    {
+      name: 'Moe',
+      age: 48,
+      place_of_origin: 'Springfield',
+      reputation: 23 
+    }
 ]
 
-export { RidersMock };
+export { UsersMock };

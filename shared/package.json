@@ -1,0 +1,25 @@
+{
+  "name": "openride-shared",
+  "version": "0.0.1",
+  "description": "Shared fiels between server and client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+		"link": "ln -s ../server/node_modules node_modules",
+		"compile": "tsc",
+		"start": "node built/shared/bin/resetmock.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lcoenen/OpenRide.git"
+  },
+  "keywords": [
+    "Openride"
+  ],
+  "author": "Loïc Coenn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcoenen/OpenRide/issues"
+  },
+  "homepage": "https://github.com/lcoenen/OpenRide#readme"
+}
