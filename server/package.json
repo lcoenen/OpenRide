@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "node_modules/.bin/tsc",
     "start": "node built/server/app/app.js",
-    "refresh": "npm run compile && npm start"
+    "refresh": "npm run compile && npm start",
+		"watch": "nodemon"
   },
   "keywords": [
     "typescript",
@@ -31,7 +32,6 @@
     "@types/restify": "^2.0.42",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "sinon": "^1.17.6",
     "tslint": "^3.15.1",
     "typescript": "^2.0.3"
   },
