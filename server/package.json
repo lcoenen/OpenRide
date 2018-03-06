@@ -43,12 +43,10 @@
   },
   "_moduleAliases": {
     "shared": "../shared"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "app"
-    ],
-    "ext": "ts",
-    "exec": "npm run refresh"
-  }
+  }, 
+	"nodemonConfig": {
+		"watch": ["app", "../shared/*"],
+		"ext": "ts",
+		"exec": "npm run refresh"
+	}
 }

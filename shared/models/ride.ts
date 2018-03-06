@@ -1,11 +1,12 @@
 import { User } from './user';
 import { Link } from './link';
-import { Place } from './place';
+
+import { Feature, Point } from 'geojson' ;
 
 export interface Ride {
   _id?: string;
-  origin: Place;
-  destination: Place;
+  origin: Feature<Point>;
+  destination: Feature<Point>;
   riding_time: string;
   payement?: number;
   driver?: Link;
