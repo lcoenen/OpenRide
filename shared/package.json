@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-		"link": "ln -s ../server/node_modules node_modules",
-		"compile": "tsc",
-		"start": "node built/shared/bin/resetmock.js",
+    "link": "ln -s ../server/node_modules node_modules",
+    "compile": "tsc",
+    "start": "node built/shared/bin/resetmock.js",
     "execute": "npm run compile && npm start"
   },
   "repository": {

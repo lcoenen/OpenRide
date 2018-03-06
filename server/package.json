@@ -8,8 +8,8 @@
     "start": "node built/server/app/app.js",
     "refresh": "npm run compile && npm start",
     "watch": "nodemon",
-		"test": "mocha -r ts-node/register test/*.ts",
-		"watch-test": "nodemon -w app -w test -V --exec 'npm run compile && mocha built/server/test'"
+    "test": "mocha -r ts-node/register test/*.ts",
+    "watch-test": "nodemon -w app -w test -V --exec 'npm run compile && mocha built/server/test'"
   },
   "keywords": [
     "typescript",
@@ -30,10 +30,12 @@
   },
   "devDependencies": {
     "@types/chai": "^3.5.2",
+    "@types/chai-http": "^3.0.4",
     "@types/mocha": "^2.2.48",
     "@types/node": "^6.0.101",
     "@types/restify": "^2.0.42",
     "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "mocha": "^3.5.3",
     "ts-node": "^5.0.1",
     "tslint": "^3.15.1",
