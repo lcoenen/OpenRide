@@ -58,8 +58,6 @@ export default class messagesController {
 	
 		logger.info(`INFO: Catching a POST /rides/:id/messages request. Id is ${req.params.id}`)
 
-
-
 		let toinsert: Message = {
 			ride: {'@id': `/api/rides/${req.params.id}`},
 			message: req.params.message,

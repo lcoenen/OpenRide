@@ -8,7 +8,14 @@ function rides_routes(api:restify.Server) {
   api.get('/api/rides/:id', routeCtrl.get);
   api.post('/api/rides', routeCtrl.post);
   api.del('/api/rides/:id', routeCtrl.del);
-  api.head('/api/rides/:id', routeCtrl.head);
+	api.head('/api/rides/:id', routeCtrl.head);
+
+	/*
+	 *
+	 * Allow join / depart from ride with options 'join/depart'
+	 * 
+	*/
+	api.patch('/api/rides/:id', routeCtrl.patch);
 }
 
 module.exports.routes = rides_routes;

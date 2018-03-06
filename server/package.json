@@ -2,7 +2,7 @@
   "name": "openride-server",
   "version": "1.0.0",
   "description": "OpenRide server",
-  "main": "app.js",
+  "main": "built/server/app/app.js",
   "scripts": {
     "compile": "node_modules/.bin/tsc",
     "start": "node built/server/app/app.js",
@@ -37,5 +37,10 @@
   },
   "_moduleAliases": {
     "shared": "../shared"
-  }
+  }, 
+	"nodemonConfig": {
+		"watch": ["app"],
+		"ext": "ts",
+		"exec": "npm run refresh"
+	}
 }
