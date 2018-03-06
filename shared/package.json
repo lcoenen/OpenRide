@@ -8,7 +8,8 @@
 		"link": "ln -s ../server/node_modules node_modules",
 		"compile": "tsc",
 		"start": "node built/shared/bin/resetmock.js",
-    "execute": "npm run compile && npm start"
+    "execute": "npm run compile && npm start",
+		"watch": "nodemon -w mocks/* -m models/* -m bin -V --exec 'npm run execute'"
   },
   "repository": {
     "type": "git",

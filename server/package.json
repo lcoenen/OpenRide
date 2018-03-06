@@ -39,7 +39,7 @@
     "shared": "../shared"
   }, 
 	"nodemonConfig": {
-		"watch": ["app"],
+		"watch": ["app", "../shared/*"],
 		"ext": "ts",
 		"exec": "npm run refresh"
 	}

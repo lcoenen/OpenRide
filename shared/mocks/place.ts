@@ -1,34 +1,64 @@
-import { Place } from '../models/place';
+import { Feature, Point } from 'geojson' ;
 
-export let PlacesMock: Place[] = [
+export let PlacesMock: Feature<Point>[] = [
 	{
-		'address': '70 Rue Jonfosse, Liege, BE',
-		'x': 50.641584,
-		'y': 5.563962,
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.641584,5.563962],
+		},
+		'properties': {
+			'address': '70 Rue Jonfosse, Liege, BE'
+		}
 	},
 	{
-		'address': 'Rue Maghin 32, Liege, BE',
-		'x': 5.586938,
-		'y': 50.648977, 
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [5.586938,50.648977],
+		},
+		'properties': {
+			'address': 'Rue Maghin 32, Liege, BE'
+		}
 	},
 	{
-		'address': 'Hochterpoort 43, Maastricht, NL',
-		'x': 50.853252,
-		'y': 5.691080,
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.853252,5.691080],
+		},
+		'properties': {
+			'address': 'Hochterpoort 43, Maastricht, NL'
+		}
 	},
 	{
-		'address': 'Rue de la commune, 23, Saint-Josse, BE',
-		'x': 50.851241,
-		'y': 4.372411,
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.851241,4.372411],
+		},
+		'properties': {
+			'address': 'Rue de la commune, 23, Saint-Josse, BE'
+		}
 	},
 	{
-		'address': 'Rue derrière Espies, Valencienne, FR',
-		'x': 50.362527,
-		'y': 3.524071,
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.362527,3.524071],
+		},
+		'properties': {
+			'address': 'Rue derrière Espies, Valencienne, FR'
+		}
 	},
 	{
-		'address': 'Elstergasse 3, Koln, DE',
-		'x': 50.939612,
-		'y': 6.952869,
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.939612,6.952869],
+		},
+		'properties': {
+			'address': 'Elstergasse 3, Koln, DE'
+		}
 	},
 ]
