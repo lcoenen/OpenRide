@@ -11,5 +11,4 @@ export interface Ride {
   payement?: number;
   driver?: Link;
   riders: Link[];
-}
-
+};

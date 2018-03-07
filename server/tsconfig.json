@@ -11,7 +11,7 @@
       {"shared/*": ["../shared/*"]},
     "noImplicitAny": true,
     "preserveConstEnums": true,
-    "types": ["node", "restify", "chai"],
+    "types": ["node", "restify", "chai", "chai-http"],
     "outDir": "built"
   },
   "exclude": [

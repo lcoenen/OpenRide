@@ -43,9 +43,10 @@ export default class ridesController {
 
 	public post(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-		logger.info(`INFO: Catching a POST /rides/:id request. Id is ${req.params.id}`)
+		logger.info(`INFO: Catching a POST /rides/:id request. Id is ${req.params._id}`)
 
 		let toinsert: Ride = {
+			_id: req.params._id,
 			origin: req.params.origin,
 			destination: req.params.destination,
 			riding_time: req.params.riding_time,
