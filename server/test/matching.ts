@@ -19,20 +19,32 @@ import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
 
+beforeEach(() => {
+
+	return resetMock();
+
+})
+
 describe('matching', () => {
 
   it("should find the match", () => {
 
-		resetMock().then(() => {
+		// resetMock().then(() => {
 
-			expect(true).to.be.equal(false);
+		// 	expect(true).to.be.equal(false);
 
-		}).catch((err) : void => {
+		// }).catch((err) : void => {
 
-		  expect(err).to.equal(undefined)  
+		  expect(true).to.equal(false)  
 
-		});
+		// });
 
-  });
+	});
+
+	it("should do something", () => {
+
+	  expect(22).to.equal(22)
+
+	});
 
 });
