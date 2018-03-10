@@ -18,6 +18,7 @@ import { postDriverExample, postRiderExample } from '../../shared/mocks/ride';
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
+const connectedUsername: string = 'Rick';
 
 beforeEach(() => {
 
@@ -27,7 +28,7 @@ beforeEach(() => {
 
 describe('matching', () => {
 
-  it("should find the match", () => {
+	it("should find the match", () => {
 
 		return (() => {
 
@@ -37,7 +38,7 @@ describe('matching', () => {
 
 		})().then((res:any) => {
 
-		 	expect(res).to.have.status(201); 
+			expect(res).to.have.status(201); 
 
 		}).then(() => {
 
@@ -47,25 +48,118 @@ describe('matching', () => {
 
 		}).then((res: any) => {
 
-		 	expect(res).to.have.status(201); 
+			expect(res).to.have.status(201); 
 
 		}).then(() => {
 
 			return chai.request(url)
-				.get(`/api/rides/${postRiderExample}/matches`)
+				.get(`/api/rides/${postRiderExample._id}/matches`)
 
 		}).then((res: any) => {
 
 			let ans = JSON.parse(res.text);
-			expect(ans[0]).to.be.equal(postRiderExample);
+			expect(ans[0]).to.include(`/api/rides/${ postRiderExample._id }`);
 
-		}).catch((err: any) => {
+	}).catch((err: any) => {
 
-		 	throw err; 
-
-		})
-
+		throw err; 
 
 	})
+
+})
+
+it("should accept request sending", () => {
+
+	return (() => {
+
+		return chai.request(url)
+			.post('/api/rides')
+			.send(postRiderExample)
+
+	})().then((res:any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).then(() => {
+
+		return chai.request(url)
+			.post('/api/rides')
+			.send(postDriverExample)
+
+	}).then((res: any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).then(() => {
+
+		return chai.request(url)
+			.post(`/api/rides/${ postDriverExample._id }/request`)
+			.send({
+				from: `/api/users/${ connectedUsername }`
+			})
+
+	}).then((res: any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).catch((err:any) => {
+
+		throw err;  
+
+	});
+
+});
+
+it("should grab the list of requests", () => {
+
+	return (() => {
+
+		return chai.request(url)
+			.post('/api/rides')
+			.send(postRiderExample)
+
+	})().then((res:any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).then(() => {
+
+		return chai.request(url)
+			.post('/api/rides')
+			.send(postDriverExample)
+
+	}).then((res: any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).then(() => {
+
+		return chai.request(url)
+			.post(`/api/rides/${ postDriverExample._id }/request`)
+			.send({
+				from: `/api/users/${ connectedUsername }`
+			});
+
+	}).then((res: any) => {
+
+		expect(res).to.have.status(201); 
+
+	}).then(() => {
+
+		return chai.request(url)
+			.get(`/api/rides/${ postDriverExample._id }/request`);
+
+	}).then((res:any) => {
+
+		let ans = JSON.parse(res.text);
+		expect(ans).to.include( `/api/users/${ connectedUsername }`);
+
+	}).catch((err:any) => {
+
+		throw err;  
+
+	});
+
+});
 
 });

@@ -16,6 +16,7 @@ function rides_routes(api:restify.Server) {
 	 * 
 	*/
 	api.patch('/api/rides/:id', routeCtrl.patch);
+
 }
 
 module.exports.routes = rides_routes;
