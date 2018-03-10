@@ -3,7 +3,7 @@ import { Place } from '../models/place';
 
 import { PlacesMock } from './place';
 
-let RidesMock: Ride[] = [
+export let RidesMock: Ride[] = [
 	{
 		_id: 'LiegeLiege',
 		origin: PlacesMock[0],
@@ -50,4 +50,58 @@ let RidesMock: Ride[] = [
 	}
 ]
 
-export { RidesMock };
+
+export const postDriverExample: Ride = {
+	'_id': 'EindhovenMaastricht',
+	'origin': {
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [51.437935, 5.462851]
+		},
+		'properties': {
+			'address': 'Jacobus Deckerstraat, 94, Eindhoven, NL'
+		}
+	},
+	'destination': {
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.841862, 5.708596]
+		},
+		'properties': {
+			'address': 'Kardinaal van Rossumplein, 6221, Maastricht, NL'
+		}
+	},
+	'riding_time': 'Tomorrow at 10:32',
+	'payement': 23,
+	'driver': { '@id': '/api/users/Moe' },
+	'riders': []
+}
+
+export const postRiderExample = {
+	'_id': 'EindhovenMaastrichtRequest',
+	'origin': {
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [51.437935, 5.462851]
+		},
+		'properties': {
+			'address': 'Jacobus Deckerstraat, 94, Eindhoven, NL'
+		}
+	},
+	'destination': {
+		'type': 'urleature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.841862, 5.708596]
+		},
+		'properties': {
+			'address': 'Kardinaal van Rossumplein, 6221, Maastricht, NL'
+		}
+	},
+	'riding_time': 'Tomorrow at 10:32',
+	'payement': 23,
+	'riders': [{ '@id': '/api/users/Moe' }]
+}

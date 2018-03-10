@@ -8,7 +8,7 @@
     "start": "node built/server/app/app.js",
     "refresh": "npm run compile && npm start",
     "watch": "nodemon",
-    "test": "mocha -r ts-node/register test/*.ts",
+    "test": "npm run compile && mocha built/server/test",
     "watch-test": "nodemon -w app -w test -V --exec 'npm run compile && mocha built/server/test'"
   },
   "keywords": [
