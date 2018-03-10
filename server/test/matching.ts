@@ -29,22 +29,43 @@ describe('matching', () => {
 
   it("should find the match", () => {
 
-		// resetMock().then(() => {
+		return (() => {
 
-		// 	expect(true).to.be.equal(false);
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postRiderExample)
 
-		// }).catch((err) : void => {
+		})().then((res:any) => {
 
-		  expect(true).to.equal(false)  
+		 	expect(res).to.have.status(201); 
 
-		// });
+		}).then(() => {
 
-	});
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverExample)
 
-	it("should do something", () => {
+		}).then((res: any) => {
 
-	  expect(22).to.equal(22)
+		 	expect(res).to.have.status(201); 
 
-	});
+		}).then(() => {
+
+			return chai.request(url)
+				.get(`/api/rides/${postRiderExample}/matches`)
+
+		}).then((res: any) => {
+
+			let ans = JSON.parse(res.text);
+			expect(ans[0]).to.be.equal(postRiderExample);
+
+		}).catch((err: any) => {
+
+		 	throw err; 
+
+		})
+
+
+	})
 
 });

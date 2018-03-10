@@ -48,7 +48,7 @@ describe('rides',  () => {
 			}).then((res: any) => {
 
 				let ans = JSON.parse(res.text);
-				expect(ans[ans.length - 1].payement).to.equal(23);
+				expect(ans[ans.length - 1].payement).to.equal(postDriverExample.payement);
 
 			}).then(() => {
 
@@ -62,7 +62,7 @@ describe('rides',  () => {
 			}).then((res: any) : void => {
 
 				let ans = JSON.parse(res.text);
-				expect(ans.destination.properties.address).to.be.equal(postRiderExample.destination.properties.address);
+				expect(ans.destination.properties.address).to.be.equal(postDriverExample.destination.properties.address);
 			}).catch((err: any) : void => {
 
 
@@ -88,7 +88,7 @@ describe('rides',  () => {
 			}).then((res: any) => {
 
 				let ans = JSON.parse(res.text);
-				expect(ans[ans.length - 1].payement).to.equal(23);
+				expect(ans[ans.length - 1].payement).to.equal(postRiderExample.payement);
 
 			});
 

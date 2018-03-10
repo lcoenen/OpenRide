@@ -57,24 +57,24 @@ export const postDriverExample: Ride = {
 		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
-			'coordinates': [51.437935, 5.462851]
+			'coordinates': [51.420274, 5.443317]
 		},
 		'properties': {
-			'address': 'Jacobus Deckerstraat, 94, Eindhoven, NL'
+			'address': 'Eimerick, 25, Eindhoven, NL'
 		}
 	},
 	'destination': {
 		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
-			'coordinates': [50.841862, 5.708596]
+			'coordinates': [50.853967, 5.669858]
 		},
 		'properties': {
-			'address': 'Kardinaal van Rossumplein, 6221, Maastricht, NL'
+			'address': 'Edmond Jasparstraat, 33, Rossumplein, 6221, Maastricht, NL'
 		}
 	},
 	'riding_time': 'Tomorrow at 10:32',
-	'payement': 23,
+	'payement': 54,
 	'driver': { '@id': '/api/users/Moe' },
 	'riders': []
 }
@@ -101,7 +101,7 @@ export const postRiderExample = {
 			'address': 'Kardinaal van Rossumplein, 6221, Maastricht, NL'
 		}
 	},
-	'riding_time': 'Tomorrow at 10:32',
+	'riding_time': 'Tomorrow at 11:54',
 	'payement': 23,
 	'riders': [{ '@id': '/api/users/Moe' }]
 }
