@@ -81,7 +81,7 @@ export const postDriverExample: Ride = {
 		}
 	},
 	'riding_time': 'Tomorrow at 10:32',
-	'payement': 54,
+	'payement': 32,
 	'driver': { '@id': '/api/users/Moe' },
 	'riders': []
 }
@@ -92,10 +92,10 @@ export const postRiderExample = {
 		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
-			'coordinates': [51.437935, 5.462851]
+			'coordinates': [51.479450, 5.63882]
 		},
 		'properties': {
-			'address': 'Jacobus Deckerstraat, 94, Eindhoven, NL'
+			'address': 'Mathisjssensstraat, 13, Eindhoven, NL'
 		}
 	},
 	'destination': {
@@ -111,4 +111,32 @@ export const postRiderExample = {
 	'riding_time': 'Tomorrow at 11:54',
 	'payement': 23,
 	'riders': [{ '@id': '/api/users/Moe' }]
+}
+
+export const postDriverLesserExample: Ride = {
+	'_id': 'EindhovenMaastrichtLesser',
+	'origin': {
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [51.437935, 5.462851]
+		},
+		'properties': {
+			'address': 'Jacobus Deckerstraat, 94, Eindhoven, NL'
+		}
+	},
+	'destination': {
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [50.997098, 5.876827]
+		},
+		'properties': {
+			'address': 'Swentiboldstraat, 19, Sittard, NL'
+		}
+	},
+	'riding_time': 'In three days, 12:32',
+	'payement': 89,
+	'driver': { '@id': '/api/users/Moe' },
+	'riders': []
 }

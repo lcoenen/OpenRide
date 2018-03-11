@@ -203,11 +203,29 @@ export default class ridesController {
 				return turf.distance(ride.destination.geometry, 
 					targetRide.destination.geometry) < maxDistance;	
 
+			}).sort((a,b) => {
+
+				let destinationDistance = turf.distance(
+					a.destination.geometry,
+					b.destination.geometry);
+
+				let originDistance = turf.distance(
+					a.origin.geometry,
+					b.origin.geometry);
+				
+				let payementDifference = a.payement - b.payement;
+
+				/// TODO perfect the algorythm
+				
+				return (destinationDistance / (maxDistance * 1000)) +
+					(originDistance / (maxDistance * 1000)) +
+					payementDifference/ 100
+
 			}).map((ride: Ride): string => {
 
 				return `/api/rides/${ ride._id }`; 
 
-			})
+			});
 
 			res.send(200, filterRides);
 

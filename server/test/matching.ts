@@ -15,7 +15,11 @@ import { expect } from 'chai' ;
 import 'mocha';
 
 import { Ride } from '../../shared/models/ride';
-import { postDriverExample, postRiderExample } from '../../shared/mocks/ride';
+import { 
+	postDriverExample, 
+	postRiderExample,
+	postDriverLesserExample } from '../../shared/mocks/ride';
+
 
 import { resetMock } from '../../shared/bin/resetmock';
 
@@ -76,9 +80,61 @@ describe('matching', () => {
 			.to.eventually.be.rejected;
 
 		expect(chai.request(url).get('/api/rides/unknownride'))
-			.to.eventually.be.rejectedWith(Error, 'Not found');
+			.to.eventually.be.rejectedWith(Error, 'Not Found');
 
 	});
+
+	it("should sort the concurrents rides based on their proximity", () => {
+
+		return (() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postRiderExample)
+
+		})().then((res:any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverLesserExample)
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverExample)
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.get(`/api/rides/${postRiderExample._id}/matches`)
+
+		}).then((res: any) => {
+
+			let ans = JSON.parse(res.text);
+			expect(ans[1]).to.be.equal(`/api/rides/${ postDriverLesserExample._id }`);
+
+		}).catch((err: any) => {
+
+			throw err			
+
+		})
+	
+	});
+
+	it("should accept moment string");
 
 	it("should accept request sending", () => {
 
