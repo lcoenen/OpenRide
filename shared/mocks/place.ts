@@ -15,7 +15,7 @@ export let PlacesMock: Feature<Point>[] = [
 		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
-			'coordinates': [5.586938,50.648977],
+			'coordinates': [50.64897, 5.586938],
 		},
 		'properties': {
 			'address': 'Rue Maghin 32, Liege, BE'
@@ -55,11 +55,11 @@ export let PlacesMock: Feature<Point>[] = [
 		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
-			'coordinates': [50.939612,6.952869],
+			'coordinates': [50.83323, 4.309065],
 		},
 		'properties': {
-			'address': 'Elstergasse 3, Koln, DE'
+			'address': 'Rue Joseph Pavez, 21, Bruxelles, BE'
 		}
-	},
+	}
 ]
 

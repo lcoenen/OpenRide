@@ -1,10 +1,15 @@
 import * as restify from 'restify';
+import * as turf from '@turf/turf'
+
+
 import { logger } from '../services/logger';
 import { db } from '../services/db';
 
 import { ObjectID } from 'mongodb';
 
 import { Ride } from '../../../shared/models/ride';
+
+const maxDistance: number = 30;
 
 export default class ridesController {
 
@@ -113,7 +118,7 @@ export default class ridesController {
 				}
 
 				else {
-					
+
 					logger.info(`INFO: Nothing to patch`);
 					return Promise.resolve();
 
@@ -151,5 +156,84 @@ export default class ridesController {
 			});
 	}
 
+	public getMatches(req: restify.Request, res: restify.Response, next: restify.Next){
+
+		logger.info(`INFO: Catching a /rides/:id/matches. ID is ${ req.params.id }`)
+
+		// Select the rides arriving nearby 
+		// the matching destination
+
+		let targetRide: Ride;
+
+		return (() => {
+
+			return db
+				.db
+				.collection('rides')
+				.findOne({ _id: req.params.id })
+
+		})().then((foundRide: Ride) => {
+
+			if(!foundRide) {
+
+				throw 404;
+
+			}
+
+			targetRide = foundRide;
+
+			return db
+				.db
+				.collection('rides')
+				.find({ 
+					'origin.geometry': {
+						$nearSphere: {
+							$geometry: foundRide.origin.geometry,
+							$maxDistance: maxDistance * 1000
+						}},
+					'_id': {'$ne': foundRide._id}
+				})
+				.toArray();
+
+		}).then((rides: Ride[]) => {
+
+			// Filter the rides foming from the matching destination
+			let filterRides : string[] = rides.filter( (ride: Ride) : boolean => {
+
+				return turf.distance(ride.destination.geometry, 
+					targetRide.destination.geometry) < maxDistance;	
+
+			}).map((ride: Ride): string => {
+
+				return `/api/rides/${ ride._id }`; 
+
+			})
+
+			res.send(200, filterRides);
+
+		}).catch((err: any) => {
+
+			if(err == 404) res.send(404, {message: `I couldn't find the ride ${ req.params.id }`});
+			else res.send(500, err);
+
+		})
+
+			// Compute a matching score based on distance, time, payement philosophy
+
+			// Order
+
+	}
+	
+	public getRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+
+
+
+	}
+
+	public postRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+
+
+
+	}
 
 }

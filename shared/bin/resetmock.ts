@@ -37,14 +37,17 @@ export function resetMock(){
 
 		}).then( () => {
 
+			db.collection('rides').createIndex( { 'destination.geometry'  : "2dsphere" } );
+			db.collection('rides').createIndex( { 'origin.geometry'  : "2dsphere" } );
+
 			return db.collection('rides').insert(RidesMock);
 
 		}).then( () => {
 
+
 			return db.collection('messages').insert(MessagesMock);
 
 		})
-
 	})
 
 }

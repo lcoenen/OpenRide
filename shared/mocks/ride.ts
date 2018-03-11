@@ -47,6 +47,13 @@ export let RidesMock: Ride[] = [
 		riding_time:'Tomorrow, 4:20',
 		riders: [],
 		driver: { '@id': '/api/users/Louise' }
+	},
+	{
+		_id: 'BruxellesLiegeRequest',
+		origin: PlacesMock[5],
+		destination: PlacesMock[1],
+		riding_time:'Tomorrow, 4:20',
+		riders: [{'@id': '/api/users/Rick'}],
 	}
 ]
 

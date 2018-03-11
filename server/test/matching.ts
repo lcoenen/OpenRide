@@ -1,12 +1,14 @@
 
-var chai = require('chai')
-	, chaiHttp = require('chai-http');
+var chai = require('chai'),
+		chaiHttp = require('chai-http'),
+		chaiAsPromised = require("chai-as-promised");
 
 /* 
  * Both librairies have limited support of ES6 import.
  * See https://github.com/DefinitelyTyped/DefinitelyTyped/issues/19480
  */
 
+chai.use(chaiAsPromised);
 chai.use(chaiHttp);
 
 import { expect } from 'chai' ;
@@ -58,108 +60,118 @@ describe('matching', () => {
 		}).then((res: any) => {
 
 			let ans = JSON.parse(res.text);
-			expect(ans[0]).to.include(`/api/rides/${ postRiderExample._id }`);
+			expect(ans).to.include(`/api/rides/${ postDriverExample._id }`);
 
-	}).catch((err: any) => {
+		}).catch((err: any) => {
 
-		throw err; 
+			throw err			
+
+		})
 
 	})
 
-})
+	it("should answer a 404 error if the ride doesn't exist", () => {
 
-it("should accept request sending", () => {
+		expect(chai.request(url).get('/api/rides/unknownride'))
+			.to.eventually.be.rejected;
 
-	return (() => {
-
-		return chai.request(url)
-			.post('/api/rides')
-			.send(postRiderExample)
-
-	})().then((res:any) => {
-
-		expect(res).to.have.status(201); 
-
-	}).then(() => {
-
-		return chai.request(url)
-			.post('/api/rides')
-			.send(postDriverExample)
-
-	}).then((res: any) => {
-
-		expect(res).to.have.status(201); 
-
-	}).then(() => {
-
-		return chai.request(url)
-			.post(`/api/rides/${ postDriverExample._id }/request`)
-			.send({
-				from: `/api/users/${ connectedUsername }`
-			})
-
-	}).then((res: any) => {
-
-		expect(res).to.have.status(201); 
-
-	}).catch((err:any) => {
-
-		throw err;  
+		expect(chai.request(url).get('/api/rides/unknownride'))
+			.to.eventually.be.rejectedWith(Error, 'Not found');
 
 	});
 
-});
+	it("should accept request sending", () => {
 
-it("should grab the list of requests", () => {
+		return (() => {
 
-	return (() => {
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postRiderExample)
 
-		return chai.request(url)
-			.post('/api/rides')
-			.send(postRiderExample)
+		})().then((res:any) => {
 
-	})().then((res:any) => {
+			expect(res).to.have.status(201); 
 
-		expect(res).to.have.status(201); 
+		}).then(() => {
 
-	}).then(() => {
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverExample)
 
-		return chai.request(url)
-			.post('/api/rides')
-			.send(postDriverExample)
+		}).then((res: any) => {
 
-	}).then((res: any) => {
+			expect(res).to.have.status(201); 
 
-		expect(res).to.have.status(201); 
+		}).then(() => {
 
-	}).then(() => {
+			return chai.request(url)
+				.post(`/api/rides/${ postDriverExample._id }/request`)
+				.send({
+					from: `/api/users/${ connectedUsername }`
+				})
 
-		return chai.request(url)
-			.post(`/api/rides/${ postDriverExample._id }/request`)
-			.send({
-				from: `/api/users/${ connectedUsername }`
-			});
+		}).then((res: any) => {
 
-	}).then((res: any) => {
+			expect(res).to.have.status(201); 
 
-		expect(res).to.have.status(201); 
+		}).catch((err:any) => {
 
-	}).then(() => {
+			throw err;  
 
-		return chai.request(url)
-			.get(`/api/rides/${ postDriverExample._id }/request`);
-
-	}).then((res:any) => {
-
-		let ans = JSON.parse(res.text);
-		expect(ans).to.include( `/api/users/${ connectedUsername }`);
-
-	}).catch((err:any) => {
-
-		throw err;  
+		});
 
 	});
 
-});
+	it("should grab the list of requests", () => {
+
+		return (() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postRiderExample)
+
+		})().then((res:any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverExample)
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post(`/api/rides/${ postDriverExample._id }/request`)
+				.send({
+					from: `/api/users/${ connectedUsername }`
+				});
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.get(`/api/rides/${ postDriverExample._id }/request`);
+
+		}).then((res:any) => {
+
+			let ans = JSON.parse(res.text);
+			expect(ans).to.include( `/api/users/${ connectedUsername }`);
+
+		}).catch((err:any) => {
+
+			throw err;  
+
+		});
+
+	});
 
 });
