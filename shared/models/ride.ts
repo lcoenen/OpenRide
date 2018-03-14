@@ -7,7 +7,7 @@ export interface Ride {
   _id?: string;
   origin: Feature<Point>;
   destination: Feature<Point>;
-  riding_time: string;
+  riding_time: Date;
   payement?: number;
   driver?: Link;
   riders: Link[];

@@ -3,12 +3,14 @@ import { Place } from '../models/place';
 
 import { PlacesMock } from './place';
 
+import * as moment from 'moment';
+
 export let RidesMock: Ride[] = [
 	{
 		_id: 'LiegeLiege',
 		origin: PlacesMock[0],
 		destination: PlacesMock[1],
-		riding_time: 'Tomorrow 23:32',
+		riding_time: moment().add(2, 'days').toDate(),
 		driver: { '@id': '/api/users/Moe' },
 		riders: [{ '@id': '/api/users/Stephane' }, { '@id': '/api/users/Rick' }]
 	},
@@ -17,7 +19,7 @@ export let RidesMock: Ride[] = [
 		_id: 'LiegeBruxelles',
 		origin: PlacesMock[1],
 		destination: PlacesMock[3],
-		riding_time: 'Tomorrow 12:52',
+		riding_time: moment().add(1, 'days').hour(12).minute(32).toDate(),
 		riders: [ { '@id': '/api/users/Louise' },
 			{ '@id': '/api/users/PB' }],
 		driver: { '@id': '/api/users/Stephane' }
@@ -27,7 +29,7 @@ export let RidesMock: Ride[] = [
 		_id: 'MaastrichtBruxelles',
 		origin: PlacesMock[2],
 		destination: PlacesMock[3],
-		riding_time:'In two days, 9:32',
+		riding_time: moment().add(3, 'days').hour(11).minute(50).toDate(),
 		riders: [ { '@id': '/api/users/PB' } ],
 		driver: { '@id': '/api/users/Moe' }
 	},
@@ -36,7 +38,7 @@ export let RidesMock: Ride[] = [
 		_id: 'ValenciennesLiege',
 		origin: PlacesMock[4],
 		destination: PlacesMock[1],
-		riding_time:'In 3 days, 13:45',
+		riding_time: moment().add(2, 'days').hour(10).minute(19).toDate(),
 		riders: [],
 		driver: { '@id': '/api/users/Rick' }
 	},
@@ -44,7 +46,7 @@ export let RidesMock: Ride[] = [
 		_id: 'BruxellesLiege',
 		origin: PlacesMock[3],
 		destination: PlacesMock[0],
-		riding_time:'Tomorrow, 4:20',
+		riding_time: moment().add(1, 'days').hour(15).minute(43).toDate(),
 		riders: [],
 		driver: { '@id': '/api/users/Louise' }
 	},
@@ -52,7 +54,7 @@ export let RidesMock: Ride[] = [
 		_id: 'BruxellesLiegeRequest',
 		origin: PlacesMock[5],
 		destination: PlacesMock[1],
-		riding_time:'Tomorrow, 4:20',
+		riding_time: moment().add(1, 'days').hour(12).minute(32).toDate(),
 		riders: [{'@id': '/api/users/Rick'}],
 	}
 ]
@@ -80,7 +82,7 @@ export const postDriverExample: Ride = {
 			'address': 'Edmond Jasparstraat, 33, Rossumplein, 6221, Maastricht, NL'
 		}
 	},
-	'riding_time': 'Tomorrow at 10:32',
+	'riding_time': moment().add(1, 'days').hour(10).minute(10).toDate(),
 	'payement': 32,
 	'driver': { '@id': '/api/users/Moe' },
 	'riders': []
@@ -108,7 +110,7 @@ export const postRiderExample = {
 			'address': 'Kardinaal van Rossumplein, 6221, Maastricht, NL'
 		}
 	},
-	'riding_time': 'Tomorrow at 11:54',
+	'riding_time': moment().add(1, 'days').hour(14).minute(30).toDate(),
 	'payement': 23,
 	'riders': [{ '@id': '/api/users/Moe' }]
 }
@@ -135,7 +137,7 @@ export const postDriverLesserExample: Ride = {
 			'address': 'Swentiboldstraat, 19, Sittard, NL'
 		}
 	},
-	'riding_time': 'In three days, 12:32',
+	'riding_time': moment().add(3, 'days').hour(18).minute(0).toDate(),
 	'payement': 89,
 	'driver': { '@id': '/api/users/Moe' },
 	'riders': []

@@ -1,5 +1,6 @@
 import * as restify from 'restify';
-import * as turf from '@turf/turf'
+import * as turf from '@turf/turf';
+import * as moment from 'moment';
 
 
 import { logger } from '../services/logger';
@@ -219,12 +220,16 @@ export default class ridesController {
 
 				let payementDifference = a.payement - b.payement;
 
-				/// TODO perfect the algorythm
+				const msPerWeek = (1000 * 60 * 60 * 24 * 7);
+  
+
+				let timeDifference = moment(a.riding_time).diff(b.riding_time);
+				timeDifference = timeDifference > msPerWeek? msPerWeek : timeDifference;
 
 				return (destinationDistance / (maxDistance * 1000)) +
 					(originDistance / (maxDistance * 1000)) +
-					payementDifference/ 100
-
+					payementDifference / 100 +
+					timeDifference / msPerWeek 
 			}).map((ride: Ride): Link => {
 
 				return { '@id' : `/api/rides/${ ride._id }`}; 

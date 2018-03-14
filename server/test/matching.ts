@@ -134,8 +134,6 @@ describe('matching', () => {
 	
 	});
 
-	it("should accept moment string");
-
 	it("should accept request sending", () => {
 
 		return (() => {
