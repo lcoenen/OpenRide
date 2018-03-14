@@ -64,7 +64,7 @@ describe('matching', () => {
 		}).then((res: any) => {
 
 			let ans = JSON.parse(res.text);
-			expect(ans).to.include(`/api/rides/${ postDriverExample._id }`);
+			expect(ans).to.include( {'@id' : `/api/rides/${ postDriverExample._id }`});
 
 		}).catch((err: any) => {
 
@@ -124,7 +124,7 @@ describe('matching', () => {
 		}).then((res: any) => {
 
 			let ans = JSON.parse(res.text);
-			expect(ans[1]).to.be.equal(`/api/rides/${ postDriverLesserExample._id }`);
+			expect(ans[1]['@id']).to.be.equal(`/api/rides/${ postDriverLesserExample._id }`);
 
 		}).catch((err: any) => {
 
@@ -161,9 +161,9 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post(`/api/rides/${ postDriverExample._id }/request`)
+				.post(`/api/rides/${ postDriverExample._id }/requests`)
 				.send({
-					from: `/api/users/${ connectedUsername }`
+					from: {'@id': `/api/users/${ connectedUsername }`}
 				})
 
 		}).then((res: any) => {
@@ -203,9 +203,9 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post(`/api/rides/${ postDriverExample._id }/request`)
+				.post(`/api/rides/${ postDriverExample._id }/requests`)
 				.send({
-					from: `/api/users/${ connectedUsername }`
+					from: {'@id': `/api/users/${ connectedUsername }`}
 				});
 
 		}).then((res: any) => {
@@ -215,12 +215,13 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.get(`/api/rides/${ postDriverExample._id }/request`);
+				.get(`/api/rides/${ postDriverExample._id }/requests`);
 
 		}).then((res:any) => {
 
 			let ans = JSON.parse(res.text);
-			expect(ans).to.include( `/api/users/${ connectedUsername }`);
+			expect(ans[0].from['@id']).to.equal(`/api/users/${ connectedUsername }`);
+			expect(ans[0].to['@id']).to.equal(`/api/rides/${ postDriverExample._id }`);
 
 		}).catch((err:any) => {
 
@@ -229,5 +230,10 @@ describe('matching', () => {
 		});
 
 	});
+
+
+	it("should should not accept a request in which the user is already in");
+
+	it("should not accept a request for a ride with no driver");
 
 });

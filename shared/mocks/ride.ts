@@ -99,7 +99,7 @@ export const postRiderExample = {
 		}
 	},
 	'destination': {
-		'type': 'urleature',
+		'type': 'Feature',
 		'geometry': {
 			'type': 'Point',
 			'coordinates': [50.841862, 5.708596]

@@ -8,6 +8,8 @@ import { db } from '../services/db';
 import { ObjectID } from 'mongodb';
 
 import { Ride } from '../../../shared/models/ride';
+import { Link } from '../../../shared/models/link';
+import { Request } from '../../../shared/models/request';
 
 const maxDistance: number = 30;
 
@@ -198,12 +200,14 @@ export default class ridesController {
 		}).then((rides: Ride[]) => {
 
 			// Filter the rides foming from the matching destination
-			let filterRides : string[] = rides.filter( (ride: Ride) : boolean => {
+			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
 
 				return turf.distance(ride.destination.geometry, 
 					targetRide.destination.geometry) < maxDistance;	
 
 			}).sort((a,b) => {
+
+				// Compute a matching score based on distance, time, payement philosophy
 
 				let destinationDistance = turf.distance(
 					a.destination.geometry,
@@ -212,18 +216,18 @@ export default class ridesController {
 				let originDistance = turf.distance(
 					a.origin.geometry,
 					b.origin.geometry);
-				
+
 				let payementDifference = a.payement - b.payement;
 
 				/// TODO perfect the algorythm
-				
+
 				return (destinationDistance / (maxDistance * 1000)) +
 					(originDistance / (maxDistance * 1000)) +
 					payementDifference/ 100
 
-			}).map((ride: Ride): string => {
+			}).map((ride: Ride): Link => {
 
-				return `/api/rides/${ ride._id }`; 
+				return { '@id' : `/api/rides/${ ride._id }`}; 
 
 			});
 
@@ -236,20 +240,44 @@ export default class ridesController {
 
 		})
 
-			// Compute a matching score based on distance, time, payement philosophy
-
-			// Order
-
 	}
-	
+
 	public getRequests(req: restify.Request, res: restify.Response, next: restify.Next){
 
+		return db
+			.db
+			.collection("requests")
+			.find({to: {'@id': `/api/rides/${ req.params.id }`}})
+			.toArray()
+			.then((found) => {
 
+				res.send(200, found);  
+
+			})
 
 	}
 
 	public postRequests(req: restify.Request, res: restify.Response, next: restify.Next){
 
+	let toinsert: Request = {
+
+		from: req.params.from,
+		to: { '@id': `/api/rides/${ req.params.id }` }
+
+	};
+
+		return db
+			.db
+			.collection("requests")
+			.insertOne(toinsert).then((ans) => {
+
+				res.json(201, ans);  
+
+			}).catch((err) => {
+
+				res.json(400, {message: err});
+
+			});
 
 
 	}

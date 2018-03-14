@@ -6,6 +6,7 @@ import { settings } from '../../server/app/config/config';
 import { UsersMock } from '../mocks/user';
 import { RidesMock } from '../mocks/ride';
 import { MessagesMock } from '../mocks/message';
+import { RequestsMock } from '../mocks/requests';
 
 export function resetMock(){ 
 
@@ -28,6 +29,14 @@ export function resetMock(){
 
 		}).then(() => {
 
+			return db.collection('requests').drop();
+
+		}).catch(() => {
+
+		 	console.log('Error while dropping the collections'); 
+
+		}).then(() => {
+
 			return db.collection('users').insert(UsersMock.map((element) => {
 
 				element._id = element.name;	
@@ -46,6 +55,11 @@ export function resetMock(){
 
 
 			return db.collection('messages').insert(MessagesMock);
+
+		}).then( () => {
+
+
+			return db.collection('requests').insert(RequestsMock);
 
 		})
 	})
