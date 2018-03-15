@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Rider } from 'shared/models/rider'
-import { RidersMock } from 'shared/mocks/rider';
+import { Ride } from 'shared/models/ride'
+import { RidesMock } from 'shared/mocks/ride';
 
 /*
   Generated class for the RidersProvider provider.
@@ -20,7 +20,7 @@ export class RidersProvider {
   /*
     Used when a driver is offering a ride, to invite riders
   */
-  invitable_riders(): Rider[] {
+  invitable_riders(): Ride[] {
 
     console.log('Trying the API call');
 /*
@@ -31,21 +31,27 @@ export class RidersProvider {
     }); 
 */
     console.log('Fetching invitable riders');
-    return RidersMock;
+    return RidesMock;
 
   }
 
   /*
     Used when a rider request a ride, to show him matches
   */
-  request_find_ride(): Rider[] {
+  request_find_ride(): Ride[] {
 
     console.log('Fetching invitable riders');
-    return RidersMock;
+    return RidesMock;
 
   }
 
   /*
-      
-  */
+  	Offer a ride
+	*/
+	offer_ride(ride: Ride) {
+
+		console.log(`Provider: recieved a ride ${ ride }`)
+
+	}
+
 }

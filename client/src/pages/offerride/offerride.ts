@@ -17,6 +17,7 @@ import { OfferInvitePage } from '../offer-invite/offer-invite';
 
 import { AddressModalPage } from '../address-modal/address-modal'; 
 
+import { RidersProvider } from '../../providers/riders/riders';
 
 enum PayementPhilosophy {
 
@@ -49,8 +50,9 @@ export class OfferRidePage  {
   constructor(
         public navCtrl: NavController, 
         public navParams: NavParams,
-	public modalCtrl: ModalController) {
-    this.philosophy = 0
+				public modalCtrl: ModalController,
+				public ridersProvider: RidersProvider) {
+		this.philosophy = 0;
     this._next = false;
   }
 
@@ -234,7 +236,17 @@ export class OfferRidePage  {
   }
 
   valid() {
-  
+ 		
+		// this.ridersProvider.offer_ride({
+
+		// 	origin: this.origin,
+		// 	destination: this.destination,
+		// 	riding_time: this.riding_time,
+		// 	payement: this.payement,
+		// 	riders: []
+
+		// });
+
     this.navCtrl.push(OfferInvitePage);
   
   }

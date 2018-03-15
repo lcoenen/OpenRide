@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Rider } from 'shared/models/rider';
+import { Ride } from 'shared/models/ride';
 
 import { RidersProvider } from '../../providers/riders/riders';
 
@@ -19,7 +19,7 @@ import { RidersProvider } from '../../providers/riders/riders';
 })
 export class RequestFindRidePage {
 
-  drivers: Rider[];
+  drivers: Ride[];
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,

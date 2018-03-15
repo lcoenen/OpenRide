@@ -16,11 +16,20 @@
 <ion-content padding>
 
 
-  <ion-item>
-    <ion-label fixed>Address:</ion-label>
-    <ion-input name="address" [(ngModel)]="address" type="text"></ion-input>
+  <ion-item class="overflow">
+		<ion-label fixed>Address:</ion-label>
+		<ion-auto-complete
+			item-content
+			[dataProvider]="nominatimProvider"	
+			[(ngModel)]="address"
+			type="text"></ion-auto-complete>
   </ion-item>
 
 <button ion-button (click)="pick()">Pick</button>
+
+<div style="height: 70%;"
+     leaflet
+		 [leafletCenter]="center">
+</div>
 
 </ion-content>
