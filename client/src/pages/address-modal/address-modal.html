@@ -1,14 +1,14 @@
 <!--
-  Generated template for the AddressModalPage page.
+Generated template for the AddressModalPage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
+See http://ionicframework.com/docs/components/#navigation for more info on
+Ionic pages and navigation.
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Pick an address</ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<ion-title>Pick an address</ion-title>
+	</ion-navbar>
 
 </ion-header>
 
@@ -16,20 +16,24 @@
 <ion-content padding>
 
 
-  <ion-item class="overflow">
+	<ion-item class="overflow">
 		<ion-label fixed>Address:</ion-label>
 		<ion-auto-complete
 			item-content
 			[dataProvider]="nominatimProvider"	
 			[(ngModel)]="address"
+			#searchbar
+			(itemSelected)="itemSelected($event)"
 			type="text"></ion-auto-complete>
-  </ion-item>
+	</ion-item>
 
-<button ion-button (click)="pick()">Pick</button>
+	<button ion-button (click)="pick()">Pick</button>
 
-<div style="height: 70%;"
-     leaflet
-		 [leafletCenter]="center">
-</div>
+	<div style="height: 70%;"
+		leaflet
+		[leafletOptions]="map_options"
+		[leafletZoom]="zoom"
+		[leafletCenter]="center">
+	</div>
 
 </ion-content>

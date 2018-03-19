@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 import { NominatimProvider } from '../../providers/nominatim/nominatim';
+import { AutoCompleteComponent } from 'ionic2-auto-complete';
+
+import { ViewChild } from '@angular/core';
+
+import L from "leaflet";
 
 /**
  * Generated class for the AddressModalPage page.
@@ -17,7 +22,18 @@ import { NominatimProvider } from '../../providers/nominatim/nominatim';
 })
 export class AddressModalPage {
 
-  private address:string;
+	private address:string;
+	public center: number[];
+	public layers: any[] = [];
+	public map_options: object = {
+		layers: [
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' })
+    ],
+		zoom: 5,
+    center: [42.044355, -74.1185505 ]};
+
+  @ViewChild('searchbar')
+  searchbar: AutoCompleteComponent;
 
   constructor(
 		public viewCtrl: ViewController,
@@ -25,10 +41,17 @@ export class AddressModalPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AddressModalPage');
   }
 
-  pick(){
+	itemSelected(selection: any) {
+	
+		this.center = [selection.lat, selection.lon];
+		this.zoom = 14;
+		this.layers = [L.marker(this.center)];
+
+	}
+	
+	pick(){
     console.log('Address is ');
     console.log(this.address);
 

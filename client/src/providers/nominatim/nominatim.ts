@@ -8,10 +8,10 @@ import 'rxjs/add/operator/map'
 // import { Feature, Point } from 'geojson' ;
 
 /*
-  Generated class for the NominatimProvider provider.
+	Generated class for the NominatimProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
+	See https://angular.io/guide/dependency-injection for more info on providers
+	and Angular DI.
  */
 
 const nominatimUrl:string = 'https://nominatim.openstreetmap.org/search?q=SEARCH&format=json';
@@ -21,10 +21,11 @@ export class NominatimProvider implements AutoCompleteService {
 
 
 	labelAttribute = "display_name";
+	formValueAttribute = '';
 
-  constructor(public http: HttpClient) {
-    console.log('Hello NominatimProvider Provider');
-  }
+	constructor(public http: HttpClient) {
+		console.log('Hello NominatimProvider Provider');
+	}
 
 	getResults(address: string){
 
@@ -40,4 +41,6 @@ export class NominatimProvider implements AutoCompleteService {
 			})
 
 	}
+
+
 }
