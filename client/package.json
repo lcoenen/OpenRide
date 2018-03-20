@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.0",
+    "@types/crypto-js": "^3.1.38",
     "typescript": "2.4.2"
   },
   "description": "FOSS ride-sharing application",
