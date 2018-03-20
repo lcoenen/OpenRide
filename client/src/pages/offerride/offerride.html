@@ -22,17 +22,18 @@ Ionic pages and navigation.
     <h2>Destination</h2>
     <ion-item>
     <ion-label floating>Where are you going?</ion-label>
-    <ion-select [(ngModel)]="destination">
+    <ion-select (ionChange)="setDestination()" multiple="false" [(ngModel)]="destination">
       <ion-option value="here">Here</ion-option>
       <ion-option value="address">Pick an address
 				<ion-icon name="arrow-dropdown" icon-right></ion-icon>
 				</ion-option>
 
-      <ion-option value="anywherenearby">Anywhere nearby</ion-option>
+				<ion-option *ngFor="let address of recent_addresses; index as i" value="address{{i}}">{{address.display_name}}
+					</ion-option>
+
     </ion-select>
     </ion-item>
 
-    <p *ngIf="destination == 'address'">You're going to {{destination_address}}</p>
 
   </ion-slide>
 
@@ -42,18 +43,18 @@ Ionic pages and navigation.
     <ion-item>
 	    <ion-label floating>From where will you depart?</ion-label>
 
-	    <ion-select [(ngModel)]="origin">
-	      <ion-option value="here">Here</ion-option>
-	      <ion-option (click)="address_modal()" value="address">Pick an address
-					<ion-icon name="arrow-dropdown" icon-right></ion-icon>
+			
+    <ion-select (ionChange)="setOrigin()" multiple="false" [(ngModel)]="origin">
+      <ion-option value="here">Here</ion-option>
+      <ion-option value="address">Pick an address
+				<ion-icon name="arrow-dropdown" icon-right></ion-icon>
+				</ion-option>
+
+				<ion-option *ngFor="let address of recent_addresses; index as i" value="address{{i}}">{{address.display_name}}
 					</ion-option>
 
-	      <ion-option value="anywherenearby">Anywhere nearby</ion-option>
-	    </ion-select>
+    </ion-select>
     </ion-item>
-
-    <p *ngIf="origin == 'address'">You're going from {{origin_address}}</p>
-
   </ion-slide>
 
   <ion-slide>

@@ -21,222 +21,238 @@ import { RidersProvider } from '../../providers/riders/riders';
 
 enum PayementPhilosophy {
 
-FREE,
-PART,
-REFUNDED, 
-PAID
+	FREE,
+		PART,
+		REFUNDED, 
+		PAID
 
 }
 
 @IonicPage()
 @Component({
-  selector: 'page-offerride',
-  templateUrl: 'offerride.html',
+	selector: 'page-offerride',
+	templateUrl: 'offerride.html',
 })
 export class OfferRidePage  {
 
-  public philosophy: PayementPhilosophy;
+	public philosophy: PayementPhilosophy;
 
-  private _destination: string;
-  private _origin: string;
-  private _riding_time: string;
-  private _payement: string;
+	public recent_addresses: any[] = [];
 
-  private _next: boolean;
+	private _destination: string;
+	private _origin: string;
+	private _riding_time: string;
+	private _payement: string;
 
-  public destination_address: string;
-  public origin_address: string;
+	private _next: boolean;
 
-  constructor(
-        public navCtrl: NavController, 
-        public navParams: NavParams,
-				public modalCtrl: ModalController,
-				public ridersProvider: RidersProvider) {
+	public destination_address: string;
+	public origin_address: string;
+
+	constructor(
+		public navCtrl: NavController, 
+		public navParams: NavParams,
+		public modalCtrl: ModalController,
+		public ridersProvider: RidersProvider) {
 		this.philosophy = 0;
-    this._next = false;
-  }
+		this._next = false;
+	}
 
-  ionViewDidLoad() {
-    this.slides.lockSwipeToNext(true);
-    console.log('ionViewDidLoad OfferridePage');
+	ionViewDidLoad() {
+		this.slides.lockSwipeToNext(true);
+		console.log('ionViewDidLoad OfferridePage');
 
-  }
+	}
 
-  @ViewChild(Slides) slides: Slides;
+	@ViewChild(Slides) slides: Slides;
 
-  previous() {
-  
-    this.slides.slidePrev();
+	previous() {
 
-    this.refresh_allow_next()
+		this.slides.slidePrev();
 
-  }
+		this.refresh_allow_next()
 
-  next() { 
+	}
 
-    this.slides.slideNext();
+	next() { 
 
-    this.refresh_allow_next()
+		this.slides.slideNext();
 
-  }
+		this.refresh_allow_next()
 
-  isFirst(){
+	}
 
-    return this.slides.isBeginning()
+	isFirst(){
 
-  }
+		return this.slides.isBeginning()
 
+	}
 
-  isLast(){
 
-    return !this._next || this.slides.isEnd()
+	isLast(){
 
-  }
+		return !this._next || this.slides.isEnd()
 
-  isValid(){
-  
-    return this.slides.isEnd()
-  
-  }
+	}
 
-  refresh_allow_next(){
+	isValid(){
 
-    let page = this.slides.getActiveIndex() 
+		return this.slides.isEnd()
 
-    const relevant_vars: string[] = [
-      'destination',
-      'origin',
-      'riding_time',
-      'payement'
-    ]
+	}
 
-    console.log(relevant_vars[page]);
-    console.log(this[relevant_vars[page]]);
-    
-    let allow_next: boolean = this[relevant_vars[page]] != undefined;
+	refresh_allow_next(){
 
-    this._next = allow_next;
-    this.slides.lockSwipeToNext(!allow_next) 
-    console.log('this._next', this._next);
+		let page = this.slides.getActiveIndex() 
 
-  }
+		const relevant_vars: string[] = [
+			'destination',
+			'origin',
+			'riding_time',
+			'payement'
+		]
 
-  address_modal(){
+		console.log(relevant_vars[page]);
+		console.log(this[relevant_vars[page]]);
 
-    console.log('Address modal')
+		let allow_next: boolean = this[relevant_vars[page]] != undefined;
 
-  }
+		this._next = allow_next;
+		this.slides.lockSwipeToNext(!allow_next) 
+		console.log('this._next', this._next);
 
-  set destination(theDestination: string){
+	}
 
-    if(theDestination == 'address'){
+	address_modal(){
 
-      let addressModal = this.modalCtrl.create(AddressModalPage);
-      addressModal.onDidDismiss(data => {
-        this.destination_address = data.address
-      });
-      addressModal.present();
+		console.log('Address modal')
 
-    }
+	}
 
-    this._destination = theDestination
-    this.refresh_allow_next()
+	setDestination(){
 
-  }
+		if(this.destination == 'address'){
 
-  get destination(): string {
+			let addressModal = this.modalCtrl.create(AddressModalPage);
+			addressModal.onDidDismiss(data => {
+				let l = this.recent_addresses.push(data.address);
+				this.destination = `address${l-1}`;
+			});
+			addressModal.present();
 
-    return this._destination
+		}
 
-  }
+		console.log(`Now destination is ${ this.destination }`)
 
-  set origin(theOrigin: string){
+	}
 
-    if(theOrigin == 'address'){
+	set destination(theDestination: string){
 
-      let addressModal = this.modalCtrl.create(AddressModalPage);
-      addressModal.onDidDismiss(data => {
-        this.origin_address = data.address
-      });
-      addressModal.present();
+		this._destination = theDestination
+		this.refresh_allow_next()
 
-    }
+	}
 
-    this._origin = theOrigin
-    this.refresh_allow_next()
+	get destination(): string {
 
-  }
+		return this._destination
 
-  get origin(): string {
+	}
 
-    return this._origin
+	setOrigin(){
 
-  }
+		if(this.origin == 'address'){
 
-  set riding_time(theRidingTime: string){
+			let addressModal = this.modalCtrl.create(AddressModalPage);
+			addressModal.onDidDismiss(data => {
+				let l = this.recent_addresses.push(data.address)
+				this.origin = `address${l-1}`;
+			});
+			addressModal.present();
 
-    this._riding_time = theRidingTime
-    this.refresh_allow_next()
+		}
 
-  }
+		console.log(`Now origin is ${ this.origin }`)
 
-  get riding_time(): string {
+	}
 
-    return this._riding_time
+	set origin(theOrigin: string){
 
-  }
+		this._origin = theOrigin
+		this.refresh_allow_next()
 
+	}
 
-  set asap(theAsap: boolean){
+	get origin(): string {
 
-    if(theAsap)
-      this.riding_time = 'asap';
-    else
-      this.riding_time = '';
-  }
+		return this._origin
 
+	}
 
+	set riding_time(theRidingTime: string){
 
-  get asap(): boolean {
+		this._riding_time = theRidingTime
+		this.refresh_allow_next()
 
-    return this.riding_time == 'asap';
+	}
 
-  }
+	get riding_time(): string {
 
-  set payement(thePayement: string){
+		return this._riding_time
 
-    this._payement = thePayement
-    this.refresh_allow_next()
+	}
 
 
-    const _boundaries = {
-     
-      10: PayementPhilosophy.FREE,
-      40: PayementPhilosophy.PART,
-      60: PayementPhilosophy.REFUNDED,
-      80: PayementPhilosophy.PAID
-      
-    }
-    
-    for (let i in _boundaries) {
+	set asap(theAsap: boolean){
 
-      let boundary = _boundaries[i];
-      
-      if(thePayement > i)
-        this.philosophy = boundary;
+		if(theAsap)
+			this.riding_time = 'asap';
+		else
+			this.riding_time = '';
+	}
 
-    }
 
-  }
 
-  get payement(): string {
+	get asap(): boolean {
 
-    return this._payement
+		return this.riding_time == 'asap';
 
-  }
+	}
 
-  valid() {
- 		
+	set payement(thePayement: string){
+
+		this._payement = thePayement
+		this.refresh_allow_next()
+
+
+		const _boundaries = {
+
+			10: PayementPhilosophy.FREE,
+			40: PayementPhilosophy.PART,
+			60: PayementPhilosophy.REFUNDED,
+			80: PayementPhilosophy.PAID
+
+		}
+
+		for (let i in _boundaries) {
+
+			let boundary = _boundaries[i];
+
+			if(thePayement > i)
+				this.philosophy = boundary;
+
+		}
+
+	}
+
+	get payement(): string {
+
+		return this._payement
+
+	}
+
+	valid() {
+
 		// this.ridersProvider.offer_ride({
 
 		// 	origin: this.origin,
@@ -247,8 +263,8 @@ export class OfferRidePage  {
 
 		// });
 
-    this.navCtrl.push(OfferInvitePage);
-  
-  }
+		this.navCtrl.push(OfferInvitePage);
+
+	}
 
 }

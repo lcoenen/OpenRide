@@ -22,8 +22,9 @@ import L from "leaflet";
 })
 export class AddressModalPage {
 
-	private address:string;
+	public address: any;
 	public center: number[];
+	public zoom: number;
 	public layers: any[] = [];
 	public map_options: object = {
 		layers: [
@@ -47,7 +48,9 @@ export class AddressModalPage {
 	
 		this.center = [selection.lat, selection.lon];
 		this.zoom = 14;
-		this.layers = [L.marker(this.center)];
+		this.layers = [L.marker(selection.lat, selection.lon)];
+
+		this.address = selection;
 
 	}
 	
