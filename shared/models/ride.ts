@@ -19,6 +19,6 @@ export interface Ride {
 export function hashRide(ride: Ride) : string {
 
 	return hash(ride.origin.properties.address, ride.destination.properties.address, 
-		ride.payement, (new Date).now());
+		ride.payement, (new Date).toString());
 
 }

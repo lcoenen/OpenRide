@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-function checksum (str, algorithm?, encoding?) {
+function checksum (str: any, algorithm? :any, encoding?: any) {
     return crypto
         .createHash(algorithm || 'md5')
         .update(str, 'utf8')
@@ -12,5 +12,3 @@ export function hash(...str: any[]) : string {
 	return checksum(str.reduce((a,b) => a + b, ''));
 
 }
-
-console.log(`Trying to get ${ hash("salut", "ehllo", 22) }`)
