@@ -267,7 +267,7 @@ export class OfferRidePage  {
 			origin: NominatimToGeoJSON(this.recent_addresses[this.originId]),
 			destination: NominatimToGeoJSON(this.recent_addresses[this.destinationId]),
 			riding_time: this.riding_time,
-			payement: this.payement,
+			payement: Number(this.payement),
 			riders: []
 
 		}).then(() => {

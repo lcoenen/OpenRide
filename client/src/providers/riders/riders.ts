@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Ride } from 'shared/models/ride'
+import { Ride, hashRide } from 'shared/models/ride'
 import { RidesMock } from 'shared/mocks/ride';
 
 import { settings } from '../../config/config';
@@ -53,7 +53,8 @@ export class RidersProvider {
 		Offer a ride
 	 */
 	offer_ride(ride: Ride) {
-		
+
+		if(!ride._id) ride._id = hashRide(ride);
 		console.log(`Provider: recieved a ride`)
 		console.log(ride)
 		console.log(`Trying to contact ${  settings.apiEndpoint + `/api/rides`}`)
