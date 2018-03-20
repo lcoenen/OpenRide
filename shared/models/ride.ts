@@ -10,7 +10,7 @@ export interface Ride {
   _id?: string;
   origin: Feature<Point>;
   destination: Feature<Point>;
-  riding_time: Date;
+  riding_time: Date | string;
   payement?: number;
   driver?: Link;
   riders: Link[];
@@ -19,6 +19,6 @@ export interface Ride {
 export function hashRide(ride: Ride) : string {
 
 	return hash(ride.origin.properties.address, ride.destination.properties.address, 
-		ride.payement, (Date.now()));
+		ride.payement, (new Date).now());
 
 }
