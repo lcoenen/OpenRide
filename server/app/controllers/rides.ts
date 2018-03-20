@@ -70,6 +70,7 @@ export default class ridesController {
 		}).catch((err) => {
 
 			res.json(400, {message: err});
+			logger.error(`Bad request: ${ err }`)
 
 		});
 
