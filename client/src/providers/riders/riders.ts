@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Ride } from 'shared/models/ride'
 import { RidesMock } from 'shared/mocks/ride';
 
-import { settings } from '../../config/config.ts';
+import { settings } from '../../config/config';
 
 import 'rxjs/add/operator/toPromise';
 
