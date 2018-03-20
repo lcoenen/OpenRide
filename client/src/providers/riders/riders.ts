@@ -4,53 +4,73 @@ import { Injectable } from '@angular/core';
 import { Ride } from 'shared/models/ride'
 import { RidesMock } from 'shared/mocks/ride';
 
-/*
-  Generated class for the RidersProvider provider.
+import { settings } from '../../config/config.ts';
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+import 'rxjs/add/operator/toPromise';
+
+/*
+	Generated class for the RidersProvider provider.
+
+	See https://angular.io/guide/dependency-injection for more info on providers
+	and Angular DI.
+ */
 @Injectable()
 export class RidersProvider {
 
-  constructor(public httpClient: HttpClient) {
-    console.log('Hello RidersProvider Provider');
-  }
+	constructor(public httpClient: HttpClient) {
+		console.log('Hello RidersProvider Provider');
+	}
 
-  /*
-    Used when a driver is offering a ride, to invite riders
-  */
-  invitable_riders(): Ride[] {
+	/*
+		Used when a driver is offering a ride, to invite riders
+	 */
+	invitable_riders(): Ride[] {
 
-    console.log('Trying the API call');
-/*
-    this.httpClient.get('localhost:3000/api/ping').subscribe( data => {
+		console.log('Trying the API call');
+		/*
+		this.httpClient.get('localhost:3000/api/ping').subscribe( data => {
 
-      console.log('Answer from the API', data);
+			console.log('Answer from the API', data);
 
-    }); 
-*/
-    console.log('Fetching invitable riders');
-    return RidesMock;
+		}); 
+		 */
+		console.log('Fetching invitable riders');
+		return RidesMock;
 
-  }
+	}
 
-  /*
-    Used when a rider request a ride, to show him matches
-  */
-  request_find_ride(): Ride[] {
+	/*
+		Used when a rider request a ride, to show him matches
+	 */
+	request_find_ride(): Ride[] {
 
-    console.log('Fetching invitable riders');
-    return RidesMock;
+		console.log('Fetching invitable riders');
+		return RidesMock;
 
-  }
+	}
 
-  /*
-  	Offer a ride
-	*/
+	/*
+		Offer a ride
+	 */
 	offer_ride(ride: Ride) {
+		
+		console.log(`Provider: recieved a ride`)
+		console.log(ride)
+		console.log(`Trying to contact ${  settings.apiEndpoint + `/api/rides`}`)
+		return this.httpClient
+			.post(
+				settings.apiEndpoint + `/api/rides`,
+				ride)
+			.toPromise()
+			.catch((msg) => {
 
-		console.log(`Provider: recieved a ride ${ ride }`)
+				console.error(`RiderProvider: offerride() tried to contact the server but recieved an error`)
+				console.error(`Status: ${ msg.status } ${ msg.statusText }`)
+				console.log(msg)
+
+				throw Error(msg);
+
+			})
 
 	}
 

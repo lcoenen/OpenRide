@@ -5,7 +5,8 @@ import { AutoCompleteService } from 'ionic2-auto-complete';
 
 import 'rxjs/add/operator/map'
 
-// import { Feature, Point } from 'geojson' ;
+import { Feature, Point } from 'geojson' ;
+
 
 /*
 	Generated class for the NominatimProvider provider.
@@ -42,5 +43,21 @@ export class NominatimProvider implements AutoCompleteService {
 
 	}
 
+}
+
+export function NominatimToGeoJSON(nominatimAnswer: any) : Feature<Point> {
+
+ return {
+
+		'type': 'Feature',
+		'geometry': {
+			'type': 'Point',
+			'coordinates': [Number(nominatimAnswer.lat), Number(nominatimAnswer.lon)]
+		},
+		'properties': {
+			'address': nominatimAnswer.display_name 
+		}
+
+ }
 
 }

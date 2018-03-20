@@ -19,6 +19,8 @@ import { AddressModalPage } from '../address-modal/address-modal';
 
 import { RidersProvider } from '../../providers/riders/riders';
 
+import { NominatimToGeoJSON } from '../../providers/nominatim/nominatim';
+
 enum PayementPhilosophy {
 
 	FREE,
@@ -48,6 +50,9 @@ export class OfferRidePage  {
 
 	public destination_address: string;
 	public origin_address: string;
+
+	public destinationId: number;
+	public originId: number;
 
 	constructor(
 		public navCtrl: NavController, 
@@ -137,6 +142,8 @@ export class OfferRidePage  {
 			addressModal.onDidDismiss(data => {
 				let l = this.recent_addresses.push(data.address);
 				this.destination = `address${l-1}`;
+				this.destinationId = l-1;
+				// ugly shit over here...
 			});
 			addressModal.present();
 
@@ -167,6 +174,8 @@ export class OfferRidePage  {
 			addressModal.onDidDismiss(data => {
 				let l = this.recent_addresses.push(data.address)
 				this.origin = `address${l-1}`;
+				this.originId = l-1;
+				// ugly shit over here...
 			});
 			addressModal.present();
 
@@ -253,17 +262,19 @@ export class OfferRidePage  {
 
 	valid() {
 
-		// this.ridersProvider.offer_ride({
+		this.ridersProvider.offer_ride({
 
-		// 	origin: this.origin,
-		// 	destination: this.destination,
-		// 	riding_time: this.riding_time,
-		// 	payement: this.payement,
-		// 	riders: []
+			origin: NominatimToGeoJSON(this.recent_addresses[this.originId]),
+			destination: NominatimToGeoJSON(this.recent_addresses[this.destinationId]),
+			riding_time: this.riding_time,
+			payement: this.payement,
+			riders: []
 
-		// });
+		}).then(() => {
 
-		this.navCtrl.push(OfferInvitePage);
+			this.navCtrl.push(OfferInvitePage);
+
+		})
 
 	}
 
