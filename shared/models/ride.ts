@@ -5,6 +5,10 @@ import { hash } from '../lib/hash';
 
 import { Feature, Point } from 'geojson' ;
 
+export enum RideType {
+	REQUEST,
+	OFFER
+}
 
 export interface Ride {
   _id?: string;
@@ -14,6 +18,7 @@ export interface Ride {
   payement?: number;
   driver?: Link | User;
 	riders: Link[] | User[];
+	type: RideType;
 };
 
 export function hashRide(ride: Ride) : string {
