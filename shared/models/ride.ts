@@ -12,8 +12,8 @@ export interface Ride {
   destination: Feature<Point>;
   riding_time: Date | string;
   payement?: number;
-  driver?: Link;
-  riders: Link[];
+  driver?: Link | User;
+	riders: Link[] | User[];
 };
 
 export function hashRide(ride: Ride) : string {

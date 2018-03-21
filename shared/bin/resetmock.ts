@@ -1,3 +1,4 @@
+#! /usr/share/ts-node
 
 import { MongoClient, Db } from 'mongodb';
 

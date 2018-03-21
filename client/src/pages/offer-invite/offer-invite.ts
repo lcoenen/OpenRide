@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Ride } from 'shared/models/ride';
+import { User } from 'shared/models/user';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
 
@@ -21,15 +21,18 @@ import { RidersProvider } from '../../providers/riders/riders';
 })
 export class OfferInvitePage {
 
-  public riders: Ride[];
+  public riders: User[];
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
     public ridersProvider: RidersProvider) {
 
-      this.riders = ridersProvider.invitable_riders();
+		ridersProvider.invitable_riders()/*.then((riders: User[]) => {
 
-      console.log(this.riders)
+        this.rides = riders  
+				console.log(this.riders)
+
+			})*/
 
   }
 
