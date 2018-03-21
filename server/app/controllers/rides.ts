@@ -197,7 +197,7 @@ export default class ridesController {
 						$maxDistance: maxDistance * 1000
 					}},
 				'_id': {'$ne': foundRide._id },
-				'driver': { '$exists': foundRide.driver == undefined }	
+				'type': { '$ne': foundRide.type }	
 
 			}
 
