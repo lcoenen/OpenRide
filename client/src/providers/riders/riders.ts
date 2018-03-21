@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Ride, hashRide } from 'shared/models/ride'
 import { Link } from 'shared/models/link'
+import { User } from 'shared/models/user'
 import { RidesMock } from 'shared/mocks/ride';
 
 import { settings } from '../../config/config';
@@ -29,8 +30,6 @@ export class RidersProvider {
 		Used when a driver is offering a ride, to invite riders
 	 */
 	invitable_riders(): Observable<Ride[]> {
-
-		return Observable.of(RidesMock)
 
 		// A stream that emit one Link[] 
 		return this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ this.currentRideId }/matches`)
