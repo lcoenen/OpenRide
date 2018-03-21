@@ -134,6 +134,49 @@ describe('matching', () => {
 	
 	});
 
+	it("should not return rides of the same types (offer or request)", () => {
+
+		return (() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postRiderExample)
+
+		})().then((res:any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverLesserExample)
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			return chai.request(url)
+				.post('/api/rides')
+				.send(postDriverExample)
+
+		}).then((res: any) => {
+
+			return chai.request(url)
+				.get(`/api/rides/${ postDriverLesserExample._id }/matches`)
+
+		}).then((res: any) => {
+
+			let ans = JSON.parse(res.text);
+			expect(ans).to.lengthOf(1);
+			expect(ans[0]['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`);
+
+		})
+
+	});
+
 	it("should accept request sending", () => {
 
 		return (() => {

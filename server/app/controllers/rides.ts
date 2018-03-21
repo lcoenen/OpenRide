@@ -9,7 +9,7 @@ import { session } from '../services/session';
 
 import { ObjectID } from 'mongodb';
 
-import { Ride } from '../../../shared/models/ride';
+import { Ride, RideType } from '../../../shared/models/ride';
 import { Link } from '../../../shared/models/link';
 import { Request } from '../../../shared/models/request';
 
@@ -60,9 +60,12 @@ export default class ridesController {
 			destination: req.params.destination,
 			riding_time: req.params.riding_time,
 			payement: req.params.payement,
-			driver: session.loggedInUser,
+			type: req.params.type,
 			riders: []
 		};
+
+		if(toinsert.type == RideType.REQUEST) toinsert.riders = [session.loggedInUser]
+		else toinsert.driver = session.loggedInUser; 
 
 		db.db.collection('rides').insertOne(toinsert).then((ans) => {
 
@@ -187,17 +190,26 @@ export default class ridesController {
 
 			targetRide = foundRide;
 
+			let criterias = { 
+				'origin.geometry': {
+					$nearSphere: {
+						$geometry: foundRide.origin.geometry,
+						$maxDistance: maxDistance * 1000
+					}},
+				'_id': {'$ne': foundRide._id },
+				'driver': { '$exists': foundRide.driver == undefined }	
+
+			}
+
+			logger.info(criterias)
+
+			// If there's a driver, I need to match it with people 
+			// who are requesting a ride (i.e. without driver)
+
 			return db
 				.db
 				.collection('rides')
-				.find({ 
-					'origin.geometry': {
-						$nearSphere: {
-							$geometry: foundRide.origin.geometry,
-							$maxDistance: maxDistance * 1000
-						}},
-					'_id': {'$ne': foundRide._id}
-				})
+				.find(criterias)
 				.toArray();
 
 		}).then((rides: Ride[]) => {
@@ -223,7 +235,6 @@ export default class ridesController {
 				let payementDifference = a.payement - b.payement;
 
 				const msPerWeek = (1000 * 60 * 60 * 24 * 7);
-  
 
 				let timeDifference = moment(a.riding_time).diff(b.riding_time);
 				timeDifference = timeDifference > msPerWeek? msPerWeek : timeDifference;
@@ -266,12 +277,12 @@ export default class ridesController {
 
 	public postRequests(req: restify.Request, res: restify.Response, next: restify.Next){
 
-	let toinsert: Request = {
+		let toinsert: Request = {
 
-		from: req.params.from,
-		to: { '@id': `/api/rides/${ req.params.id }` }
+			from: req.params.from,
+			to: { '@id': `/api/rides/${ req.params.id }` }
 
-	};
+		};
 
 		return db
 			.db

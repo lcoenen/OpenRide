@@ -1,4 +1,4 @@
-import { Ride } from '../models/ride';
+import { Ride, RideType } from '../models/ride';
 import { Place } from '../models/place';
 
 import { PlacesMock } from './place';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 export let RidesMock: Ride[] = [
 	{
 		_id: 'LiegeLiege',
+		type: RideType.OFFER,
 		origin: PlacesMock[0],
 		destination: PlacesMock[1],
 		riding_time: moment().add(2, 'days').toDate(),
@@ -17,6 +18,7 @@ export let RidesMock: Ride[] = [
 
 	{
 		_id: 'LiegeBruxelles',
+		type: RideType.OFFER,
 		origin: PlacesMock[1],
 		destination: PlacesMock[3],
 		riding_time: moment().add(1, 'days').hour(12).minute(32).toDate(),
@@ -28,6 +30,7 @@ export let RidesMock: Ride[] = [
 	{
 		_id: 'MaastrichtBruxelles',
 		origin: PlacesMock[2],
+		type: RideType.OFFER,
 		destination: PlacesMock[3],
 		riding_time: moment().add(3, 'days').hour(11).minute(50).toDate(),
 		riders: [ { '@id': '/api/users/PB' } ],
@@ -36,6 +39,7 @@ export let RidesMock: Ride[] = [
 
 	{
 		_id: 'ValenciennesLiege',
+		type: RideType.OFFER,
 		origin: PlacesMock[4],
 		destination: PlacesMock[1],
 		riding_time: moment().add(2, 'days').hour(10).minute(19).toDate(),
@@ -44,6 +48,7 @@ export let RidesMock: Ride[] = [
 	},
 	{
 		_id: 'BruxellesLiege',
+		type: RideType.OFFER,
 		origin: PlacesMock[3],
 		destination: PlacesMock[0],
 		riding_time: moment().add(1, 'days').hour(15).minute(43).toDate(),
@@ -52,6 +57,7 @@ export let RidesMock: Ride[] = [
 	},
 	{
 		_id: 'BruxellesLiegeRequest',
+		type: RideType.REQUEST,
 		origin: PlacesMock[5],
 		destination: PlacesMock[1],
 		riding_time: moment().add(1, 'days').hour(12).minute(32).toDate(),
@@ -62,6 +68,7 @@ export let RidesMock: Ride[] = [
 
 export const postDriverExample: Ride = {
 	'_id': 'EindhovenMaastricht',
+	'type': RideType.OFFER,
 	'origin': {
 		'type': 'Feature',
 		'geometry': {
@@ -90,6 +97,7 @@ export const postDriverExample: Ride = {
 
 export const postRiderExample = {
 	'_id': 'EindhovenMaastrichtRequest',
+	'type': RideType.REQUEST,
 	'origin': {
 		'type': 'Feature',
 		'geometry': {
@@ -117,6 +125,7 @@ export const postRiderExample = {
 
 export const postDriverLesserExample: Ride = {
 	'_id': 'EindhovenMaastrichtLesser',
+	'type': RideType.OFFER,
 	'origin': {
 		'type': 'Feature',
 		'geometry': {
