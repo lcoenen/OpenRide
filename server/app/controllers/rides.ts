@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { logger } from '../services/logger';
 import { db } from '../services/db';
+import { session } from '../services/session';
 
 import { ObjectID } from 'mongodb';
 
@@ -59,7 +60,7 @@ export default class ridesController {
 			destination: req.params.destination,
 			riding_time: req.params.riding_time,
 			payement: req.params.payement,
-			driver: {'@id': 'Louise'},
+			driver: session.loggedInUser,
 			riders: []
 		};
 
