@@ -27,12 +27,12 @@ export class OfferInvitePage {
     public navParams: NavParams,
     public ridersProvider: RidersProvider) {
 
-		ridersProvider.invitable_riders()/*.then((riders: User[]) => {
+		ridersProvider.invitable_riders().subscribe((rides: Ride[]) => {
+				console.log(`Recieved an answer: l.31`)
+				console.log(rides)
+        this.rides = rides  
 
-        this.rides = riders  
-				console.log(this.riders)
-
-			})*/
+			})
 
   }
 

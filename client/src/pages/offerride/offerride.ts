@@ -6,6 +6,8 @@
  * Ionic pages and navigation.
  */
 
+import { Ride, RideType } from 'shared/models/ride';
+
 import { ViewChild } from '@angular/core';
 import { Slides } from 'ionic-angular';
 import { ModalController, NavParams, IonicPage, NavController } from 'ionic-angular';
@@ -268,8 +270,8 @@ export class OfferRidePage  {
 			destination: NominatimToGeoJSON(this.recent_addresses[this.destinationId]),
 			riding_time: this.riding_time,
 			payement: Number(this.payement),
-			riders: []
-
+			riders: [],
+			type: RideType.OFFER
 		}).then(() => {
 
 			this.navCtrl.push(OfferInvitePage);

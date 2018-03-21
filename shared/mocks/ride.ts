@@ -1,5 +1,4 @@
 import { Ride, RideType } from '../models/ride';
-import { Place } from '../models/place';
 
 import { PlacesMock } from './place';
 

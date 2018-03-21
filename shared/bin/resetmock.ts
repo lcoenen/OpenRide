@@ -1,4 +1,4 @@
-#! /usr/share/ts-node
+#! /usr/bin/ts-node
 
 import { MongoClient, Db } from 'mongodb';
 
