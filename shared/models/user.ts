@@ -13,3 +13,10 @@ export interface User {
 	email: string;
 }
 
+export interface Credentials {
+
+	login: string;
+	password: string;
+	rememberme?: boolean;
+
+}

@@ -12,7 +12,7 @@ import { expect } from 'chai' ;
 import 'mocha';
 
 import { User } from '../../shared/models/user';
-import { userSignupExample } from '../../shared/mocks/user';
+import { userSignupExample, userSignupCredentials	} from '../../shared/mocks/user';
 
 import { resetMock } from '../../shared/bin/resetmock';
 
@@ -67,7 +67,43 @@ describe('session',  () => {
 
 	});
 
-	it("should accept login");
+	it("should accept login", () => {
+				  
+		return (() => {
+			
+			return chai.request(url)
+				.post('/api/users/me')
+				.send(userSignupCredentials)
+
+		})().then((ans: any) => {
+
+			expect(ans).to.have.status(201);
+
+		});
+
+	});
+
+	it("should fail with a not found if there's no such user or email", () => {
+
+		return (() => {
+
+			userSignupCredentials['password'] = 'fake';
+
+			return chai.request(url)
+				.post('/api/users/me')
+				.send(userSignupCredentials)
+
+		})().catch((err:any) => {
+
+			console.log(`l. 98`)
+			console.log(err)
+
+		})
+
+	});
+	it("should fail with an unauthorise if the password is not good");
+	it("should remember me once I'm connected");
+
 	it("should should accept logout");
 
 });

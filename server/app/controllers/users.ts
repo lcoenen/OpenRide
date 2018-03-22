@@ -72,4 +72,21 @@ export default class usersController {
 
 	}
 
+	public login(req: restify.Request, res: restify.Response, next: restify.Next) {
+
+		
+
+	}
+
+	public connected_user(req: restify.Request, res: restify.Response, next: restify.Next) {
+
+
+
+	}
+
+	public logout(req: restify.Request, res: restify.Response, next: restify.Next) {
+
+
+
+	}
 }
