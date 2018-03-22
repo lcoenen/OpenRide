@@ -6,7 +6,7 @@ function users_routes(api:restify.Server) {
 
   let routeCtrl = new usersController();
   api.get('/api/users/:id', routeCtrl.get);
-  api.post('/api/users', routeCtrl.post);
+  api.post('/api/users', routeCtrl.signup);
   api.del('/api/users/:id', routeCtrl.del);
 
 }
