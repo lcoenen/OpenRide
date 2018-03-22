@@ -35,7 +35,7 @@ Ionic pages and navigation.
 					<ion-icon name='arrow-dropleft-circle' item-start></ion-icon>
 					Departure
 					<ion-note item-end>
-						Rue du Decibel, 22, Paris
+						{{currentRide.origin.properties.address}}	
 					</ion-note>
 				</ion-item>
 
@@ -43,7 +43,7 @@ Ionic pages and navigation.
 					<ion-icon name='arrow-dropright-circle' item-start></ion-icon>
 					Destination	 
 					<ion-note item-end>
-						Rue du son, 67, Liege
+						{{currentRide.destination.properties.address}}	
 					</ion-note>
 				</ion-item>
 
@@ -51,7 +51,7 @@ Ionic pages and navigation.
 					<ion-icon name='time' item-start></ion-icon>
 					Riding time
 					<ion-note item-end>
-						ASAP 
+						{{currentRide.riding_time}}		 
 					</ion-note>
 				</ion-item>
 
@@ -59,7 +59,7 @@ Ionic pages and navigation.
 					<ion-icon name='cash' item-start></ion-icon>
 					Payement
 					<ion-note item-end>
-						50$ 
+						{{currentRide.payement}}€		 
 					</ion-note>
 				</ion-item>
 

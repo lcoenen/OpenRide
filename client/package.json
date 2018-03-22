@@ -10,7 +10,7 @@
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "serve": "ionic serve -f firefox"
+    "serve": "ionic serve -c --browser /dev/null"
   },
   "dependencies": {
     "@angular/common": "5.0.0",

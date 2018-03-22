@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+
 import { Injectable } from '@angular/core';
 
 import { Ride, hashRide } from 'shared/models/ride'
@@ -20,7 +21,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class RidersProvider {
 
-	public currentRideId: string;
+	public currentRide: Ride;
 
 	constructor(public httpClient: HttpClient) {
 		console.log('Hello RidersProvider Provider');
@@ -91,7 +92,7 @@ request_find_ride(): Ride[] {
 offer_ride(ride: Ride) {
 
 	if(!ride._id) ride._id = hashRide(ride);
-	this.currentRideId = ride._id;
+	this.currentRide = ride;
 	console.log(`Provider: recieved a ride`)
 	console.log(ride)
 	console.log(`Trying to contact ${  settings.apiEndpoint + `/api/rides`}`)
@@ -109,6 +110,12 @@ offer_ride(ride: Ride) {
 			throw Error(msg);
 
 		})
+
+}
+
+get currentRideId(){
+
+	return this.currentRide._id;
 
 }
 
