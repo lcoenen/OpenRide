@@ -1,3 +1,4 @@
+#! /usr/bin/ts-node
 
 import { MongoClient, Db } from 'mongodb';
 
@@ -14,26 +15,15 @@ export function resetMock(){
 
 		let db: Db = client.db(settings.dbName);
 
-		return (() => {
+		return Promise.all([
+			db.collection('users').drop(),
+			db.collection('rides').drop(),
+			db.collection('requests').drop(),
+			db.collection('messages').drop()
+		])
+		.catch((err) => {
 
-			return db.collection('rides').drop()
-
-		})().then(() => {
-
-		  
-			return db.collection('users').drop();
-
-		}).then(() => {
-
-			return db.collection('messages').drop();
-
-		}).then(() => {
-
-			return db.collection('requests').drop();
-
-		}).catch(() => {
-
-		 	console.log('Error while dropping the collections'); 
+		 	console.log(`Error while dropping the collections. ${ err.message }`); 
 
 		}).then(() => {
 
@@ -45,6 +35,7 @@ export function resetMock(){
 			}));
 
 		}).then( () => {
+	
 
 			db.collection('rides').createIndex( { 'destination.geometry'  : "2dsphere" } );
 			db.collection('rides').createIndex( { 'origin.geometry'  : "2dsphere" } );

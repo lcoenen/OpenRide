@@ -6,3 +6,4 @@ export interface Config {
   mongoUrl: string;
   dbName: string;
 }
+

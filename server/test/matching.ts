@@ -39,7 +39,7 @@ describe('matching', () => {
 		return (() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -49,7 +49,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -89,7 +89,7 @@ describe('matching', () => {
 		return (() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -99,7 +99,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverLesserExample._id}`)
 				.send(postDriverLesserExample)
 
 		}).then((res: any) => {
@@ -109,7 +109,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -139,7 +139,7 @@ describe('matching', () => {
 		return (() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -149,7 +149,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverLesserExample._id}`)
 				.send(postDriverLesserExample)
 
 		}).then((res: any) => {
@@ -159,7 +159,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -182,7 +182,7 @@ describe('matching', () => {
 		return (() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -192,7 +192,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -224,7 +224,7 @@ describe('matching', () => {
 		return (() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -234,7 +234,7 @@ describe('matching', () => {
 		}).then(() => {
 
 			return chai.request(url)
-				.post('/api/rides')
+				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
 
 		}).then((res: any) => {

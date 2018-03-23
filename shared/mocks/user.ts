@@ -43,7 +43,7 @@ let UsersMock: User[] = [
 	{
 		name: 'PB',
 		login: 'princess77',
-		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
+		password: '6afd4731177767192adaf5f064fc0fa88097d109',
 		age: 17,
 		email: 'princess@candykingdom.com',
 		place_of_origin: 'Bubblegum castle',
@@ -71,10 +71,10 @@ let userSignupExample: User = {
 	reputation: 32
 }
 
-let userSignupCredentials	= {
+const userSignupCredentials	= {
 
-	'login': 'mordecai',
-	'password': 'e51e002cf339122c1576deafff386d09dc0bda40',
+	'login': 'princess77',
+	'password': '6afd4731177767192adaf5f064fc0fa88097d109',
 	'rememberMe': true
 
 }

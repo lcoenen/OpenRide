@@ -19,7 +19,8 @@ import { resetMock } from '../../shared/bin/resetmock';
 const url: string = 'localhost:3000';
 
 beforeEach(() => {
-
+	
+	// this.timeout(0)
 	return resetMock();
 
 })
@@ -29,9 +30,9 @@ describe('session',  () => {
 	it("should accept signup", () => {
 
 		return (() => {
-			
+
 			return chai.request(url)
-				.post('/api/users')
+				.put(`/api/users/${ userSignupExample._id}`)
 				.send(userSignupExample)
 
 		})().then((ans: any) => {
@@ -59,7 +60,7 @@ describe('session',  () => {
 			userSignupExample.email = undefined;
 
 			expect(chai.request(url)
-				.post('/api/users')
+				.put(`/api/users/${userSignupExample._id}`)
 				.send(userSignupExample))
 				.to.eventually.be.rejected
 
@@ -68,42 +69,57 @@ describe('session',  () => {
 	});
 
 	it("should accept login", () => {
-				  
-		return (() => {
-			
-			return chai.request(url)
-				.post('/api/users/me')
-				.send(userSignupCredentials)
 
-		})().then((ans: any) => {
+		return chai.request(url)
+			.put('/api/session/me')
+			.send(userSignupCredentials)
+			.then((ans: any) => {
 
-			expect(ans).to.have.status(201);
+				expect(ans).to.have.status(201);
 
-		});
+			})
+			.catch((err: Error) => {
+
+				throw err;
+
+			});
 
 	});
 
 	it("should fail with a not found if there's no such user or email", () => {
 
-		return (() => {
+		let _credentials:any = Object.assign({},userSignupCredentials);
+		_credentials['login'] = 'fake';
 
-			userSignupCredentials['password'] = 'fake';
+		return chai.request(url)
+			.put('/api/session/me')
+			.send(userSignupCredentials)
+			.catch((err: any) => {
+			
+				expect(err).to.have.status(404)
 
-			return chai.request(url)
-				.post('/api/users/me')
-				.send(userSignupCredentials)
-
-		})().catch((err:any) => {
-
-			console.log(`l. 98`)
-			console.log(err)
-
-		})
+			})
 
 	});
-	it("should fail with an unauthorise if the password is not good");
-	it("should remember me once I'm connected");
 
+	it("should fail with an unauthorise if the password is not good", () => {
+	  
+		let _credentials:any = Object.assign({}, userSignupCredentials);
+		_credentials['password'] = 'fake';
+
+		return chai.request(url)
+			.put('/api/session/me')
+			.send(userSignupCredentials)
+			.catch((err: any) => {
+			
+				expect(err).to.have.status(400)
+
+			})
+
+	});
+	it("should remember me once I'm connected");
+	it("should send a cookie when rememberme is true");
+	it("should connect me when I sign up");
 	it("should should accept logout");
 
 });

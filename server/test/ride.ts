@@ -33,9 +33,8 @@ describe('rides',  () => {
 
 	it("should post a new ride", () => {
 
-
 		return chai.request(url)
-			.post('/api/rides')
+			.put(`/api/rides/${postDriverExample._id}`)
 			.send(postDriverExample)
 			.then((res: any) => {
 
@@ -75,7 +74,7 @@ describe('rides',  () => {
 	it("should post a new ride request", () => {
 
 		return chai.request(url)
-			.post('/api/rides')
+			.put(`/api/rides/${postRiderExample._id}`)
 			.send(postRiderExample)
 			.then((res: any) => {
 

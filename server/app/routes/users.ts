@@ -5,13 +5,14 @@ import usersController from '../controllers/users';
 function users_routes(api:restify.Server) {
 
   let routeCtrl = new usersController();
-  api.get('/api/users/:id', routeCtrl.get);
-  api.post('/api/users', routeCtrl.signup);
-  api.del('/api/users/:id', routeCtrl.del);
 
-	api.post('/api/users/me', routeCtrl.login);
-	api.get('/api/users/me', routeCtrl.connected_user);
-	api.del('/api/users/me', routeCtrl.logout);
+	api.get('/api/session/me', routeCtrl.connected_user);
+	api.put('/api/session/me', routeCtrl.login);
+	api.del('/api/session/me', routeCtrl.logout);
+
+	api.get('/api/users/:id', routeCtrl.get);
+	api.put('/api/users/:id', routeCtrl.signup);
+  api.del('/api/users/:id', routeCtrl.del);
 
 }
 
