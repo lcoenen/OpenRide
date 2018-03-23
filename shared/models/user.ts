@@ -5,7 +5,7 @@ export interface User {
   _id?: string;
 	name: string;
 	login: string;
-	password: string; //	SHA encrypted
+	password?: string; //	SHA encrypted
   age: number;
   place_of_origin: string;
   reputation: number;

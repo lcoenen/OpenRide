@@ -19,7 +19,7 @@ import { resetMock } from '../../shared/bin/resetmock';
 const url: string = 'localhost:3000';
 
 beforeEach(() => {
-	
+
 	// this.timeout(0)
 	return resetMock();
 
@@ -95,7 +95,7 @@ describe('session',  () => {
 			.put('/api/session/me')
 			.send(userSignupCredentials)
 			.catch((err: any) => {
-			
+
 				expect(err).to.have.status(404)
 
 			})
@@ -103,7 +103,7 @@ describe('session',  () => {
 	});
 
 	it("should fail with an unauthorise if the password is not good", () => {
-	  
+
 		let _credentials:any = Object.assign({}, userSignupCredentials);
 		_credentials['password'] = 'fake';
 
@@ -111,13 +111,59 @@ describe('session',  () => {
 			.put('/api/session/me')
 			.send(userSignupCredentials)
 			.catch((err: any) => {
-			
+
 				expect(err).to.have.status(400)
 
 			})
 
 	});
-	it("should remember me once I'm connected");
+
+	it("should remember me once I'm connected", () => {
+
+		return (() => {
+
+			return chai.request(url)
+				.put('/api/session/me')
+				.send(userSignupCredentials)
+
+		})().then(() => {
+
+			return chai.request(url) 
+				.get('/api/session/me')	
+
+		}).then((res: any) => {
+
+			let user: User = JSON.parse(res.text);
+			expect(user.login).to.be.equal(userSignupCredentials.login);
+			expect(user.password).not.to.exist;
+
+		})
+
+	});
+
+	it("should log me in when I sign up", () => {
+
+		return (() => {
+
+			return chai.request(url)
+				.put(`/api/users/${ userSignupExample._id}`)
+				.send(userSignupExample)
+
+		})().then(() => {
+
+			return chai.request(url)
+				.get(`/api/session/me`)
+
+		}).then((ans: any) => {
+
+			let user: User = JSON.parse(ans);
+			expect(user.login).to.be.equal(userSignupExample.login)
+			expect(user.password).not.to.exist;
+
+		})
+
+	})
+
 	it("should send a cookie when rememberme is true");
 	it("should connect me when I sign up");
 	it("should should accept logout");
