@@ -29,6 +29,7 @@
     "module-alias": "^2.0.6",
     "moment": "^2.21.0",
     "mongodb": "^3.0.3",
+    "redis": "^2.8.0",
     "restify": "^4.1.1",
     "restify-session": "^1.1.1"
   },
@@ -38,6 +39,7 @@
     "@types/chai-http": "^3.0.4",
     "@types/mocha": "^2.2.48",
     "@types/node": "^6.0.101",
+    "@types/redis": "^2.8.6",
     "@types/restify": "^2.0.42",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",

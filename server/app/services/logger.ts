@@ -11,7 +11,7 @@ infoStream.write = (info: any): boolean => {
 };
 
 export let logger = bunyan.createLogger({
-  name: 'myapp',
+  name: 'openride',
   streams: [
     {
       level: 'info',
@@ -20,6 +20,10 @@ export let logger = bunyan.createLogger({
     {
       level: 'error',
       path: `error.log`
-    }
+		},
+		{
+			level: 'trace',
+			path: 'debug.log'
+		}
   ]
 });

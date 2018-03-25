@@ -11,25 +11,29 @@ chai.use(chaiHttp);
 import { expect } from 'chai' ;
 import 'mocha';
 
-import { User } from '../../shared/models/user';
+import { User, sanitize } from '../../shared/models/user';
 import { userSignupExample, userSignupCredentials	} from '../../shared/mocks/user';
 
+import { logger } from '../app/services/logger';
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
-
-beforeEach(() => {
-
-	// this.timeout(0)
-	return resetMock();
-
-})
-
 describe('session',  () => {
+
+	beforeEach(function  () {
+
+		this.timeout(0);
+		return resetMock();
+
+	})
 
 	it("should accept signup", () => {
 
 		return (() => {
+
+			logger.trace(`TRACE: Starting test accept signup`)
+			logger.trace(`TRACE: Here is ${ userSignupExample.login }`)
+			logger.trace(userSignupExample)
 
 			return chai.request(url)
 				.put(`/api/users/${ userSignupExample._id}`)
@@ -46,8 +50,17 @@ describe('session',  () => {
 
 		}).then((res: any) => {
 
+			logger.trace(`TRACE: recieved the answer. `)
+			logger.trace(res)
+
 			let ans = JSON.parse(res.text);
-			expect(ans).to.be.deep.equal(userSignupExample);
+			expect(ans).to.be.deep.equal(sanitize(userSignupExample));
+
+		}).catch((err: Error) => {
+
+			logger.error(`ERROR: Couldn't get the user mordicai`)
+			logger.error(err)
+			throw err;
 
 		})
 
@@ -57,12 +70,14 @@ describe('session',  () => {
 
 		return (() => {
 
-			userSignupExample.email = undefined;
 
-			expect(chai.request(url)
+			let _credentials:any = Object.assign({},userSignupExample);
+			delete _credentials.email;
+
+			return expect(chai.request(url)
 				.put(`/api/users/${userSignupExample._id}`)
-				.send(userSignupExample))
-				.to.eventually.be.rejected
+				.send(_credentials))
+				.to.eventually.be.rejectedWith('Bad Request')
 
 		})()
 
@@ -112,7 +127,7 @@ describe('session',  () => {
 			.send(userSignupCredentials)
 			.catch((err: any) => {
 
-				expect(err).to.have.status(400)
+				expect(err).to.have.status(401)
 
 			})
 
@@ -126,16 +141,23 @@ describe('session',  () => {
 				.put('/api/session/me')
 				.send(userSignupCredentials)
 
-		})().then(() => {
+		})().then((res: any) => {
 
-			return chai.request(url) 
+			expect(res).to.have.header('openride-key')
+			return chai.request(url)
 				.get('/api/session/me')	
+				.set('openride-key', res.headers['openride-key'])
 
 		}).then((res: any) => {
 
 			let user: User = JSON.parse(res.text);
 			expect(user.login).to.be.equal(userSignupCredentials.login);
 			expect(user.password).not.to.exist;
+
+		}).catch((err: any) => {
+
+			console.log(err)
+			throw err;
 
 		})
 
@@ -144,24 +166,28 @@ describe('session',  () => {
 	it("should log me in when I sign up", () => {
 
 		return (() => {
-
+			
+			logger.trace(`TRACE: aaaaaaa`)
+			logger.trace(userSignupExample)
 			return chai.request(url)
 				.put(`/api/users/${ userSignupExample._id}`)
 				.send(userSignupExample)
 
-		})().then(() => {
+		})().then((res: any) => {
 
+			expect(res).to.have.header('openride-key')
 			return chai.request(url)
-				.get(`/api/session/me`)
+				.get('/api/session/me')	
+				.set('openride-key', res.headers['openride-key'])
 
-		}).then((ans: any) => {
+		}).then((res: any) => {
 
-			let user: User = JSON.parse(ans);
-			expect(user.login).to.be.equal(userSignupExample.login)
+			let user: User = JSON.parse(res.text);
+			expect(user.login).to.be.equal(userSignupExample.login);
 			expect(user.password).not.to.exist;
 
 		})
-
+	
 	})
 
 	it("should send a cookie when rememberme is true");

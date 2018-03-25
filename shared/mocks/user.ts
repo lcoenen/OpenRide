@@ -60,7 +60,7 @@ let UsersMock: User[] = [
 	}
 ]
 
-let userSignupExample: User = {
+const userSignupExample: User = {
 	_id: 'mordecai',
 	name: 'Mordecai',
 	login: 'mordecai',

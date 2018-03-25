@@ -64,8 +64,8 @@ export default class ridesController {
 			riders: []
 		};
 
-		if(toinsert.type == RideType.REQUEST) toinsert.riders = [session.loggedInUser]
-		else toinsert.driver = session.loggedInUser; 
+		if(toinsert.type == RideType.REQUEST) toinsert.riders = [session.loggedInUser()]
+		else toinsert.driver = session.loggedInUser(); 
 
 		db.db.collection('rides').insertOne(toinsert).then((ans) => {
 

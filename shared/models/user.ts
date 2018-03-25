@@ -20,3 +20,11 @@ export interface Credentials {
 	rememberme?: boolean;
 
 }
+
+export function sanitize (user: User): User {
+
+	let newUser: User = Object.assign({}, user);
+	delete newUser.password;
+	return newUser;
+
+}
