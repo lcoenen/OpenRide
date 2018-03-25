@@ -50,9 +50,12 @@ export default class ridesController {
 
 	}
 
-	public put(req: restify.Request, res: restify.Response, next: restify.Next) {
+	@session.needAuthentification
+	public put(req: any, res: restify.Response, next: restify.Next) {
 
 		logger.info(`INFO: Catching a PUT /rides/:id request. Id is ${req.params._id}`)
+
+		session.check
 
 		let toinsert: Ride = {
 			_id: req.params.id,
@@ -64,8 +67,8 @@ export default class ridesController {
 			riders: []
 		};
 
-		if(toinsert.type == RideType.REQUEST) toinsert.riders = [session.loggedInUser()]
-		else toinsert.driver = session.loggedInUser(); 
+		if(toinsert.type == RideType.REQUEST) toinsert.riders = [{'@id': `/api/users/${ req.user._id }` }]
+		else toinsert.driver = {'@id': `/api/users/${ req.user._id }` }; 
 
 		db.db.collection('rides').insertOne(toinsert).then((ans) => {
 

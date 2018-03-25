@@ -1,4 +1,5 @@
 import * as redis from 'redis';
+import * as restify from 'restify';
 
 import { Link } from '../../../shared/models/link';
 import { User, Credentials } from '../../../shared/models/user';
@@ -28,7 +29,7 @@ export namespace session {
 	 *
 	 */
 	export function authentify (user: User): Promise<Signature> {
-	
+
 		logger.trace(`TRACE: session.authentify()`)
 
 		return new Promise((resolve, reject) => {
@@ -42,14 +43,14 @@ export namespace session {
 
 				logger.trace(`TRACE: Included into redis`)
 				if(err) {
-					
+
 					logger.trace(err)
 					return reject(err);
-					
+
 				}
 
 				redis_client.expire(`keys:${ client_key }`, settings.sessionTTL, (err: Error) => {
-   
+
 					resolve(client_key);
 
 				})
@@ -59,6 +60,30 @@ export namespace session {
 		})
 
 
+	}
+
+	export function needAuthentification (target: any, member: string, descriptor: PropertyDescriptor) {
+
+		const orig = descriptor.value;
+		descriptor.value = function  (req: any, res: restify.Response, next: restify.Next) {
+
+			
+		session.check(req.header('openride-key'))
+			.then((user: User) => {
+
+				req.user = user;
+				orig(req, res, next)
+	
+			}).catch((err: RangeError) => {
+
+				res.json(401, {message: 'I don\'t know who you are, man'});  
+				next();
+
+			})
+
+		}
+
+		return descriptor;
 	}
 
 	export function check (sign: Signature): Promise<User> {
@@ -77,7 +102,7 @@ export namespace session {
 				}
 
 			})
-			
+
 		})
 
 	}

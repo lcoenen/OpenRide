@@ -163,18 +163,10 @@ export default class usersController {
 
 	}
 
-	public connected_user(req: restify.Request, res: restify.Response, next: restify.Next) {
+	@needAuthentification
+	public connected_user(req: any, res: restify.Response, next: restify.Next) {
 
-		session.check(req.header('openride-key'))
-			.then((user: User) => {
-
-				res.json(200, sanitize(user));
-
-			}).catch((err: RangeError) => {
-
-				res.json(401, {message: 'I don\'t know who you are, man'});  
-
-			})
+		res.json(200, sanitize(req.user));
 
 	}
 
