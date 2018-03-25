@@ -88,11 +88,4 @@ export namespace session {
 
 	}
 
-	export function loggedInUser() : User {
-
-		return null;
-
-	}
-
-
 }
