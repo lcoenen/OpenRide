@@ -5,6 +5,7 @@ import { User, Credentials } from '../../../shared/models/user';
 
 import { db } from '../services/db';
 import { logger } from '../services/logger';
+import { settings } from '../config/config';
 
 import { hash } from '../../../shared/lib/hash';
 
@@ -20,28 +21,38 @@ export namespace session {
 	// export let loggedInUser: Link = { '@id': '/api/users/Louise' }	
 
 	/*
-	 * Return a token that have to be sent to the client
+	 * Return a token that have to be sent to the client.
+	 *
+	 * Register the tokens inside redis under the form
+	 * SET keys:<client_key> JSON.stringify(user)
+	 *
 	 */
-	export function authentify (cred?: Credentials): Promise<Signature> {
+	export function authentify (user: User): Promise<Signature> {
 	
 		logger.trace(`TRACE: session.authentify()`)
 
-		if (!cred) return Promise.reject(new RangeError('No credentials'));
-
-		logger.trace(`TRACE: we have cred!`)
-
 		return new Promise((resolve, reject) => {
 
-			let first_hash: string = hash(`${ salt }cred ${ cred.login } / ${ cred.password } ${ (new Date()).toString() }`)
+			let first_hash: string = hash(`${ salt }user ${ user.login } / ${ user.password } ${ (new Date()).toString() }`)
 			let client_key = hash(first_hash.substr(0,20))		
 
 			logger.info(`INFO: hashed ${ client_key }`)
 
-			redis_client.hset('keys', client_key, cred.login, (err: Error) => {
-				
+			redis_client.set(`keys:${ client_key }`, JSON.stringify(user), (err: Error) => {
+
 				logger.trace(`TRACE: Included into redis`)
-				logger.trace(err)
-				resolve(client_key);
+				if(err) {
+					
+					logger.trace(err)
+					return reject(err);
+					
+				}
+
+				redis_client.expire(`keys:${ client_key }`, settings.sessionTTL, (err: Error) => {
+   
+					resolve(client_key);
+
+				})
 
 			});
 
@@ -54,31 +65,19 @@ export namespace session {
 
 		return new Promise((resolve, reject) => {
 
-			redis_client.hget('keys', sign, (err: Error, arg?: string) => {
+			redis_client.get(`keys:${ sign }`, (err: Error, arg?: string) => {
 
 				if(!arg) {
 					let err = new RangeError(`No such key : ${sign}`)
 					reject(err);
 				}
 				else {
-
-					db.db.collection('users').findOne({login: arg})
-						.then((user: User) => {
-
-							if(user)
-								resolve(user)  
-							else {
-
-								let err = new RangeError(`No such user : ${arg}`)
-								reject(err)
-							
-							}
-
-						});
-
+					let user: User = JSON.parse(arg);
+					resolve(user);  
 				}
-			})	
 
+			})
+			
 		})
 
 	}

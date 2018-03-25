@@ -44,7 +44,7 @@ export default class usersController {
 
 		try {
 
-			let toInsert: User = {
+			let user: User = {
 				_id: req.params.id,
 				name: req.params.name,
 				login: req.params.login,
@@ -57,19 +57,19 @@ export default class usersController {
 
 			logger.trace(`TRACE: I'm into the signup() function of the controller`)
 			logger.trace(`TRACE: here is my request`)
-			logger.trace(toInsert);
-			logger.trace(`TRACE: here's the email: ${ toInsert.email }`)
+			logger.trace(user);
+			logger.trace(`TRACE: here's the email: ${ user.email }`)
 
 			try {
 
-				if(!toInsert._id){ throw Error('One argument ( _id ) is missing') }
-				if(!toInsert.name){ throw Error('One argument ( name ) is missing') }
-				if(!toInsert.login){ throw Error('One argument ( login ) is missing') }
-				if(!toInsert.password){ throw Error('One argument ( password ) is missing') }
-				if(!toInsert.age){ throw Error('One argument ( age ) is missing') }
-				if(!toInsert.place_of_origin){ throw Error('One argument ( place_of_origin ) is missing') }
-				if(!toInsert.reputation){ throw Error('One argument ( reputation ) is missing') }
-				if(!toInsert.email){ logger.trace(`TRACE: I have no email!`); throw Error('One argument ( email ) is missing') }
+				if(!user._id){ throw Error('One argument ( _id ) is missing') }
+				if(!user.name){ throw Error('One argument ( name ) is missing') }
+				if(!user.login){ throw Error('One argument ( login ) is missing') }
+				if(!user.password){ throw Error('One argument ( password ) is missing') }
+				if(!user.age){ throw Error('One argument ( age ) is missing') }
+				if(!user.place_of_origin){ throw Error('One argument ( place_of_origin ) is missing') }
+				if(!user.reputation){ throw Error('One argument ( reputation ) is missing') }
+				if(!user.email){ throw Error('One argument ( email ) is missing') }
 
 			} catch (err) {
 			
@@ -80,19 +80,16 @@ export default class usersController {
 				
 			}
 
-			let login: string = toInsert.login;
-			let password: string = toInsert.password;
-
 			db
 				.db
 				.collection('users')
-				.insertOne(toInsert)
+				.insertOne(user)
 				.then((ans: any) => {
 
 					logger.trace(`TRACE: correctly inserted user`)
 					logger.trace(ans)
 
-					return session.authentify({login, password})
+					return session.authentify(user)
 
 				}).then((key: Signature) => {
 
@@ -149,7 +146,7 @@ export default class usersController {
 					logger.error(`ERROR: 404 error (PUT /users/me. No such user)`)	
 				}
 				else if(password == user.password)  {
-					session.authentify({login, password}).then((key: Signature) => {
+					session.authentify(user).then((key: Signature) => {
 
 						res.header('openride-key', key)
 						res.json(201, { message: 'All right' })

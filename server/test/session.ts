@@ -191,7 +191,6 @@ describe('session',  () => {
 	})
 
 	it("should send a cookie when rememberme is true");
-	it("should connect me when I sign up");
 	it("should should accept logout");
 
 });
