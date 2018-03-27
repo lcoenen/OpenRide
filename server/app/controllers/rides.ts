@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { logger } from '../services/logger';
 import { db } from '../services/db';
 import { session } from '../services/session';
+import { catnapify } from '../services/catnapify';
 
 import { ObjectID } from 'mongodb';
 
@@ -15,292 +16,329 @@ import { Request } from '../../../shared/models/request';
 
 const maxDistance: number = 30;
 
-export default class ridesController {
 
-	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
+function isArrayofRides(x: any): x is Ride[] {
+	return x.filter != undefined &&
+		!(x.filter((v:any) => {
+			return !isRide(v);	
+		}).length)
+}
 
-		logger.info(`INFO: Catching a /rides/:id request. Id is ${req.params.id}`)
+export class ridesController extends catnapify.Controller {
 
-		db
-			.db
-			.collection('rides')
-			.findOne({_id: req.params.id})
-			.then((ans:any) => {
-				db.answeror404(res, ans, req.params.id);
-			});
+	public constructor() {
 
-		return next();
+		let routes: string[] = [
+			'get',
+			'getAll'//,
+			// 'put',
+			// 'patch',
+			// 'head',
+			// 'del',
+			// 'getMatches',
+			// 'getRequests',
+			// 'postRequests'
+		]	
+
+		super(routes)
 
 	}
 
-	public getAll(req: restify.Request, res: restify.Response, next: restify.Next) {
+	@catnapify.route('get', '/api/rides/:id')
+	@catnapify.modernify()
+	@catnapify.needParams('id')
+	@catnapify.answerParams(isUser)
+	public get(burrito: catnapify.RestifyBurrito) {
 
-		db
+		logger.trace(`TRACE: catching get`)
+		logger.trace(burrito)
+
+		logger.info(`INFO: Catching a /rides/:id request. Id is ${burrito.req.params.id}`)
+
+		return db
+			.db
+			.collection('rides')
+			.findOne({_id: burrito.req.params.id})
+			.then((ans:Ride) : catnapify.HttpAnswer<Ride> => {
+				ans.origin = undefined;
+				if(!ans) throw { code: 404, answer: Error('ERROR: No such user') } ;
+				return { code: 200, answer: ans } ;
+			});
+
+
+	}
+
+	@catnapify.route('get', '/api/rides')
+	@catnapify.modernify()
+	@catnapify.answerParams(isArrayOfRides)
+	public getAll(burrito: catnapify.RestifyBurrito) {
+
+		return db
 			.db
 			.collection('rides')
 			.find()
 			.toArray()
-			.then((ans:any) => {
-
-				res.json(200, ans);
-
-			});
-
-		return next();
 
 	}
 
-	@session.needAuthentification
-	public put(req: any, res: restify.Response, next: restify.Next) {
+@catnapify.route('put', '/api/rides/:id')
+@catnapify.modernify()
+@session.needAuthentification
+public put(burrito: catnapify.RestifyBurrito) {
 
-		logger.info(`INFO: Catching a PUT /rides/:id request. Id is ${req.params._id}`)
+// 		let { req } = burrito;
 
-		session.check
+// 		logger.info(`INFO: Catching a PUT /rides/:id request. Id is ${req.params._id}`)
 
-		let toinsert: Ride = {
-			_id: req.params.id,
-			origin: req.params.origin,
-			destination: req.params.destination,
-			riding_time: req.params.riding_time,
-			payement: req.params.payement,
-			type: req.params.type,
-			riders: []
-		};
+// 		let toinsert: Ride = {
+// 			_id: req.params.id,
+// 			origin: req.params.origin,
+// 			destination: req.params.destination,
+// 			riding_time: req.params.riding_time,
+// 			payement: req.params.payement,
+// 			type: req.params.type,
+// 			riders: []
+// 		};
 
-		if(toinsert.type == RideType.REQUEST) toinsert.riders = [{'@id': `/api/users/${ req.user._id }` }]
-		else toinsert.driver = {'@id': `/api/users/${ req.user._id }` }; 
+// 		if(toinsert.type == RideType.REQUEST) toinsert.riders = [{'@id': `/api/users/${ req.user._id }` }]
+// 		else toinsert.driver = {'@id': `/api/users/${ req.user._id }` }; 
 
-		db.db.collection('rides').insertOne(toinsert).then((ans) => {
+// 		return db.db.collection('rides').insertOne(toinsert).then((ans) => {
 
-			res.json(201, ans);  
+// 			return { code: 201, answer: ans };
 
-		}).catch((err) => {
+// 		})
 
-			res.json(400, {message: err});
-			logger.error(`Bad request: ${ err }`)
+// 	}
 
-		});
+// 	@catnapify.route('patch', '/api/rides/:id')
+// 	@catnapify.modernify()
+// 	public patch(burrito: catnapify.RestifyBurrito) {
 
-		return next();
+// 		logger.info(`INFO: Catching a PATCH /rides/:id request. Id is ${req.params.id}`)
 
-	}
+// 		db
+// 			.db
+// 			.collection('rides')
+// 			.findOne({_id: req.params.id})
+// 			.then((ans:any) => {
 
-	public patch(req: restify.Request, res: restify.Response, next: restify.Next) {
+// 				logger.info(`INFO: Trying to find the ride. Found ${ans._id}`)
 
-		logger.info(`INFO: Catching a PATCH /rides/:id request. Id is ${req.params.id}`)
+// 				if(!ans) throw `ERROR: I could not find the ride ID ${req.params.id}`;
 
-		db
-			.db
-			.collection('rides')
-			.findOne({_id: req.params.id})
-			.then((ans:any) => {
+// 			}).then( (): Promise<any> => {
 
-				logger.info(`INFO: Trying to find the ride. Found ${ans._id}`)
+// 				logger.info(`INFO: Trying to execute the request`)
 
-				if(!ans) throw `ERROR: I could not find the ride ID ${req.params.id}`;
+// 				if(req.params.join) {
 
-			}).then( (): Promise<any> => {
 
-				logger.info(`INFO: Trying to execute the request`)
+// 					logger.info(`INFO: User ${req.params.join} want to join the ride`)
 
-				if(req.params.join) {
+// 					return db.db.collection('rides').updateOne({
+// 						_id: req.params.id
+// 					}, {
+// 						$addToSet: { riders: { '@id': `/api/users/${req.params.join}`}}
+// 					});
 
+// 				}
 
-					logger.info(`INFO: User ${req.params.join} want to join the ride`)
+// 				if(req.params.depart) {
+// 					logger.info(`INFO: User ${req.params.depart} want to depart the ride`)
 
-					return db.db.collection('rides').updateOne({
-						_id: req.params.id
-					}, {
-						$addToSet: { riders: { '@id': `/api/users/${req.params.join}`}}
-					});
 
-				}
+// 					return db.db.collection('rides').updateOne({
+// 						_id: req.params.id
+// 					}, {
+// 						$pull: { riders: { '@id': `/api/users/${req.params.depart}`}}
+// 					});
 
-				if(req.params.depart) {
-					logger.info(`INFO: User ${req.params.depart} want to depart the ride`)
+// 				}
 
+// 				else {
 
-					return db.db.collection('rides').updateOne({
-						_id: req.params.id
-					}, {
-						$pull: { riders: { '@id': `/api/users/${req.params.depart}`}}
-					});
+// 					logger.info(`INFO: Nothing to patch`);
+// 					return Promise.resolve();
 
-				}
+// 				}
 
-				else {
+// 			}).then(() => {
 
-					logger.info(`INFO: Nothing to patch`);
-					return Promise.resolve();
+// 				res.send(205);
 
-				}
+// 			}).catch((err) => {
 
-			}).then(() => {
+// 				logger.error(err);
 
-				res.send(205);
+// 				res.send(404, {message: err} );
 
-			}).catch((err) => {
+// 			});
 
-				logger.error(err);
+// 	}
 
-				res.send(404, {message: err} );
+// 	@catnapify.route('del', '/api/rides/:id')
+// 	@catnapify.modernify()
+// 	public del(burrito: catnapify.RestifyBurrito) {
 
-			});
 
-	}
 
-	public del(req: restify.Request, res: restify.Response, next: restify.Next) {
+// 	}
 
+// 	@catnapify.route('head', '/api/rides/:id')
+// 	@catnapify.modernify()
+// 	public head(burrito: catnapify.RestifyBurrito) {
 
+// 		db
+// 			.db
+// 			.collection('rides')
+// 			.findOne({_id: req.params.id})
+// 			.then((ans:any) => {
+// 				if(ans)	res.send(200);
+// 				else res.send(404);
+// 			});
+// 	}
 
-	}
+// 	@catnapify.route('get', '/api/rides/:id/matches')
+// 	@catnapify.modernify()
+// 	public getMatches(burrito: catnapify.RestifyBurrito){
 
-	public head(req: restify.Request, res: restify.Response, next: restify.Next) {
+// 		logger.info(`INFO: Catching a /rides/:id/matches. ID is ${ req.params.id }`)
 
-		db
-			.db
-			.collection('rides')
-			.findOne({_id: req.params.id})
-			.then((ans:any) => {
-				if(ans)	res.send(200);
-				else res.send(404);
-			});
-	}
+// 		// Select the rides arriving nearby 
+// 		// the matching destination
 
-	public getMatches(req: restify.Request, res: restify.Response, next: restify.Next){
+// 		let targetRide: Ride;
 
-		logger.info(`INFO: Catching a /rides/:id/matches. ID is ${ req.params.id }`)
+// 		return (() => {
 
-		// Select the rides arriving nearby 
-		// the matching destination
+// 			return db
+// 				.db
+// 				.collection('rides')
+// 				.findOne({ _id: req.params.id })
 
-		let targetRide: Ride;
+// 		})().then((foundRide: Ride) => {
 
-		return (() => {
+// 			if(!foundRide) {
 
-			return db
-				.db
-				.collection('rides')
-				.findOne({ _id: req.params.id })
+// 				throw 404;
 
-		})().then((foundRide: Ride) => {
+// 			}
 
-			if(!foundRide) {
+// 			targetRide = foundRide;
 
-				throw 404;
+// 			let criterias = { 
+// 				'origin.geometry': {
+// 					$nearSphere: {
+// 						$geometry: foundRide.origin.geometry,
+// 						$maxDistance: maxDistance * 1000
+// 					}},
+// 				'_id': {'$ne': foundRide._id },
+// 				'type': { '$ne': foundRide.type }	
 
-			}
+// 			}
 
-			targetRide = foundRide;
+// 			logger.info(criterias)
 
-			let criterias = { 
-				'origin.geometry': {
-					$nearSphere: {
-						$geometry: foundRide.origin.geometry,
-						$maxDistance: maxDistance * 1000
-					}},
-				'_id': {'$ne': foundRide._id },
-				'type': { '$ne': foundRide.type }	
+// 			// If there's a driver, I need to match it with people 
+// 			// who are requesting a ride (i.e. without driver)
 
-			}
+// 			return db
+// 				.db
+// 				.collection('rides')
+// 				.find(criterias)
+// 				.toArray();
 
-			logger.info(criterias)
+// 		}).then((rides: Ride[]) => {
 
-			// If there's a driver, I need to match it with people 
-			// who are requesting a ride (i.e. without driver)
+// 			// Filter the rides foming from the matching destination
+// 			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
 
-			return db
-				.db
-				.collection('rides')
-				.find(criterias)
-				.toArray();
+// 				return turf.distance(ride.destination.geometry, 
+// 					targetRide.destination.geometry) < maxDistance;	
 
-		}).then((rides: Ride[]) => {
+// 			}).sort((a,b) => {
 
-			// Filter the rides foming from the matching destination
-			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
+// 				// Compute a matching score based on distance, time, payement philosophy
 
-				return turf.distance(ride.destination.geometry, 
-					targetRide.destination.geometry) < maxDistance;	
+// 				let destinationDistance = turf.distance(
+// 					a.destination.geometry,
+// 					b.destination.geometry);
 
-			}).sort((a,b) => {
+// 				let originDistance = turf.distance(
+// 					a.origin.geometry,
+// 					b.origin.geometry);
 
-				// Compute a matching score based on distance, time, payement philosophy
+// 				let payementDifference = a.payement - b.payement;
 
-				let destinationDistance = turf.distance(
-					a.destination.geometry,
-					b.destination.geometry);
+// 				const msPerWeek = (1000 * 60 * 60 * 24 * 7);
 
-				let originDistance = turf.distance(
-					a.origin.geometry,
-					b.origin.geometry);
+// 				let timeDifference = moment(a.riding_time).diff(b.riding_time);
+// 				timeDifference = timeDifference > msPerWeek? msPerWeek : timeDifference;
 
-				let payementDifference = a.payement - b.payement;
+// 				return (destinationDistance / (maxDistance * 1000)) +
+// 					(originDistance / (maxDistance * 1000)) +
+// 					payementDifference / 100 +
+// 					timeDifference / msPerWeek 
+// 			}).map((ride: Ride): Link => {
 
-				const msPerWeek = (1000 * 60 * 60 * 24 * 7);
+// 				return { '@id' : `/api/rides/${ ride._id }`}; 
 
-				let timeDifference = moment(a.riding_time).diff(b.riding_time);
-				timeDifference = timeDifference > msPerWeek? msPerWeek : timeDifference;
+// 			});
 
-				return (destinationDistance / (maxDistance * 1000)) +
-					(originDistance / (maxDistance * 1000)) +
-					payementDifference / 100 +
-					timeDifference / msPerWeek 
-			}).map((ride: Ride): Link => {
+// 			res.send(200, filterRides);
 
-				return { '@id' : `/api/rides/${ ride._id }`}; 
+// 		}).catch((err: any) => {
 
-			});
+// 			if(err == 404) res.send(404, {message: `I couldn't find the ride ${ req.params.id }`});
+// 			else res.send(500, err);
 
-			res.send(200, filterRides);
+// 		})
 
-		}).catch((err: any) => {
+// 	}
 
-			if(err == 404) res.send(404, {message: `I couldn't find the ride ${ req.params.id }`});
-			else res.send(500, err);
+// 	@catnapify.route('get', '/api/rides/:id/requests')
+// 	@catnapify.modernify()
+// 	public getRequests(burrito: catnapify.RestifyBurrito){
 
-		})
+// 		return db
+// 			.db
+// 			.collection("requests")
+// 			.find({to: {'@id': `/api/rides/${ req.params.id }`}})
+// 			.toArray()
+// 			.then((found) => {
 
-	}
+// 				res.send(200, found);  
 
-	public getRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+// 			})
 
-		return db
-			.db
-			.collection("requests")
-			.find({to: {'@id': `/api/rides/${ req.params.id }`}})
-			.toArray()
-			.then((found) => {
+// 	}
 
-				res.send(200, found);  
+// 	@catnapify.route('post')
+// 	@catnapify.modernify()
+// 	public postRequests(burrito: catnapify.RestifyBurrito){
 
-			})
+// 		let toinsert: Request = {
 
-	}
+// 			from: req.params.from,
+// 			to: { '@id': `/api/rides/${ req.params.id }` }
 
-	public postRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+// 		};
 
-		let toinsert: Request = {
+// 		return db
+// 			.db
+// 			.collection("requests")
+// 			.insertOne(toinsert).then((ans) => {
 
-			from: req.params.from,
-			to: { '@id': `/api/rides/${ req.params.id }` }
+// 				res.json(201, ans);  
 
-		};
+// 			}).catch((err) => {
 
-		return db
-			.db
-			.collection("requests")
-			.insertOne(toinsert).then((ans) => {
+// 				res.json(400, {message: err});
 
-				res.json(201, ans);  
+// 			});
 
-			}).catch((err) => {
 
-				res.json(400, {message: err});
-
-			});
-
-
-	}
+// 	}
 
 }

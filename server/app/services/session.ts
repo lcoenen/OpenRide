@@ -10,11 +10,12 @@ import { settings } from '../config/config';
 
 import { hash } from '../../../shared/lib/hash';
 
-const salt = '5ce5be34c720d80d9d0075bccb47e7e56db9d36c';
+export const salt = '5ce5be34c720d80d9d0075bccb47e7e56db9d36c';
 
 export type Signature = string;
 // type ApiError = Error;
 
+export const keyName = `${ settings.name }-session`
 let redis_client = redis.createClient()
 
 export namespace session {
@@ -62,13 +63,20 @@ export namespace session {
 
 	}
 
+	/*
+	 * Specify that a request should be authentified with a token
+	 *
+	 * This is a decorator. Use 
+	 * `@needAuthentification()` before the controller's method
+	 *
+	 */
 	export function needAuthentification (target: any, member: string, descriptor: PropertyDescriptor) {
 
 		const orig = descriptor.value;
 		descriptor.value = function  (req: any, res: restify.Response, next: restify.Next) {
 
 			
-		session.check(req.header('openride-key'))
+		session.check(req.header(keyName))
 			.then((user: User) => {
 
 				req.user = user;

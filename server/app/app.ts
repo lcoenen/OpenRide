@@ -1,35 +1,29 @@
 import * as fs from 'fs';
 import * as restify from 'restify';
+
 import { settings } from './config/config';
 
+import { ridesController } from './controllers/rides';
+
+import { catnapify } from './services/catnapify';
 import { logger } from './services/logger';
 import { db } from './services/db';
 
-export let api = restify.createServer({
-  name: settings.name
-});
-
-restify.CORS.ALLOW_HEADERS.push('authorization');
-api.use(restify.CORS());
-api.pre(restify.pre.sanitizePath());
-api.use(restify.acceptParser(api.acceptable));
-api.use(restify.bodyParser());
-api.use(restify.queryParser());
-api.use(restify.authorizationParser());
-api.use(restify.fullResponse());
+catnapify.initialise(settings);
 
 db.connect().then( () => {
 
-  fs.readdirSync(__dirname + '/routes').forEach(function (routeConfig: string) {
-    if (routeConfig.substr(-3) === '.js') {
-      let route = require(__dirname + '/routes/' + routeConfig);
-      route.routes(api);
-    }
-  });
+	try {
+	
+		let rides = new ridesController;
 
-  api.listen(settings.port, function () {
-    logger.info(`INFO: ${settings.name} is running at ${api.url}`);
-  });
+	}
+	catch(err) {
+		logger.error(`ERROR: Could not create ridesController`)	
+		logger.error(err)
+	}
+
+	catnapify.listen()
 
 }).catch((err:any) => {
 

@@ -2,7 +2,7 @@ import * as restify from 'restify';
 
 import { logger } from '../services/logger';
 import { db } from '../services/db';
-import { session, Signature } from '../services/session';
+import { session, Signature, keyName } from '../services/session';
 
 import { ObjectID } from 'mongodb';
 
@@ -96,7 +96,7 @@ export default class usersController {
 					logger.trace(`TRACE: Recieved the API key`)
 					logger.trace(key)
 
-					res.header('openride-key', key)
+					res.header(keyName, key)
 					res.json(201, { message: 'All right' })
 
 				})
@@ -163,7 +163,7 @@ export default class usersController {
 
 	}
 
-	@needAuthentification
+	@session.needAuthentification
 	public connected_user(req: any, res: restify.Response, next: restify.Next) {
 
 		res.json(200, sanitize(req.user));

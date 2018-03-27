@@ -21,6 +21,21 @@ export interface Ride {
 	type: RideType;
 };
 
+export function isRide(x: any) : x is Ride {
+
+	return [
+		x.origin, 
+		x.destination,
+		x.riding_time,
+		x.type
+	].filter((x:any) => {
+
+	  return x == undefined;  
+
+	}).length == 0;
+
+}
+
 export function hashRide(ride: Ride) : string {
 
 	return hash(ride.origin.properties.address, ride.destination.properties.address, 
