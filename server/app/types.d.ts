@@ -8,3 +8,4 @@ export interface Config {
 	sessionTTL: number;
 }
 
+declare module 'catnapify';

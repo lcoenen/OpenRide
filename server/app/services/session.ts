@@ -1,6 +1,8 @@
 import * as redis from 'redis';
 import * as restify from 'restify';
 
+import { Promise } from 'es6-promise'
+
 import { Link } from '../../../shared/models/link';
 import { User, Credentials } from '../../../shared/models/user';
 
@@ -67,7 +69,7 @@ export namespace session {
 	 * Specify that a request should be authentified with a token
 	 *
 	 * This is a decorator. Use 
-	 * `@needAuthentification()` before the controller's method
+	 * `@needAuthentification` before the controller's method
 	 *
 	 */
 	export function needAuthentification (target: any, member: string, descriptor: PropertyDescriptor) {

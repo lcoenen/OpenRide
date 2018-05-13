@@ -48,7 +48,7 @@ export function isCredentials (x: any) : x is Credentials {
 
 export function sanitize (user: User): User {
 
-	let newUser: User = Object.assign({}, user);
+	let newUser: User = {...user};
 	delete newUser.password;
 	return newUser;
 

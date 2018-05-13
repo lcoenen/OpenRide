@@ -2,89 +2,79 @@ import * as restify from 'restify';
 import * as turf from '@turf/turf';
 import * as moment from 'moment';
 
+import { ObjectID } from 'mongodb';
+import * as cat from 'catnapify';
 
 import { logger } from '../services/logger';
 import { db } from '../services/db';
 import { session } from '../services/session';
-import { catnapify } from '../services/catnapify';
 
-import { ObjectID } from 'mongodb';
 
-import { Ride, RideType } from '../../../shared/models/ride';
+import { Ride, RideType, isRide } from '../../../shared/models/ride';
 import { Link } from '../../../shared/models/link';
 import { Request } from '../../../shared/models/request';
 
 const maxDistance: number = 30;
 
 
-function isArrayofRides(x: any): x is Ride[] {
+function isArrayOfRides(x: any): x is Ride[] {
 	return x.filter != undefined &&
 		!(x.filter((v:any) => {
 			return !isRide(v);	
 		}).length)
 }
 
-export class ridesController extends catnapify.Controller {
+export class ridesController extends cat.Controller {
 
 	public constructor() {
 
-		let routes: string[] = [
-			'get',
-			'getAll'//,
-			// 'put',
-			// 'patch',
-			// 'head',
-			// 'del',
-			// 'getMatches',
-			// 'getRequests',
-			// 'postRequests'
-		]	
-
-		super(routes)
+		super()
 
 	}
 
-	@catnapify.route('get', '/api/rides/:id')
-	@catnapify.modernify()
-	@catnapify.needParams('id')
-	@catnapify.answerParams(isUser)
-	public get(burrito: catnapify.RestifyBurrito) {
+	@cat.catnapify('get', '/api/rides/:id')
+	@cat.need('id')
+	@cat.give(isRide)
+	public get(request: cat.Request) {
 
 		logger.trace(`TRACE: catching get`)
-		logger.trace(burrito)
+		logger.info(`INFO: Catching a /rides/:id request. Id is ${request.req.params.id}`)
 
-		logger.info(`INFO: Catching a /rides/:id request. Id is ${burrito.req.params.id}`)
+		console.log(`get`)
 
 		return db
 			.db
 			.collection('rides')
-			.findOne({_id: burrito.req.params.id})
-			.then((ans:Ride) : catnapify.HttpAnswer<Ride> => {
-				ans.origin = undefined;
-				if(!ans) throw { code: 404, answer: Error('ERROR: No such user') } ;
-				return { code: 200, answer: ans } ;
+			.findOne({_id: request.req.params.id})
+			.then((ans:Ride) : cat.Answer<Ride> => {
+				if(!ans) throw { code: 404, response: 'ERROR: No such ride' } ;
+				return { code: 200, response: ans } ;
 			});
-
 
 	}
 
-	@catnapify.route('get', '/api/rides')
-	@catnapify.modernify()
-	@catnapify.answerParams(isArrayOfRides)
-	public getAll(burrito: catnapify.RestifyBurrito) {
+	@cat.catnapify('get', '/api/rides')
+	@cat.give(isArrayOfRides)
+	public getAll(request: cat.Request) {
+
+		console.log(`getAll`)
 
 		return db
 			.db
 			.collection('rides')
 			.find()
-			.toArray()
+			.toArray().then((rides: Ride[]) => {
+			
+				return {code: 200, response: rides}
+			
+			})
 
 	}
 
-@catnapify.route('put', '/api/rides/:id')
-@catnapify.modernify()
-@session.needAuthentification
-public put(burrito: catnapify.RestifyBurrito) {
+// @catnapify.route('put', '/api/rides/:id')
+// @catnapify.modernify()
+// @session.needAuthentification
+// public put(burrito: catnapify.RestifyBurrito) {
 
 // 		let { req } = burrito;
 

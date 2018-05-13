@@ -1,5 +1,7 @@
 #! /usr/bin/ts-node
 
+import { Promise } from 'es6-promise'
+
 import { MongoClient, Db } from 'mongodb';
 
 import { settings } from '../../server/app/config/config';

@@ -71,7 +71,7 @@ describe('session',  () => {
 		return (() => {
 
 
-			let _credentials:any = Object.assign({},userSignupExample);
+			let _credentials:any = {... userSignupExample};
 			delete _credentials.email;
 
 			return expect(chai.request(url)
@@ -103,7 +103,7 @@ describe('session',  () => {
 
 	it("should fail with a not found if there's no such user or email", () => {
 
-		let _credentials:any = Object.assign({},userSignupCredentials);
+		let _credentials:any = {...userSignupCredentials};
 		_credentials['login'] = 'fake';
 
 		return chai.request(url)
@@ -119,7 +119,7 @@ describe('session',  () => {
 
 	it("should fail with an unauthorise if the password is not good", () => {
 
-		let _credentials:any = Object.assign({}, userSignupCredentials);
+		let _credentials:any = {... userSignupCredentials};
 		_credentials['password'] = 'fake';
 
 		return chai.request(url)
