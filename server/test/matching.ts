@@ -38,6 +38,7 @@ describe('matching', () => {
 
 		return (() => {
 
+
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
@@ -47,6 +48,7 @@ describe('matching', () => {
 			expect(res).to.have.status(201); 
 
 		}).then(() => {
+
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
@@ -212,7 +214,7 @@ describe('matching', () => {
 			expect(res).to.have.status(201); 
 
 		}).catch((err:any) => {
-
+	
 			throw err;  
 
 		});
@@ -222,6 +224,7 @@ describe('matching', () => {
 	it("should grab the list of requests", () => {
 
 		return (() => {
+
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
@@ -233,6 +236,7 @@ describe('matching', () => {
 
 		}).then(() => {
 
+
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
@@ -242,6 +246,7 @@ describe('matching', () => {
 			expect(res).to.have.status(201); 
 
 		}).then(() => {
+
 
 			return chai.request(url)
 				.post(`/api/rides/${ postDriverExample._id }/requests`)
@@ -255,6 +260,7 @@ describe('matching', () => {
 
 		}).then(() => {
 
+
 			return chai.request(url)
 				.get(`/api/rides/${ postDriverExample._id }/requests`);
 
@@ -264,7 +270,8 @@ describe('matching', () => {
 			expect(ans[0].from['@id']).to.equal(`/api/users/${ connectedUsername }`);
 			expect(ans[0].to['@id']).to.equal(`/api/rides/${ postDriverExample._id }`);
 
-		}).catch((err:any) => {
+		}).catch((err:any) => {	
+
 
 			throw err;  
 

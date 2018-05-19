@@ -3,6 +3,7 @@ import { User, Credentials } from '../models/user';
 let UsersMock: User[] = [
 	{
 		name: 'Marc',
+		_id: 'Marc',
 		login: 'marc',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 32,
@@ -13,6 +14,7 @@ let UsersMock: User[] = [
 
 	{
 		name: 'Stephane',
+		_id: 'Stephane',
 		login: 'steph',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 54 ,
@@ -23,6 +25,7 @@ let UsersMock: User[] = [
 
 	{
 		name: 'Rick',
+		_id: 'Rick',
 		login: 'ricksanchez',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 34,
@@ -33,6 +36,7 @@ let UsersMock: User[] = [
 
 	{
 		name: 'Louise',
+		_id: 'Louise',
 		login: 'louise',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 12,
@@ -42,6 +46,7 @@ let UsersMock: User[] = [
 	},
 	{
 		name: 'PB',
+		_id: 'PB',
 		login: 'princess77',
 		password: '6afd4731177767192adaf5f064fc0fa88097d109',
 		age: 17,
@@ -51,6 +56,7 @@ let UsersMock: User[] = [
 	},
 	{
 		name: 'Moe',
+		_id: 'Moe',
 		age: 48,
 		login: 'moe',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',

@@ -18,7 +18,8 @@ import { logger } from '../app/services/logger';
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
-describe('session',  () => {
+
+describe.skip('session',  () => {
 
 	beforeEach(function  () {
 

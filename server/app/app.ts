@@ -19,7 +19,6 @@ db.connect().then( () => {
 		let server = new Server(settings)
 		let rides = new ridesController;
 
-		console.log(`Trying to link ride`)
 		server.link(rides);
 
 		server.listen()

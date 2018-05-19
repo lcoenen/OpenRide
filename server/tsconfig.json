@@ -11,7 +11,7 @@
       {"shared/*": ["../shared/*"]},
     "noImplicitAny": true,
     "preserveConstEnums": true,
-    "types": ["node", "restify", "chai", "chai-http", "chai-as-promised"],
+    "types": ["node", "restify", "chai", "chai-http", "chai-as-promised", "turf"],
     "outDir": "built",
 		"experimentalDecorators": true
   },

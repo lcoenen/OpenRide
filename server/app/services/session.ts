@@ -1,10 +1,14 @@
 import * as redis from 'redis';
 import * as restify from 'restify';
 
+import * as cat from 'catnapify';
+
 import { Promise } from 'es6-promise'
 
 import { Link } from '../../../shared/models/link';
 import { User, Credentials } from '../../../shared/models/user';
+
+import { UsersMock } from '../../../shared/mocks/user'
 
 import { db } from '../services/db';
 import { logger } from '../services/logger';
@@ -15,10 +19,19 @@ import { hash } from '../../../shared/lib/hash';
 export const salt = '5ce5be34c720d80d9d0075bccb47e7e56db9d36c';
 
 export type Signature = string;
-// type ApiError = Error;
 
 export const keyName = `${ settings.name }-session`
+
 let redis_client = redis.createClient()
+
+//export interface cat.Request{ user : User };
+
+export interface sessionRequest extends cat.Request {
+
+	user: User;
+
+}
+
 
 export namespace session {
 
@@ -42,9 +55,14 @@ export namespace session {
 
 			logger.info(`INFO: hashed ${ client_key }`)
 
+			/*
+			 * Set a pair inside the `keys` dictionary.
+			 * The key is a string, the value is the stringified user
+			 */
 			redis_client.set(`keys:${ client_key }`, JSON.stringify(user), (err: Error) => {
 
 				logger.trace(`TRACE: Included into redis`)
+
 				if(err) {
 
 					logger.trace(err)
@@ -52,6 +70,9 @@ export namespace session {
 
 				}
 
+				/*
+				 * Set a TTL
+				 */
 				redis_client.expire(`keys:${ client_key }`, settings.sessionTTL, (err: Error) => {
 
 					resolve(client_key);
@@ -66,6 +87,7 @@ export namespace session {
 	}
 
 	/*
+	 *
 	 * Specify that a request should be authentified with a token
 	 *
 	 * This is a decorator. Use 
@@ -75,27 +97,65 @@ export namespace session {
 	export function needAuthentification (target: any, member: string, descriptor: PropertyDescriptor) {
 
 		const orig = descriptor.value;
-		descriptor.value = function  (req: any, res: restify.Response, next: restify.Next) {
+		descriptor.value = function  (request: cat.Request) {
 
+
+			logger.info(`INFO: Trying to authentificate`)
+
+			/*
+			 *
+			 * Casting the request so it can accept an user
+			 *
+			 */
+			let sessRequest = <sessionRequest>request;
+
+			/* 
+			 *
+			 * This is a mock.
+			 *
+			 * The actual mechanism will be implemented using 
+			 * a non-yet-written decorator factory in catnapify
+			 *
+			 */
+			sessRequest.user = UsersMock[3];
+
+			// session.check(req.header(keyName))
+			// 	.then((user: User) => {
+
+			// 		req.user = user;
+			// 		orig(req, res, next)
+
+			// 	}).catch((err: RangeError) => {
+
+			// 		res.json(401, {message: 'I don\'t know who you are, man'});  
+			// 		next();
+
+			// 	})
+			try{
+
+				return orig(sessRequest);
+
+			}
+			catch(err){
 			
-		session.check(req.header(keyName))
-			.then((user: User) => {
-
-				req.user = user;
-				orig(req, res, next)
-	
-			}).catch((err: RangeError) => {
-
-				res.json(401, {message: 'I don\'t know who you are, man'});  
-				next();
-
-			})
+				console.log(`caught an error`)
+				console.log(err)
+			
+			}
 
 		}
 
 		return descriptor;
+
 	}
 
+	/*
+	 *
+	 * Check that the signature is used and return the user
+	 *
+	 * @return The user
+	 *
+	 */
 	export function check (sign: Signature): Promise<User> {
 
 		return new Promise((resolve, reject) => {
@@ -103,12 +163,16 @@ export namespace session {
 			redis_client.get(`keys:${ sign }`, (err: Error, arg?: string) => {
 
 				if(!arg) {
+
 					let err = new RangeError(`No such key : ${sign}`)
 					reject(err);
+
 				}
 				else {
+
 					let user: User = JSON.parse(arg);
 					resolve(user);  
+
 				}
 
 			})
@@ -117,6 +181,11 @@ export namespace session {
 
 	}
 
+	/*
+	 *
+	 * Log out the user
+	 *
+	 */
 	export function logout (sign: Signature): Promise<any> {
 
 		return null; 
