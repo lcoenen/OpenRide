@@ -1,6 +1,8 @@
 import * as bunyan from 'bunyan';
 import * as stream from 'stream';
 
+import { logger as catnapify_logger } from 'catnapify'
+
 let infoStream = new stream.Writable();
 infoStream.writable = true;
 
@@ -27,3 +29,5 @@ export let logger = bunyan.createLogger({
 		}
   ]
 });
+
+export let logged = catnapify_logger({logger: logger})

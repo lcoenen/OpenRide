@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { ObjectID } from 'mongodb';
 import * as cat from 'catnapify';
 
-import { logger } from '../services/logger';
+import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
 import { session, sessionRequest } from '../services/session';
 
@@ -39,14 +39,10 @@ export class ridesController extends cat.Controller {
 	 */
 
 	@cat.catnapify('get', '/api/rides/:id')
+	@logged
 	@cat.need('id')
 	@cat.give(isRide)
 	public get(request: cat.Request) {
-
-		logger.trace(`TRACE: catching get`)
-		logger.info(`INFO: Catching a /rides/:id request. Id is ${request.req.params.id}`)
-
-		console.log(`get`)
 
 		return db
 			.db
@@ -67,10 +63,10 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('get', '/api/rides')
+	@logged
 	@cat.give(isArrayOfRides)
 	public getAll(request: cat.Request) {
 
-		console.log(`getAll`)
 
 		return db
 			.db
@@ -94,11 +90,10 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('put', '/api/rides/:id')
+	@logged
 	@cat.need(isRide)
 	@session.needAuthentification
 	public put(request: cat.Request) {
-
-		logger.info(`INFO: Catching a PUT /rides/:id request. Id is ${request.params.id}`)
 
 		let toinsert: Ride = {
 			_id: request.params.id, /* id is from the URL */
@@ -133,15 +128,14 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('patch', '/api/rides/:id')
-	@cat.logger({logger: logger})
+	@logged
+	//	@cat.logger({logger: logger})
 	@cat.need((params: any) => {
 
 		return (params.join !== undefined) || (params.depart !== undefined); 
 
 	})
 	public patch(request: cat.Request) {
-
-		logger.info(`INFO: Catching a PATCH /rides/:id request. Id is ${request.req.params.id}`)
 
 		return db
 			.db
@@ -155,20 +149,13 @@ export class ridesController extends cat.Controller {
 				 *
 				 */
 
-				logger.info(`INFO: Trying to find the ride. Found ${ans._id}`)
-
 				if(!ans) throw `ERROR: I could not find the ride ID ${request.req.params.id}`;
 
 				return ans;
 
 			}).then( (): Promise<any> => {
 
-				logger.info(`INFO: Trying to execute the request`)
-
 				if(request.req.params.join) {
-
-
-					logger.info(`INFO: User ${request.req.params.join} want to join the ride`)
 
 					/* 
 					 *
@@ -186,8 +173,6 @@ export class ridesController extends cat.Controller {
 
 				}
 				else {
-
-					logger.info(`INFO: User ${request.req.params.depart} want to depart the ride`)
 
 					/* 
 					 *
@@ -221,6 +206,7 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('head', '/api/rides/:id')
+	@logged
 	@cat.need('id')
 	public head(req: cat.Request) {
 
@@ -250,17 +236,14 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('get', '/api/rides/:id/matches')
+	@logged
 	@cat.need('id')
 	@cat.give((links: Link[]) => {
 
-		console.log(`[χψω]checking`)
-		console.log(links)
 		return <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0
 	
 	})
 	public getMatches(req: cat.Request){
-
-		logger.info(`INFO: Catching a /rides/:id/matches. ID is ${ req.params.id }`)
 
 		/*
 		 *
@@ -303,8 +286,6 @@ export class ridesController extends cat.Controller {
 				'type': { '$ne': foundRide.type }	
 
 			}
-
-			logger.info(criterias)
 
 			/*
 			 *
@@ -368,8 +349,6 @@ export class ridesController extends cat.Controller {
 			 * Return the filtered ride with a code 200
 			 *
 			 */
-			console.log(`returning filterrides`)
-			console.log(filterRides)
 			return filterRides;
 
 		})
@@ -386,6 +365,7 @@ export class ridesController extends cat.Controller {
 	 * Will always answer a 200 with what he found
 	 */
 	@cat.catnapify('get', '/api/rides/:id/requests')
+	@logged
 	@cat.need('id')
 	//@cat.give((links: Link[]) => <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0)
 	public getRequests(req: cat.Request){
@@ -406,6 +386,7 @@ export class ridesController extends cat.Controller {
 	 *
 	 */
 	@cat.catnapify('post', '/api/rides/:id/requests')
+	@logged
 	@cat.need(['id', 'from'])
 	public postRequests(req: cat.Request){
 

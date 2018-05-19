@@ -100,8 +100,6 @@ export namespace session {
 		descriptor.value = function  (request: cat.Request) {
 
 
-			logger.info(`INFO: Trying to authentificate`)
-
 			/*
 			 *
 			 * Casting the request so it can accept an user

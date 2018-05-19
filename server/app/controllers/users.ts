@@ -14,8 +14,6 @@ export default class usersController {
 
 	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-		logger.info(`INFO: Catching a /users/:id request. Id is ${req.params.id}`)
-
 		db
 			.db
 			.collection('users')
@@ -27,8 +25,6 @@ export default class usersController {
 
 			}).catch((err: Error) => {
 
-			  logger.error(`ERROR: error caught during user lookup`);
-				logger.error(err)
 				throw err;
 
 			});
@@ -40,7 +36,6 @@ export default class usersController {
 
 	public signup(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-		logger.info(`INFO: Catching a /users/:id PUT request (signup). Id is ${ req.params.id }`)
 
 		try {
 
@@ -55,11 +50,6 @@ export default class usersController {
 				email: req.params.email,
 			}
 
-			logger.trace(`TRACE: I'm into the signup() function of the controller`)
-			logger.trace(`TRACE: here is my request`)
-			logger.trace(user);
-			logger.trace(`TRACE: here's the email: ${ user.email }`)
-
 			try {
 
 				if(!user._id){ throw Error('One argument ( _id ) is missing') }
@@ -73,8 +63,6 @@ export default class usersController {
 
 			} catch (err) {
 			
-				logger.error(`ERROR: 400 error argument missing`)	
-				logger.error(err)
 				res.json(400, err)
 				return
 				
@@ -85,9 +73,6 @@ export default class usersController {
 				.collection('users')
 				.insertOne(user)
 				.then((ans: any) => {
-
-					logger.trace(`TRACE: correctly inserted user`)
-					logger.trace(ans)
 
 					return session.authentify(user)
 
@@ -120,9 +105,6 @@ export default class usersController {
 	}
 
 	public login(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-		logger.info(`INFO: catching a logging in request (PUT /users/me)`)
-
 
 		let login: string = req.params.login; 
 		let password: string = req.params.password; 
