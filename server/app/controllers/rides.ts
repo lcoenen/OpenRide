@@ -32,6 +32,27 @@ export class ridesController extends cat.Controller {
 
 	}
 
+
+	static checkRideHasDriver = cat.before((request: cat.Request) => {
+
+		/*
+		 *
+		 * Check that the rides have a driver (is a proposition) and not a request
+		 *
+		 */
+		logger.debug('DEBUG: checking the ride')
+		return db.db.collection('rides')
+			.findOne({'_id': request.params['id']})
+			.then((ride: Ride) => {
+
+
+				if(ride.driver == undefined) throw {code: 404, response: 'This ride have no driver'};
+				return request;
+
+			})
+
+	})
+
 	/*
 	 *
 	 * Route allowing to get a specific ride
@@ -110,7 +131,7 @@ export class ridesController extends cat.Controller {
 
 		return db.db.collection('rides').insertOne(toinsert).then((ans) => {
 
-			return { code: 201, response: ans };
+			return { code: 201, response: 'created' };
 
 		})
 
@@ -129,12 +150,7 @@ export class ridesController extends cat.Controller {
 	 */
 	@cat.catnapify('patch', '/api/rides/:id')
 	@logged
-	//	@cat.logger({logger: logger})
-	@cat.need((params: any) => {
-
-		return (params.join !== undefined) || (params.depart !== undefined); 
-
-	})
+	@cat.need((params: any) => (params.join !== undefined) || (params.depart !== undefined))
 	public patch(request: cat.Request) {
 
 		return db
@@ -190,13 +206,28 @@ export class ridesController extends cat.Controller {
 
 	}
 
-	// 	@catnapify.route('del', '/api/rides/:id')
-	// 	@catnapify.modernify()
-	// 	public del(burrito: catnapify.RestifyBurrito) {
+	/*
+	 *
+	 * This route will delete a ride
+	 *
+	 */
+	@cat.catnapify('del', '/api/rides/:id')
+	@logged
+	@cat.need('id')
+	public del(request: cat.Request) {
 
+		return db
+			.db
+			.collection('rides')
+			.deleteOne({'_id': request.params['id']})
+			.then(( ) => {
 
+				logger.debug(`Deleting ${ request.params['id'] }`)
+				return {code: 204, response: 'deleted'};  
 
-	// 	}
+			})
+
+	}
 
 	/*
 	 *
@@ -210,7 +241,7 @@ export class ridesController extends cat.Controller {
 	@cat.need('id')
 	public head(req: cat.Request) {
 
-		db
+		return db
 			.db
 			.collection('rides')
 			.findOne({_id: req.params.id})
@@ -241,7 +272,7 @@ export class ridesController extends cat.Controller {
 	@cat.give((links: Link[]) => {
 
 		return <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0
-	
+
 	})
 	public getMatches(req: cat.Request){
 
@@ -367,6 +398,7 @@ export class ridesController extends cat.Controller {
 	@cat.catnapify('get', '/api/rides/:id/requests')
 	@logged
 	@cat.need('id')
+	@ridesController.checkRideHasDriver
 	//@cat.give((links: Link[]) => <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0)
 	public getRequests(req: cat.Request){
 
@@ -388,6 +420,7 @@ export class ridesController extends cat.Controller {
 	@cat.catnapify('post', '/api/rides/:id/requests')
 	@logged
 	@cat.need(['id', 'from'])
+	@ridesController.checkRideHasDriver
 	public postRequests(req: cat.Request){
 
 		let toinsert: Request = {

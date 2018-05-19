@@ -1,7 +1,7 @@
 
 var chai = require('chai'),
-		chaiHttp = require('chai-http'),
-		chaiAsPromised = require("chai-as-promised");
+	chaiHttp = require('chai-http'),
+	chaiAsPromised = require("chai-as-promised");
 
 /* 
  * Both librairies have limited support of ES6 import.
@@ -39,6 +39,12 @@ describe('matching', () => {
 		return (() => {
 
 
+			/* 
+			 *
+			 * Post these two examples 
+			 *
+			 */
+
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
@@ -60,6 +66,12 @@ describe('matching', () => {
 
 		}).then(() => {
 
+
+			/*
+			 *
+			 * Recover the matches of the request and check if the proposition is there
+			 *
+			 */
 			return chai.request(url)
 				.get(`/api/rides/${postRiderExample._id}/matches`)
 
@@ -133,13 +145,21 @@ describe('matching', () => {
 			throw err			
 
 		})
-	
+
 	});
 
 	it("should not return rides of the same types (offer or request)", () => {
 
 		return (() => {
 
+
+			/*
+			 *
+			 * Add the three examples
+			 *
+			 * These three examples are contained in shared/mocks/rides.ts
+			 *
+			 */
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
@@ -166,11 +186,21 @@ describe('matching', () => {
 
 		}).then((res: any) => {
 
+			/*
+			 *
+			 * Recover the matches
+			 *
+			 */
 			return chai.request(url)
 				.get(`/api/rides/${ postDriverLesserExample._id }/matches`)
 
 		}).then((res: any) => {
 
+			/*
+			 *
+			 * It should contain the driver proposition and NOT the other ride request
+			 *
+			 */
 			let ans = JSON.parse(res.text);
 			expect(ans).to.lengthOf(1);
 			expect(ans[0]['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`);
@@ -183,6 +213,11 @@ describe('matching', () => {
 
 		return (() => {
 
+			/*
+			 *
+			 * Post the rider's request
+			 *
+			 */
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
 				.send(postRiderExample)
@@ -192,7 +227,11 @@ describe('matching', () => {
 			expect(res).to.have.status(201); 
 
 		}).then(() => {
-
+			/*
+			 *
+			 * Post the driver proposition
+			 *
+			 */
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
@@ -203,6 +242,11 @@ describe('matching', () => {
 
 		}).then(() => {
 
+			/*
+			 *
+			 * Post the rider's request to the driver proposition
+			 *
+			 */
 			return chai.request(url)
 				.post(`/api/rides/${ postDriverExample._id }/requests`)
 				.send({
@@ -214,7 +258,7 @@ describe('matching', () => {
 			expect(res).to.have.status(201); 
 
 		}).catch((err:any) => {
-	
+
 			throw err;  
 
 		});
@@ -225,6 +269,11 @@ describe('matching', () => {
 
 		return (() => {
 
+			/*
+			 *
+			 * Posting the example rider
+			 *
+			 */
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
@@ -236,7 +285,11 @@ describe('matching', () => {
 
 		}).then(() => {
 
-
+			/*
+			 *
+			 * Posting the example driver ride
+			 *
+			 */
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
 				.send(postDriverExample)
@@ -248,6 +301,11 @@ describe('matching', () => {
 		}).then(() => {
 
 
+			/*
+			 *
+			 * Make the rider post a request to the driver ride
+			 *
+			 */
 			return chai.request(url)
 				.post(`/api/rides/${ postDriverExample._id }/requests`)
 				.send({
@@ -261,6 +319,11 @@ describe('matching', () => {
 		}).then(() => {
 
 
+			/*
+			 *
+			 * Check that the request have been recorded
+			 *
+			 */
 			return chai.request(url)
 				.get(`/api/rides/${ postDriverExample._id }/requests`);
 
@@ -272,16 +335,64 @@ describe('matching', () => {
 
 		}).catch((err:any) => {	
 
-
 			throw err;  
 
 		});
 
 	});
 
+	it("should not accept a request for a ride with no driver", ( ) => {
 
-	it("should should not accept a request in which the user is already in");
 
-	it("should not accept a request for a ride with no driver");
+		return (() => {
+
+			/*
+			 *
+			 * Posting the example rider
+			 *
+			 */
+
+			return chai.request(url)
+				.put(`/api/rides/${postRiderExample._id}`)
+				.send(postRiderExample)
+
+		})().then((res:any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			/*
+			 *
+			 * Posting the example driver ride
+			 *
+			 */
+			return chai.request(url)
+				.put(`/api/rides/${postDriverExample._id}`)
+				.send(postDriverExample)
+
+		}).then((res: any) => {
+
+			expect(res).to.have.status(201); 
+
+		}).then(() => {
+
+			/*
+			 *
+			 * Make the rider post a request to the RIDER ride request
+			 *
+			 * It should fail since there's no point in joining a ride without any drivers
+			 *
+			 */
+			expect(chai.request(url)
+				.post(`/api/rides/${ postRiderExample._id }/requests`)
+				.send({
+					from: {'@id': `/api/users/${ connectedUsername }`}
+				}))
+			.to.eventually.be.rejectedWith(Error, 'Not Found');
+
+		});
+
+	});
 
 });

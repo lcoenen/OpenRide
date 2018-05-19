@@ -31,7 +31,7 @@ beforeEach(() => {
 
 describe('rides',  () => {
 	it("should get a list of rides", () => {
-	
+
 		return chai.request(url)
 			.get('/api/rides/')
 			.then((res: any) => {
@@ -51,7 +51,7 @@ describe('rides',  () => {
 			.get(`/api/rides/${ RidesMock[3]._id }`)
 			.then((res : any) => {
 				let ride: Ride = res.body;
-			  expect(ride._id).to.be.equal(RidesMock[3]._id) 
+				expect(ride._id).to.be.equal(RidesMock[3]._id) 
 				expect(isRide(ride)).to.be.equal(true)
 
 			})
@@ -61,14 +61,14 @@ describe('rides',  () => {
 	it("should add and remove riders inside ride", () => {
 
 		return chai.request(url)
-			/* Trying to join the ride */
+		/* Trying to join the ride */
 
 			.patch(`/api/rides/${ RidesMock[4]._id }`)
 			.send({'join': UsersMock[3]._id})
 			.then((res: any) => {
 				expect(res).to.have.status(200)
 
-			/* Getting the ride */
+				/* Getting the ride */
 
 				return chai.request(url)
 					.get(`/api/rides/${ RidesMock[4]._id }`)
@@ -95,8 +95,8 @@ describe('rides',  () => {
 
 				return chai.request(url)
 				/* Trying to make the user depart from the ride */
-				.patch(`/api/rides/${ RidesMock[4]._id }`)
-				.send({'depart': UsersMock[3]._id})
+					.patch(`/api/rides/${ RidesMock[4]._id }`)
+					.send({'depart': UsersMock[3]._id})
 
 			})
 			.then((res: any) => {
@@ -127,7 +127,29 @@ describe('rides',  () => {
 
 	});
 
-	it("should delete ride when needed");
+	it("should delete ride when needed", () => {
+
+		return chai.request(url)
+			.delete(`/api/rides/${ RidesMock[3]._id }`)
+			.then((res: any) => {
+
+				expect(res).to.have.status(204)	
+
+			})
+			.then(() => {
+
+				return chai.request(url)
+					.get('/api/rides')
+					.then((res: any) => {
+
+						expect(res).to.have.status(200)
+						expect(res.body.length).to.be.equal(RidesMock.length - 1)	
+
+					})
+
+			})
+
+	});
 
 	it("should post a new ride", () => {
 
@@ -186,6 +208,6 @@ describe('rides',  () => {
 
 			});
 
- 	});
+	});
 
 });
