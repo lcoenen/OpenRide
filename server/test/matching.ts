@@ -19,12 +19,14 @@ import {
 	postDriverExample, 
 	postRiderExample,
 	postDriverLesserExample } from '../../shared/mocks/ride';
-
+import { userSignupCredentials } from '../../shared/mocks/user';
 
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
 const connectedUsername: string = 'Rick';
+
+let key: string = '';
 
 beforeEach(() => {
 
@@ -33,6 +35,23 @@ beforeEach(() => {
 })
 
 describe('matching', () => {
+
+	before(( ) => {
+
+		return (() => {
+
+			return chai.request(url)
+				.put('/api/session/me')
+				.set('openride-server-session', key)
+				.send(userSignupCredentials)
+
+		})().then((res: any) => {
+
+			key = res.headers['openride-server-session']
+
+		})
+
+	})
 
 	it("should find the match", () => {
 
@@ -47,6 +66,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -58,6 +78,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -104,6 +125,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -114,6 +136,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverLesserExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverLesserExample)
 
 		}).then((res: any) => {
@@ -124,6 +147,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -134,6 +158,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.get(`/api/rides/${postRiderExample._id}/matches`)
+				.set('openride-server-session', key)
 
 		}).then((res: any) => {
 
@@ -162,6 +187,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -172,6 +198,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverLesserExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverLesserExample)
 
 		}).then((res: any) => {
@@ -182,6 +209,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -220,6 +248,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -234,6 +263,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -249,6 +279,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.post(`/api/rides/${ postDriverExample._id }/requests`)
+				.set('openride-server-session', key)
 				.send({
 					from: {'@id': `/api/users/${ connectedUsername }`}
 				})
@@ -277,6 +308,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -292,6 +324,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -308,6 +341,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.post(`/api/rides/${ postDriverExample._id }/requests`)
+				.set('openride-server-session', key)
 				.send({
 					from: {'@id': `/api/users/${ connectedUsername }`}
 				});
@@ -354,6 +388,7 @@ describe('matching', () => {
 
 			return chai.request(url)
 				.put(`/api/rides/${postRiderExample._id}`)
+				.set('openride-server-session', key)
 				.send(postRiderExample)
 
 		})().then((res:any) => {
@@ -369,6 +404,7 @@ describe('matching', () => {
 			 */
 			return chai.request(url)
 				.put(`/api/rides/${postDriverExample._id}`)
+				.set('openride-server-session', key)
 				.send(postDriverExample)
 
 		}).then((res: any) => {
@@ -386,6 +422,7 @@ describe('matching', () => {
 			 */
 			expect(chai.request(url)
 				.post(`/api/rides/${ postRiderExample._id }/requests`)
+				.set('openride-server-session', key)
 				.send({
 					from: {'@id': `/api/users/${ connectedUsername }`}
 				}))

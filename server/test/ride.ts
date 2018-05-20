@@ -17,11 +17,13 @@ import { postDriverExample, postRiderExample } from '../../shared/mocks/ride';
 import { Link } from '../../shared/models/link';
 
 import { RidesMock } from '../../shared/mocks/ride';
-import { UsersMock } from '../../shared/mocks/user';
+import { UsersMock, userSignupCredentials } from '../../shared/mocks/user';
 
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
+
+let key: string = '';
 
 beforeEach(() => {
 
@@ -30,10 +32,28 @@ beforeEach(() => {
 })
 
 describe('rides',  () => {
+
+	before(( ) => {
+
+		return (() => {
+
+			return chai.request(url)
+				.put('/api/session/me')
+				.send(userSignupCredentials)
+
+		})().then((res: any) => {
+
+			key = res.headers['openride-server-session']
+
+		})
+
+	})
+
 	it("should get a list of rides", () => {
 
 		return chai.request(url)
 			.get('/api/rides/')
+			.set('openride-server-session', key)
 			.then((res: any) => {
 
 				let arrayOfRide: Ride[] = res.body;
@@ -49,6 +69,7 @@ describe('rides',  () => {
 
 		return chai.request(url)
 			.get(`/api/rides/${ RidesMock[3]._id }`)
+			.set('openride-server-session', key)
 			.then((res : any) => {
 				let ride: Ride = res.body;
 				expect(ride._id).to.be.equal(RidesMock[3]._id) 
@@ -62,8 +83,8 @@ describe('rides',  () => {
 
 		return chai.request(url)
 		/* Trying to join the ride */
-
 			.patch(`/api/rides/${ RidesMock[4]._id }`)
+			.set('openride-server-session', key)
 			.send({'join': UsersMock[3]._id})
 			.then((res: any) => {
 				expect(res).to.have.status(200)
@@ -96,6 +117,7 @@ describe('rides',  () => {
 				return chai.request(url)
 				/* Trying to make the user depart from the ride */
 					.patch(`/api/rides/${ RidesMock[4]._id }`)
+					.set('openride-server-session', key)
 					.send({'depart': UsersMock[3]._id})
 
 			})
@@ -131,6 +153,7 @@ describe('rides',  () => {
 
 		return chai.request(url)
 			.delete(`/api/rides/${ RidesMock[3]._id }`)
+			.set('openride-server-session', key)
 			.then((res: any) => {
 
 				expect(res).to.have.status(204)	
@@ -140,6 +163,7 @@ describe('rides',  () => {
 
 				return chai.request(url)
 					.get('/api/rides')
+					.set('openride-server-session', key)
 					.then((res: any) => {
 
 						expect(res).to.have.status(200)
@@ -153,9 +177,11 @@ describe('rides',  () => {
 
 	it("should post a new ride", () => {
 
+
 		return chai.request(url)
 			.put(`/api/rides/${postDriverExample._id}`)
 			.send(postDriverExample)
+			.set('openride-server-session', key)
 			.then((res: any) => {
 				expect(res).to.have.status(201);
 
@@ -193,6 +219,7 @@ describe('rides',  () => {
 		return chai.request(url)
 			.put(`/api/rides/${postRiderExample._id}`)
 			.send(postRiderExample)
+			.set('openride-server-session', key)
 			.then((res: any) => {
 
 				expect(res).to.have.status(201);
