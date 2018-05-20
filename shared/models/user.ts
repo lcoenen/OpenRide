@@ -4,7 +4,6 @@ import { Link } from './link';
 export interface User {
   _id?: string;
 	name: string;
-	login: string;
 	password?: string; //	SHA encrypted
   age: number;
   place_of_origin: string;
@@ -16,7 +15,7 @@ export interface User {
 export function isUser(x: any) : x is User {
 
 	return [x.name,
-		x.login,
+		x._id,
 		x.age,
 		x.place_of_origin,
 		x.reputation,

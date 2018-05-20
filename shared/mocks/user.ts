@@ -4,7 +4,6 @@ let UsersMock: User[] = [
 	{
 		name: 'Marc',
 		_id: 'Marc',
-		login: 'marc',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 32,
 		email: 'marc@gmail.com',
@@ -15,7 +14,6 @@ let UsersMock: User[] = [
 	{
 		name: 'Stephane',
 		_id: 'Stephane',
-		login: 'steph',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 54 ,
 		email: 'stephsteph@gmail.com',
@@ -26,7 +24,6 @@ let UsersMock: User[] = [
 	{
 		name: 'Rick',
 		_id: 'Rick',
-		login: 'ricksanchez',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 34,
 		email: 'marcdu83@gmail.com',
@@ -37,7 +34,6 @@ let UsersMock: User[] = [
 	{
 		name: 'Louise',
 		_id: 'Louise',
-		login: 'louise',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		age: 12,
 		email: 'loulou@caraibmail.com',
@@ -46,8 +42,7 @@ let UsersMock: User[] = [
 	},
 	{
 		name: 'PB',
-		_id: 'PB',
-		login: 'princess77',
+		_id: 'princess77',
 		password: '6afd4731177767192adaf5f064fc0fa88097d109',
 		age: 17,
 		email: 'princess@candykingdom.com',
@@ -58,7 +53,6 @@ let UsersMock: User[] = [
 		name: 'Moe',
 		_id: 'Moe',
 		age: 48,
-		login: 'moe',
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		email: 'moe@simpsons.com',
 		place_of_origin: 'Springfield',
@@ -69,7 +63,6 @@ let UsersMock: User[] = [
 const userSignupExample: User = {
 	_id: 'mordecai',
 	name: 'Mordecai',
-	login: 'mordecai',
 	email: 'rigbysuck@hotmail.com',
 	password: 'e51e002cf339122c1576deafff386d09dc0bda40',
 	age: 17,

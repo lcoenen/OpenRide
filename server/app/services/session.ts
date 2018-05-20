@@ -38,6 +38,7 @@ export namespace session {
 	// export let loggedInUser: Link = { '@id': '/api/users/Louise' }	
 
 	/*
+	 *
 	 * Return a token that have to be sent to the client.
 	 *
 	 * Register the tokens inside redis under the form
@@ -50,14 +51,16 @@ export namespace session {
 
 		return new Promise((resolve, reject) => {
 
-			let first_hash: string = hash(`${ salt }user ${ user.login } / ${ user.password } ${ (new Date()).toString() }`)
+			let first_hash: string = hash(`${ salt }user ${ user._id } / ${ user.password } ${ (new Date()).toString() }`)
 			let client_key = hash(first_hash.substr(0,20))		
 
 			logger.info(`INFO: hashed ${ client_key }`)
 
 			/*
+			 *
 			 * Set a pair inside the `keys` dictionary.
 			 * The key is a string, the value is the stringified user
+			 *
 			 */
 			redis_client.set(`keys:${ client_key }`, JSON.stringify(user), (err: Error) => {
 
@@ -69,9 +72,11 @@ export namespace session {
 					return reject(err);
 
 				}
-
+				
 				/*
+				 *
 				 * Set a TTL
+				 *
 				 */
 				redis_client.expire(`keys:${ client_key }`, settings.sessionTTL, (err: Error) => {
 
@@ -94,58 +99,37 @@ export namespace session {
 	 * `@needAuthentification` before the controller's method
 	 *
 	 */
-	export function needAuthentification (target: any, member: string, descriptor: PropertyDescriptor) {
+	export let needAuthentification = cat.before((request: cat.Request) => {
 
-		const orig = descriptor.value;
-		descriptor.value = function  (request: cat.Request) {
+		logger.trace(`The key is ${ keyName }`)
 
+		/*
+		 *
+		 * Casting the request so it can accept an user
+		 *
+		 */
+		let sessRequest = <sessionRequest>request;
 
-			/*
-			 *
-			 * Casting the request so it can accept an user
-			 *
-			 */
-			let sessRequest = <sessionRequest>request;
+		/* 
+		 *
+		 * Checking if the user is connected and linking the user to the request
+		 * If there's no user with that session key, throw a 401
+		 *
+		 */
+		
+		return session.check(<Signature>request.req.headers[keyName])
+				.then((user: User) => {
 
-			/* 
-			 *
-			 * This is a mock.
-			 *
-			 * The actual mechanism will be implemented using 
-			 * a non-yet-written decorator factory in catnapify
-			 *
-			 */
-			sessRequest.user = UsersMock[3];
+					sessRequest.user = user;
+					return sessRequest;
 
-			// session.check(req.header(keyName))
-			// 	.then((user: User) => {
+				}).catch((err: RangeError) => {
 
-			// 		req.user = user;
-			// 		orig(req, res, next)
+					throw {code: 401, response: {message: 'I don\'t know who you are, man'}};  
 
-			// 	}).catch((err: RangeError) => {
+				})
 
-			// 		res.json(401, {message: 'I don\'t know who you are, man'});  
-			// 		next();
-
-			// 	})
-			try{
-
-				return orig(sessRequest);
-
-			}
-			catch(err){
-			
-				console.log(`caught an error`)
-				console.log(err)
-			
-			}
-
-		}
-
-		return descriptor;
-
-	}
+	})
 
 	/*
 	 *

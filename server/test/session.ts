@@ -19,7 +19,7 @@ import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
 
-describe.skip('session',  () => {
+describe('session',  () => {
 
 	beforeEach(function  () {
 
@@ -32,13 +32,9 @@ describe.skip('session',  () => {
 
 		return (() => {
 
-			logger.trace(`TRACE: Starting test accept signup`)
-			logger.trace(`TRACE: Here is ${ userSignupExample.login }`)
-			logger.trace(userSignupExample)
-
 			return chai.request(url)
 				.put(`/api/users/${ userSignupExample._id}`)
-				.send(userSignupExample)
+				.send({user: userSignupExample})
 
 		})().then((ans: any) => {
 
@@ -72,15 +68,37 @@ describe.skip('session',  () => {
 		return (() => {
 
 
+			/*
+			 *
+			 * Trying to sign up an incomplete user
+			 *
+			 */
 			let _credentials:any = {... userSignupExample};
 			delete _credentials.email;
 
 			return expect(chai.request(url)
 				.put(`/api/users/${userSignupExample._id}`)
+
+				.send({user:_credentials}))
+				.to.eventually.be.rejectedWith('Bad Request')
+
+		})().then(() => {
+
+			/*
+			 *
+			 * Trying to sign up an user without using the {user: XXX} property
+			 *
+			 */
+			let _credentials:any = {... userSignupExample};
+
+			return expect(chai.request(url)
+				.put(`/api/users/${userSignupExample._id}`)
+
 				.send(_credentials))
 				.to.eventually.be.rejectedWith('Bad Request')
 
-		})()
+
+		})
 
 	});
 
@@ -144,15 +162,16 @@ describe.skip('session',  () => {
 
 		})().then((res: any) => {
 
-			expect(res).to.have.header('openride-key')
+			expect(res).to.have.header('openride-server-session')
+			logger.trace(`The test recieved the key ${ res.headers['openride-server-session'] }`)
 			return chai.request(url)
 				.get('/api/session/me')	
-				.set('openride-key', res.headers['openride-key'])
+				.set('openride-server-session', res.headers['openride-server-session'])
 
 		}).then((res: any) => {
 
 			let user: User = JSON.parse(res.text);
-			expect(user.login).to.be.equal(userSignupCredentials.login);
+			expect(user._id).to.be.equal(userSignupCredentials.login);
 			expect(user.password).not.to.exist;
 
 		}).catch((err: any) => {
@@ -168,23 +187,21 @@ describe.skip('session',  () => {
 
 		return (() => {
 			
-			logger.trace(`TRACE: aaaaaaa`)
-			logger.trace(userSignupExample)
 			return chai.request(url)
 				.put(`/api/users/${ userSignupExample._id}`)
-				.send(userSignupExample)
+				.send({user: userSignupExample})
 
 		})().then((res: any) => {
 
-			expect(res).to.have.header('openride-key')
+			expect(res).to.have.header('openride-server-session')
 			return chai.request(url)
 				.get('/api/session/me')	
-				.set('openride-key', res.headers['openride-key'])
+				.set('openride-server-session', res.headers['openride-server-session'])
 
 		}).then((res: any) => {
 
 			let user: User = JSON.parse(res.text);
-			expect(user.login).to.be.equal(userSignupExample.login);
+			expect(user._id).to.be.equal(userSignupExample._id);
 			expect(user.password).not.to.exist;
 
 		})
@@ -192,6 +209,5 @@ describe.skip('session',  () => {
 	})
 
 	it("should send a cookie when rememberme is true");
-	it("should should accept logout");
 
 });

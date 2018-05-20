@@ -1,143 +1,172 @@
 import * as restify from 'restify';
-
-import { logger } from '../services/logger';
-import { db } from '../services/db';
-import { session, Signature, keyName } from '../services/session';
-
+import * as cat from 'catnapify';
 import { ObjectID } from 'mongodb';
 
-import { User, sanitize } from '../../../shared/models/user';
+import { logger, logged } from '../services/logger';
+import { db } from '../services/db';
+import { session, Signature, keyName, sessionRequest } from '../services/session';
+
+import { Promise } from 'es6-promise';
+
+import { User, Credentials, isCredentials, isUser, sanitize } from '../../../shared/models/user';
+
 import { hash } from '../../../shared/lib/hash';
 
+interface userRequest extends cat.Request{
 
-export default class usersController {
+	user: User;
 
-	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
+}
 
-		db
+export class usersController extends cat.Controller {
+
+	public constructor() {
+
+		super()
+
+	}
+
+	static findUser = cat.before((request: userRequest) => {
+
+		logger.trace('Trying to find an user')
+		logger.trace(request.params)
+
+		return db.db.collection('users')
+			.findOne({_id: request.params.id})
+			.then((user: User) => {
+
+				logger.trace('Found the user:')
+				logger.trace(user)
+
+				if(!user) throw {code: 404, response: 'No such user'}  
+				else request.user = user;	
+
+				return request;
+
+			})
+
+	})
+
+	/*
+	 *
+	 * This route allow to get information about an user.
+	 *
+	 * It return an user or a 404 error. 
+	 *
+	 */
+
+	@cat.catnapify('get', '/api/users/:id')
+	@logged
+	@cat.need('id')
+	@cat.give(isUser)
+	@usersController.findUser
+	public get(request: userRequest) {
+
+		request.user = sanitize(request.user)
+		return request.user; 
+
+	}
+
+	/*
+	 *
+	 * This route allow the user to sign up
+	 *
+	 * It PUT the user into the system under his ID, then sign him up
+	 * 
+	 * @params User the user to add
+	 *
+	 */
+	@cat.catnapify('put', '/api/users/:id')
+	@logged
+	@cat.need('user')
+	@cat.need((params: any) => isUser(params.user))
+	@cat.need('id')
+	public signup(request: cat.Request) {
+
+		let user: User = request.params.user;
+		user._id = request.params.id;
+
+		return db
 			.db
 			.collection('users')
-			.findOne({_id: req.params.id})
-			.then((user: User) => {
-				
-				user.password = undefined;
-				db.answeror404(res, user, req.params.id);
+			.insertOne(user)
+			.then((ans: any) => {
 
-			}).catch((err: Error) => {
+				return session.authentify(user)
 
-				throw err;
+			}).then((key: Signature) => {
 
-			});
+				logger.trace(`TRACE: Recieved the API key`)
+				logger.trace(key)
 
-		return next();	
+				request.res.header(keyName, key)
+				return {code: 201, response: {
+					user: user,
+					key: key,
+					message: `user ${ user._id } is signed in`
+				} }
 
-	}
-
-
-	public signup(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-
-		try {
-
-			let user: User = {
-				_id: req.params.id,
-				name: req.params.name,
-				login: req.params.login,
-				password: req.params.password, //	SHA encrypted
-				age: req.params.age,
-				place_of_origin: req.params.place_of_origin,
-				reputation: req.params.reputation,
-				email: req.params.email,
-			}
-
-			try {
-
-				if(!user._id){ throw Error('One argument ( _id ) is missing') }
-				if(!user.name){ throw Error('One argument ( name ) is missing') }
-				if(!user.login){ throw Error('One argument ( login ) is missing') }
-				if(!user.password){ throw Error('One argument ( password ) is missing') }
-				if(!user.age){ throw Error('One argument ( age ) is missing') }
-				if(!user.place_of_origin){ throw Error('One argument ( place_of_origin ) is missing') }
-				if(!user.reputation){ throw Error('One argument ( reputation ) is missing') }
-				if(!user.email){ throw Error('One argument ( email ) is missing') }
-
-			} catch (err) {
-			
-				res.json(400, err)
-				return
-				
-			}
-
-			db
-				.db
-				.collection('users')
-				.insertOne(user)
-				.then((ans: any) => {
-
-					return session.authentify(user)
-
-				}).then((key: Signature) => {
-
-					logger.trace(`TRACE: Recieved the API key`)
-					logger.trace(key)
-
-					res.header(keyName, key)
-					res.json(201, { message: 'All right' })
-
-				})
-				.catch((err: Error) => {
-
-				  throw err;  
-
-				})
-
-		} catch (err) {
-
-			res.json(500, err);
-
-		}
-	}
-
-	public del(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-		res.json(501, {message: 'Not implemented'})
+			})
 
 	}
 
-	public login(req: restify.Request, res: restify.Response, next: restify.Next) {
+	// @cat.catnapify('del', '/api/users/:id')
+	// @logged
+	// public del(request: cat.Request) {
 
-		let login: string = req.params.login; 
-		let password: string = req.params.password; 
+	// 	throw {code: 501, response: 'Not implemented'}
 
+	// }
 
-		db
+	/*
+	 *
+	 * This route log the user inside the system
+	 *
+	 * Once the user is authentified, s.he will be sent an 
+	 * API key using the `openride-server-session` HTTP header
+	 * Using the @needAuthentification decorator, every other 
+	 * route can match the API key with the connected user
+	 *
+	 */
+	@cat.catnapify('put', '/api/session/me')
+	@logged
+	@cat.need(isCredentials)
+	public login(request: cat.Request) {
+
+		let login: string = request.params.login; 
+		let password: string = request.params.password; 
+
+		return db
 			.db
 			.collection('users')
 			.findOne({
-				login: login	
+				_id: login	
 			})
-			.then((user: User) => {
+			.then((user: User) : Promise<cat.Answer<any>> => {
 
 				// let hashedPassword = hash(password);
 				/*
 				 * @note It is client responsability to hash password
 				 */
 
-				if(!user) {
-					res.json(404, { message: 'I didn\'t find such user, sorry' })
-					logger.error(`ERROR: 404 error (PUT /users/me. No such user)`)	
-				}
-				else if(password == user.password)  {
-					session.authentify(user).then((key: Signature) => {
-
-						res.header('openride-key', key)
-						res.json(201, { message: 'All right' })
-
-					})
-				}
+				if(!user) 
+					return Promise.resolve({code: 404, response: 'I didn\'t find such user, sorry'  })
 				else {
-					res.json(401, { message: 'Password ain\'t good, brother' })
-					logger.error(`ERROR: 401 error. Password is no good`)
+
+					if(password == user.password)  {
+						return session.authentify(user).then((key: Signature) => {
+
+							request.res.header(keyName, key)
+							return {code: 201, response: {
+								message: 'All right',
+								key: key 
+							}}
+
+						})
+					}
+					else
+						return Promise.resolve({code: 401, response: 'Password ain\'t good, brother'})
+
 				}
 
 			})
@@ -145,16 +174,14 @@ export default class usersController {
 
 	}
 
+	@cat.catnapify('get', '/api/session/me')
+	@logged
+	@cat.give(isUser)
 	@session.needAuthentification
-	public connected_user(req: any, res: restify.Response, next: restify.Next) {
+	public connected_user(request: sessionRequest) {
 
-		res.json(200, sanitize(req.user));
-
-	}
-
-	public logout(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-		res.json(501, {message: 'Not implemented'})
+		return {code: 200, response: sanitize(request.user)};
 
 	}
+
 }

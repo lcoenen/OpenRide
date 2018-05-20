@@ -6,6 +6,7 @@ import { Server } from 'catnapify';
 import { settings } from './config/config';
 
 import { ridesController } from './controllers/rides';
+import { usersController } from './controllers/users'
 
 import { logger } from './services/logger';
 import { db } from './services/db';
@@ -17,9 +18,12 @@ db.connect().then( () => {
 	try {
 		//create a catnapify instance
 		let server = new Server(settings)
+
 		let rides = new ridesController;
+		let users = new usersController;
 
 		server.link(rides);
+		server.link(users)
 
 		server.listen()
 

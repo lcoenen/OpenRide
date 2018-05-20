@@ -29,12 +29,7 @@ export function resetMock(){
 
 		}).then(() => {
 
-			return db.collection('users').insert(UsersMock.map((element) => {
-
-				element._id = element.name;	
-				return element;
-
-			}));
+			return db.collection('users').insert(UsersMock);
 
 		}).then( () => {
 	
