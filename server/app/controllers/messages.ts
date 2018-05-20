@@ -1,93 +1,114 @@
 import * as restify from 'restify';
+import * as cat from 'catnapify';
 
-import { logger } from '../services/logger';
+import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
 
 import { ObjectID } from 'mongodb';
 
-import { Message } from '../../../shared/models/message';
+import { Message, isMessage } from '../../../shared/models/message';
+import { Ride } from '../../../shared/models/ride';
 
-export default class messagesController {
+let rideExist = cat.before((request: cat.Request) => {
 
-	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
+  return db.db.collection('rides')  
+		.findOne({_id: request.params.id})
+		.then((ride: Ride) => {
 
-		logger.info(`INFO: Catching a /rides/:id/messages request. Id is ${req.params.id}`)
+			if(!ride) throw {code: 404, response: 'No such ride'};
+			return request;
 
-		db
+		})	
+
+})
+
+export class messagesController extends cat.Controller {
+
+	/*
+	 *
+	 * Getting the messages for a specific ride
+	 *
+	 * Should fail if the ride doesn't exists
+	 *
+	 */
+	@cat.catnapify('get', '/api/rides/:id/messages')
+	@logged
+	@cat.need('id')
+	@rideExist
+	public get(request: cat.Request) {
+
+		return db
 			.db
 			.collection('rides')
-			.findOne({_id: req.params.id})
+			.findOne({_id: request.params.id})
 			.then((ans:any) => {
 
-				if(!ans) throw `ERROR: I could not find the ride ID ${req.params.id}`;
+				if(!ans) throw `ERROR: I could not find the ride ID ${request.params.id}`;
 
 			}).then(() =>{
 
-				let tofind = {
-					'ride': { '@id': `/api/rides/${req.params.id}`}
-				};
-
-				logger.info(`INFO: looking for ${JSON.stringify(tofind)}`);
-
-				let ans = db
+				return db
 					.db
 					.collection('messages')
 					.find({
-						'ride': { '@id': `/api/rides/${req.params.id}`}
-					}).toArray().then((ans) => {
+						'ride': { '@id': `/api/rides/${request.params.id}`}
+					}).toArray()
 
-						logger.info(`INFO: answer from Mongo is ${JSON.stringify(ans)}`);
-
-						db.answeror404(res, ans, req.params.id);
-
-					});
-			}).catch((err) => {
-
-				logger.error(err);
-
-				res.send(404, {message: err} );
-
-			});
-
-		return next();	
+			})
 
 	}
 
-
-	public post(req: restify.Request, res: restify.Response, next: restify.Next) {
+	/*
+	 *
+	 * Posting a message
+	 *
+	 */
+	@cat.catnapify('post', '/api/rides/:id/messages')	
+	@logged
+	@cat.need((params: any) => isMessage(params.message))
+	@cat.need('id')
+	@rideExist
+	public post(request: cat.Request) {
 	
-		logger.info(`INFO: Catching a POST /rides/:id/messages request. Id is ${req.params.id}`)
+		return db.db.collection('messages').insertOne(request.params.message).then((ans) => {
 
-		let toinsert: Message = {
-			ride: {'@id': `/api/rides/${req.params.id}`},
-			message: req.params.message,
-			author: {'@id': `/api/rides/${req.params.author}`},
-			date: req.params.date
-		};
+			return {code: 201, response: 'ok'}
 
-		db.db.collection('messages').insertOne(toinsert).then((ans) => {
+		})
+	
+	}
 
-			res.json(201, ans);  
+	@cat.catnapify('del', '/api/rides/:id/messages/:msg')
+	@logged
+	@cat.need(['id', 'msg'])
+	@rideExist
+	public del(request: cat.Request) {
 
-		}).catch((err) => {
-		
-			res.json(400, {message: err});
-		
-		});
+		return db.db.collection('message').deleteOne({'_id': request.params.msg}).then(( ) => {
 
-		return next();
+			return {code: 204, response: 'deleted'}  
+
+		})	
 
 	}
 
-	public del(req: restify.Request, res: restify.Response, next: restify.Next) {
+	/*
+	 *
+	 * This route is to edit a message
+	 *
+	 */
+	@cat.catnapify('post', '/api/rides/:id/messages/:msg')
+	@logged
+	@cat.need((params: any) => isMessage(params.message))
+	@cat.need(['id', 'msg'])
+	@rideExist
+	public edit(request: cat.Request) {
 
+		// return db.db.collection('message').deleteOne({'_id': request.params.msg}).then(( ) => {
 
+		// 	return {code: 204, response: 'deleted'}  
 
-	}
-
-	public invitables(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-
+		// })	
 
 	}
 

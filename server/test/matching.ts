@@ -432,4 +432,6 @@ describe('matching', () => {
 
 	});
 
+	it('shouldn\'t be allowed to join a ride without the consent of the driver')
+
 });

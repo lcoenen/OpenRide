@@ -5,6 +5,7 @@ import { Server } from 'catnapify';
 
 import { settings } from './config/config';
 
+import { messagesController } from './controllers/messages';
 import { ridesController } from './controllers/rides';
 import { usersController } from './controllers/users'
 
@@ -21,9 +22,11 @@ db.connect().then( () => {
 
 		let rides = new ridesController;
 		let users = new usersController;
+		let messages = new messagesController;
 
 		server.link(rides);
-		server.link(users)
+		server.link(messages);
+		server.link(users);
 
 		server.listen()
 
