@@ -33,8 +33,8 @@ export let RidesMock: Ride[] = [
 		type: RideType.OFFER,
 		destination: PlacesMock[3],
 		riding_time: moment().add(3, 'days').hour(11).minute(50).toDate(),
-		riders: [ { '@id': '/api/users/princess77' } ],
-		driver: { '@id': '/api/users/Moe' }
+		riders: [ { '@id': '/api/users/Moe' } ],
+		driver: { '@id': '/api/users/princess77' }
 	},
 
 	{

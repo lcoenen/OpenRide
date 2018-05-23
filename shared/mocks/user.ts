@@ -78,4 +78,6 @@ const userSignupCredentials	= {
 
 }
 
-export { UsersMock, userSignupExample, userSignupCredentials };
+let PB = UsersMock[5]
+
+export { UsersMock, userSignupExample, userSignupCredentials, PB };

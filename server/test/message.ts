@@ -107,7 +107,7 @@ describe('messages',  () => {
 		 *
 		 */
 		return expect(chai.request(url)
-			.get(`/api/rides/${ RidesMock[1]._id }/messages`)
+			.get(`/api/rides/${ RidesMock[0]._id }/messages`)
 			.set('openride-server-session', key))	
 			.to.eventually.be.rejectedWith(Error, 'Unauthorized');
 
@@ -124,7 +124,7 @@ describe('messages',  () => {
 			 */
 			return chai.request(url)
 				.post(`/api/rides/${ RidesMock[2]._id }/messages`)
-				.set('openride-session-session', key)
+				.set('openride-server-session', key)
 				.send({message: messagePostExample})
 				.then((res: any) => {
 

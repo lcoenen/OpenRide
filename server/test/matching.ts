@@ -16,15 +16,18 @@ import 'mocha';
 
 import { Ride } from '../../shared/models/ride';
 import { 
+	RidesMock,
 	postDriverExample, 
 	postRiderExample,
 	postDriverLesserExample } from '../../shared/mocks/ride';
-import { userSignupCredentials } from '../../shared/mocks/user';
+import { userSignupCredentials, 
+	UsersMock, 
+	PB } from '../../shared/mocks/user';
 
 import { resetMock } from '../../shared/bin/resetmock';
 
 const url: string = 'localhost:3000';
-const connectedUsername: string = 'Rick';
+const connectedUsername: string = 'princess77';
 
 let key: string = '';
 
@@ -176,7 +179,6 @@ describe('matching', () => {
 	it("should not return rides of the same types (offer or request)", () => {
 
 		return (() => {
-
 
 			/*
 			 *
@@ -432,6 +434,40 @@ describe('matching', () => {
 
 	});
 
-	it('shouldn\'t be allowed to join a ride without the consent of the driver')
+	it('shouldn\'t be allowed to join a ride without the consent of the driver', ( ) => {
+
+			return expect(chai.request(url)
+			/* Trying to make the user join the ride */
+				.patch(`/api/rides/${ RidesMock[4]._id }`)
+				.set('openride-server-session', key)
+				.send({'join': PB._id}))
+			.to.eventually.be.rejectedWith('Unauthorized')
+
+	})
+
+	it('shouldn\'t be allowed to kick somebody from a ride if you\'re not the driver (or yourself)', ( ) => {
+	    
+			return (expect(chai.request(url)
+			/* Trying to make the user depart the ride */
+				.patch(`/api/rides/${ RidesMock[0]._id }`)
+				.set('openride-server-session', key)
+				.send({'depart': 'Rick'})))
+			.to.eventually.be.rejectedWith('Unauthorized')
+
+	})
+
+	it('should not be allowed to place a request for somebody else than oneself', ( ) => {
+
+			return expect(chai.request(url)
+				.post(`/api/rides/LiegeBruxelles/requests`)
+				.set('openride-server-session', key)
+				.send({
+					/* Moe is not the connected user */
+					from: {'@id': `/api/users/Moe`} 
+				}))
+			.to.eventually.be.rejectedWith('Unauthorized')
+
+	})
+
 
 });

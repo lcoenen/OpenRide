@@ -82,31 +82,44 @@ describe('rides',  () => {
 	it("should add and remove riders inside ride", () => {
 
 		return chai.request(url)
-		/* Trying to join the ride */
-			.patch(`/api/rides/${ RidesMock[4]._id }`)
+		/* 
+		 *
+		 * Trying to join the ride.
+		 *
+		 * PB is the driver in ride 2 (MaastrichtBruxelles)
+		 *
+		 */
+			.patch(`/api/rides/${ RidesMock[2]._id }`)
 			.set('openride-server-session', key)
 			.send({'join': UsersMock[3]._id})
 			.then((res: any) => {
 				expect(res).to.have.status(200)
 
-				/* Getting the ride */
-
+				/* 
+				 *
+				 * Getting the ride 
+				 *
+				 */
 				return chai.request(url)
-					.get(`/api/rides/${ RidesMock[4]._id }`)
+					.get(`/api/rides/${ RidesMock[2]._id }`)
 
 			})
 			.then((res: any) => {
 
-				/* Checking that the user is in the ride */
-
+				/*
+				 *
+				 * Checking that the user is in the ride 
+				 *
+				 */
 
 				let riders: Link[] = res.body.riders;
 				expect(Array.isArray(riders)).to.be.equal(true)
 
+
 				let riders_ids_matching: string[] = res.body.riders.filter((link: Link) => {
 
-					return link['@id'] == `/api/users/${ UsersMock[3]._id }`;
 
+					return link['@id'] == `/api/users/${ UsersMock[3]._id }`;
 				})
 
 				expect(riders_ids_matching.length).to.be.equal(1)
@@ -115,10 +128,14 @@ describe('rides',  () => {
 			.then(() => {
 
 				return chai.request(url)
-				/* Trying to make the user depart from the ride */
-					.patch(`/api/rides/${ RidesMock[4]._id }`)
+				/*
+				 *
+				 * Trying to make the user depart from the ride 
+				 *
+				 */
+					.patch(`/api/rides/${ RidesMock[1]._id }`)
 					.set('openride-server-session', key)
-					.send({'depart': UsersMock[3]._id})
+					.send({'depart': 'princess77'})
 
 			})
 			.then((res: any) => {
@@ -126,19 +143,23 @@ describe('rides',  () => {
 				expect(res).to.have.status(200)
 
 				return chai.request(url)
-					.get(`/api/rides/${ RidesMock[4]._id }`)
+					.get(`/api/rides/${ RidesMock[1]._id }`)
 
 			})
 			.then((res: any) => {
 
-				/* Checking that the user is NOT in the ride anymore */
+				/*
+				 *
+				 * Checking that the user is NOT in the ride anymore 
+				 *
+				 */
 
 				let riders: Link[] = res.body.riders;
 				expect(Array.isArray(riders)).to.be.equal(true)
 
 				let riders_ids_matching: string[] = res.body.riders.filter((link: Link) => {
 
-					return link['@id'] == `/api/users/${ UsersMock[4]._id }`;
+					return link['@id'] == `/api/users/princess77`;
 
 				})
 

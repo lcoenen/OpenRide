@@ -114,7 +114,7 @@ export class ridesController extends cat.Controller {
 	@logged
 	@cat.need(isRide)
 	@session.needAuthentification
-	public put(request: cat.Request) {
+	public put(request: sessionRequest) {
 
 		let toinsert: Ride = {
 			_id: request.params.id, /* id is from the URL */
@@ -151,7 +151,8 @@ export class ridesController extends cat.Controller {
 	@cat.catnapify('patch', '/api/rides/:id')
 	@logged
 	@cat.need((params: any) => (params.join !== undefined) || (params.depart !== undefined))
-	public patch(request: cat.Request) {
+	@session.needAuthentification
+	public patch(request: sessionRequest) {
 
 		return db
 			.db
@@ -168,6 +169,44 @@ export class ridesController extends cat.Controller {
 				if(!ans) throw `ERROR: I could not find the ride ID ${request.req.params.id}`;
 
 				return ans;
+
+			}).then(( ride: Ride) => {
+
+				let params = request.params;
+
+				/*
+				 *
+				 * Throw an unauthorised error if the requester is not the right person
+				 *
+				 * - For join, only the driver can send the request
+				 * - For depart, the driver and the person can send the request
+				 *
+				 */
+				let requester = JSON.stringify({'@id' : `/api/users/${ request.user['_id'] }`});
+				let driver = JSON.stringify(<Link>ride.driver);
+				let target = JSON.stringify({'@id' : `/api/users/${ params.join ? params.join: params.depart }`}); 
+
+				if(params.join && requester != driver) throw {code: 401, response: 'Sorry, you are not the driver (guru meditation)'}
+				if(params.depart && requester != driver && requester != target) throw {code: 401, response: 'Sorry, that has nothing to do with you'}
+
+				/*
+				 *
+				 * Throw an unauthorised error if the requester tries to add somebody that haven't requested it
+				 *
+				 */
+
+				params.join? db.db
+					.collection("requests")
+					.findOne({
+						to: {'@id': `/api/rides/${ request.params.id }`},
+						from: {'@id' : `/api/users/${ params.join ? params.join: params.depart }`} 
+					}).then((request: Request) => {
+
+						if(!request) throw {code: 401, response: 'The person has not requested to be in the ride'}; 
+
+					}) : null; 
+
+
 
 			}).then( (): Promise<any> => {
 
@@ -421,7 +460,16 @@ export class ridesController extends cat.Controller {
 	@logged
 	@cat.need(['id', 'from'])
 	@ridesController.checkRideHasDriver
-	public postRequests(req: cat.Request){
+	@session.needAuthentification
+	public postRequests(req: sessionRequest){
+
+		/* 
+		 *
+		 * Check that the request if from the person it's supposed to be
+		 *
+		 */
+		if(req.params.from['@id'] != `/api/users/${ req.user._id }`) 
+			throw {code: 401, response: 'This is not for you'}
 
 		let toinsert: Request = {
 
