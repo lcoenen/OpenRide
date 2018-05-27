@@ -6,9 +6,9 @@ export let RequestsMock: Request[] = [
 		to: { '@id': '/api/rides/MaastrichtBruxelles' }
 	},
 	{
-		from: { '@id': '/api/users/PB' },
+		from: { '@id': '/api/users/princess77' },
 		to: { '@id': '/api/rides/BruxellesLiege' }
-	}
+	},
 
 ];
 

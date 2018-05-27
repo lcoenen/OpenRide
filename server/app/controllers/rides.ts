@@ -1,180 +1,336 @@
 import * as restify from 'restify';
-import * as turf from '@turf/turf';
+import * as turf from 'turf';
 import * as moment from 'moment';
 
-
-import { logger } from '../services/logger';
-import { db } from '../services/db';
-import { session } from '../services/session';
-
 import { ObjectID } from 'mongodb';
+import * as cat from 'catnapify';
 
-import { Ride, RideType } from '../../../shared/models/ride';
+import { logger, logged } from '../services/logger';
+import { db } from '../services/db';
+import { session, sessionRequest } from '../services/session';
+
+
+import { Ride, RideType, isRide } from '../../../shared/models/ride';
 import { Link } from '../../../shared/models/link';
 import { Request } from '../../../shared/models/request';
 
 const maxDistance: number = 30;
 
-export default class ridesController {
 
-	public get(req: restify.Request, res: restify.Response, next: restify.Next) {
+function isArrayOfRides(x: any): x is Ride[] {
+	return x.filter != undefined &&
+		!(x.filter((v:any) => {
+			return !isRide(v);	
+		}).length)
+}
 
-		logger.info(`INFO: Catching a /rides/:id request. Id is ${req.params.id}`)
+export class ridesController extends cat.Controller {
 
-		db
-			.db
-			.collection('rides')
-			.findOne({_id: req.params.id})
-			.then((ans:any) => {
-				db.answeror404(res, ans, req.params.id);
-			});
+	public constructor() {
 
-		return next();
+		super()
 
 	}
 
-	public getAll(req: restify.Request, res: restify.Response, next: restify.Next) {
 
-		db
+	static checkRideHasDriver = cat.before((request: cat.Request) => {
+
+		/*
+		 *
+		 * Check that the rides have a driver (is a proposition) and not a request
+		 *
+		 */
+		logger.debug('DEBUG: checking the ride')
+		return db.db.collection('rides')
+			.findOne({'_id': request.params['id']})
+			.then((ride: Ride) => {
+
+
+				if(ride.driver == undefined) throw {code: 404, response: 'This ride have no driver'};
+				return request;
+
+			})
+
+	})
+
+	/*
+	 *
+	 * Route allowing to get a specific ride
+	 *
+	 */
+
+	@cat.catnapify('get', '/api/rides/:id')
+	@logged
+	@cat.need('id')
+	@cat.give(isRide)
+	public get(request: cat.Request) {
+
+		return db
+			.db
+			.collection('rides')
+			.findOne({_id: request.req.params.id})
+			.then((ans:Ride) : cat.Answer<Ride> => {
+				if(!ans) throw { code: 404, response: 'ERROR: No such ride' } ;
+				return { code: 200, response: ans } ;
+			});
+
+	}
+
+	/*
+	 *
+	 * Route allowing to get all rides
+	 *
+	 * @return array An array of rides
+	 *
+	 */
+	@cat.catnapify('get', '/api/rides')
+	@logged
+	@cat.give(isArrayOfRides)
+	public getAll(request: cat.Request) {
+
+
+		return db
 			.db
 			.collection('rides')
 			.find()
 			.toArray()
-			.then((ans:any) => {
+			.then((rides: Ride[]) => {
 
-				res.json(200, ans);
+				return {code: 200, response: rides}
 
-			});
-
-		return next();
+			}) /* It should work without this, but out of security, I return a proper Answer object */
 
 	}
 
-	public post(req: restify.Request, res: restify.Response, next: restify.Next) {
-
-		logger.info(`INFO: Catching a POST /rides/:id request. Id is ${req.params._id}`)
+	/*
+	 *
+	 * This route allow to publish a new ride.
+	 *
+	 * In order to do that, the user have to PUT a new ride at the desired URL.
+	 * The request have to contains all the field needed for a ride (see shared/models/ride)
+	 *
+	 */
+	@cat.catnapify('put', '/api/rides/:id')
+	@logged
+	@cat.need(isRide)
+	@session.needAuthentification
+	public put(request: sessionRequest) {
 
 		let toinsert: Ride = {
-			_id: req.params._id,
-			origin: req.params.origin,
-			destination: req.params.destination,
-			riding_time: req.params.riding_time,
-			payement: req.params.payement,
-			type: req.params.type,
+			_id: request.params.id, /* id is from the URL */
+			origin: request.params.origin,
+			destination: request.params.destination,
+			riding_time: request.params.riding_time,
+			payement: request.params.payement,
+			type: request.params.type,
 			riders: []
 		};
 
-		if(toinsert.type == RideType.REQUEST) toinsert.riders = [session.loggedInUser]
-		else toinsert.driver = session.loggedInUser; 
+		if(toinsert.type == RideType.REQUEST) toinsert.riders = [{'@id': `/api/users/${ (<sessionRequest>request).user._id }` }]
+		else toinsert.driver = {'@id': `/api/users/${ (<sessionRequest>request).user._id }` }; 
 
-		db.db.collection('rides').insertOne(toinsert).then((ans) => {
+		return db.db.collection('rides').insertOne(toinsert).then((ans) => {
 
-			res.json(201, ans);  
+			return { code: 201, response: 'created' };
 
-		}).catch((err) => {
-
-			res.json(400, {message: err});
-			logger.error(`Bad request: ${ err }`)
-
-		});
-
-		return next();
+		})
 
 	}
 
-	public patch(req: restify.Request, res: restify.Response, next: restify.Next) {
+	/* 
+	 *
+	 * This route is used to join or depart to/from a ride
+	 *
+	 * @args join should be set to the user that want to join
+	 * @args depart should be set to the user that want to depart from the ride
+	 * @args id is the ride id (set in the route)
+	 *
+	 * The join or depart argument should be a valid user ID
+	 *
+	 */
+	@cat.catnapify('patch', '/api/rides/:id')
+	@logged
+	@cat.need((params: any) => (params.join !== undefined) || (params.depart !== undefined))
+	@session.needAuthentification
+	public patch(request: sessionRequest) {
 
-		logger.info(`INFO: Catching a PATCH /rides/:id request. Id is ${req.params.id}`)
-
-		db
+		return db
 			.db
 			.collection('rides')
-			.findOne({_id: req.params.id})
+			.findOne({_id: request.req.params.id})
 			.then((ans:any) => {
 
-				logger.info(`INFO: Trying to find the ride. Found ${ans._id}`)
+				/* 
+				 *
+				 * If we cannot find the corresponding ride, throw an error 
+				 *
+				 */
 
-				if(!ans) throw `ERROR: I could not find the ride ID ${req.params.id}`;
+				if(!ans) throw `ERROR: I could not find the ride ID ${request.req.params.id}`;
+
+				return ans;
+
+			}).then(( ride: Ride) => {
+
+				let params = request.params;
+
+				/*
+				 *
+				 * Throw an unauthorised error if the requester is not the right person
+				 *
+				 * - For join, only the driver can send the request
+				 * - For depart, the driver and the person can send the request
+				 *
+				 */
+				let requester = JSON.stringify({'@id' : `/api/users/${ request.user['_id'] }`});
+				let driver = JSON.stringify(<Link>ride.driver);
+				let target = JSON.stringify({'@id' : `/api/users/${ params.join ? params.join: params.depart }`}); 
+
+				if(params.join && requester != driver) throw {code: 401, response: 'Sorry, you are not the driver (guru meditation)'}
+				if(params.depart && requester != driver && requester != target) throw {code: 401, response: 'Sorry, that has nothing to do with you'}
+
+				/*
+				 *
+				 * Throw an unauthorised error if the requester tries to add somebody that haven't requested it
+				 *
+				 */
+
+				params.join? db.db
+					.collection("requests")
+					.findOne({
+						to: {'@id': `/api/rides/${ request.params.id }`},
+						from: {'@id' : `/api/users/${ params.join ? params.join: params.depart }`} 
+					}).then((request: Request) => {
+
+						if(!request) throw {code: 401, response: 'The person has not requested to be in the ride'}; 
+
+					}) : null; 
+
+
 
 			}).then( (): Promise<any> => {
 
-				logger.info(`INFO: Trying to execute the request`)
+				if(request.req.params.join) {
 
-				if(req.params.join) {
-
-
-					logger.info(`INFO: User ${req.params.join} want to join the ride`)
-
+					/* 
+					 *
+					 * Adding the user to the set in MongoDB
+					 * It is done using the Link format (see JsonP) { '@id': url }
+					 * This is to ensure respect of the hyperlink format
+					 * and thus that is's REST compliant
+					 *
+					 */
 					return db.db.collection('rides').updateOne({
-						_id: req.params.id
+						_id: request.req.params.id
 					}, {
-						$addToSet: { riders: { '@id': `/api/users/${req.params.join}`}}
+						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
 					});
 
 				}
-
-				if(req.params.depart) {
-					logger.info(`INFO: User ${req.params.depart} want to depart the ride`)
-
-
-					return db.db.collection('rides').updateOne({
-						_id: req.params.id
-					}, {
-						$pull: { riders: { '@id': `/api/users/${req.params.depart}`}}
-					});
-
-				}
-
 				else {
 
-					logger.info(`INFO: Nothing to patch`);
-					return Promise.resolve();
+					/* 
+					 *
+					 * If the 'depart' function is set, then remove the user from the set
+					 *
+					 */
+					return db.db.collection('rides').updateOne({
+						_id: request.req.params.id
+					}, {
+						$pull: { riders: { '@id': `/api/users/${request.req.params.depart}`}}
+					});
 
 				}
-
-			}).then(() => {
-
-				res.send(205);
-
-			}).catch((err) => {
-
-				logger.error(err);
-
-				res.send(404, {message: err} );
-
-			});
+			})
 
 	}
 
-	public del(req: restify.Request, res: restify.Response, next: restify.Next) {
+	/*
+	 *
+	 * This route will delete a ride
+	 *
+	 */
+	@cat.catnapify('del', '/api/rides/:id')
+	@logged
+	@cat.need('id')
+	public del(request: cat.Request) {
 
+		return db
+			.db
+			.collection('rides')
+			.deleteOne({'_id': request.params['id']})
+			.then(( ) => {
 
+				logger.debug(`Deleting ${ request.params['id'] }`)
+				return {code: 204, response: 'deleted'};  
+
+			})
 
 	}
 
-	public head(req: restify.Request, res: restify.Response, next: restify.Next) {
+	/*
+	 *
+	 * This route is used to know if the ride exists
+	 *
+	 * It returns a 200 if the ride is found in the database. 400 otherwise.
+	 *
+	 */
+	@cat.catnapify('head', '/api/rides/:id')
+	@logged
+	@cat.need('id')
+	public head(req: cat.Request) {
 
-		db
+		return db
 			.db
 			.collection('rides')
 			.findOne({_id: req.params.id})
 			.then((ans:any) => {
-				if(ans)	res.send(200);
-				else res.send(404);
+				if(ans) return {code: 200, response: ''}	
+				else return {code: 400, response: ''} 
 			});
+
 	}
 
-	public getMatches(req: restify.Request, res: restify.Response, next: restify.Next){
+	/*
+	 * This route is used to return the rides matching the target
+	 *
+	 * The matching algorythm is based on four parameters:
+	 *   - Origin
+	 *   - Destination
+	 *   - Payement option
+	 *   - Time of departure
+	 *
+	 *	If everything goes smoothly, it should return a 200 with a set of Link objects
+	 *	(i.e. an array {'@id': url} objects) representing the matched rides. Every URL should thus be
+	 *	in the /api/rides/XXX domain.
+	 *
+	 */
+	@cat.catnapify('get', '/api/rides/:id/matches')
+	@logged
+	@cat.need('id')
+	@cat.give((links: Link[]) => {
 
-		logger.info(`INFO: Catching a /rides/:id/matches. ID is ${ req.params.id }`)
+		return <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0
 
-		// Select the rides arriving nearby 
-		// the matching destination
+	})
+	public getMatches(req: cat.Request){
+
+		/*
+		 *
+		 * Select the rides arriving nearby 
+		 * the matching destination
+		 *
+		 */
 
 		let targetRide: Ride;
 
 		return (() => {
 
+			/*
+			 *
+			 * Selecting the target ride
+			 *
+			 */
 			return db
 				.db
 				.collection('rides')
@@ -184,7 +340,7 @@ export default class ridesController {
 
 			if(!foundRide) {
 
-				throw 404;
+				throw { code: 404, response: "I cannot find the target ride" };
 
 			}
 
@@ -201,10 +357,12 @@ export default class ridesController {
 
 			}
 
-			logger.info(criterias)
-
-			// If there's a driver, I need to match it with people 
-			// who are requesting a ride (i.e. without driver)
+			/*
+			 *
+			 * If there's a driver, I need to match it with people 
+			 * who are requesting a ride (i.e. without driver)
+			 *
+			 */
 
 			return db
 				.db
@@ -214,24 +372,31 @@ export default class ridesController {
 
 		}).then((rides: Ride[]) => {
 
-			// Filter the rides foming from the matching destination
+			/*
+			 *
+			 * Filter the rides foming from the matching destination
+			 *
+			 */
 			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
 
-				return turf.distance(ride.destination.geometry, 
-					targetRide.destination.geometry) < maxDistance;	
+				return turf.distance(ride.destination, 
+					targetRide.destination) < maxDistance;	
 
 			}).sort((a,b) => {
 
-				// Compute a matching score based on distance, time, payement philosophy
+				/*
+				 *
+				 * Compute a matching score based on distance, time, payement philosophy
+				 *
+				 */
 
 				let destinationDistance = turf.distance(
-					a.destination.geometry,
-					b.destination.geometry);
+					a.destination,
+					b.destination);
 
 				let originDistance = turf.distance(
-					a.origin.geometry,
-					b.origin.geometry);
-
+					a.origin,
+					b.origin);
 				let payementDifference = a.payement - b.payement;
 
 				const msPerWeek = (1000 * 60 * 60 * 24 * 7);
@@ -249,33 +414,62 @@ export default class ridesController {
 
 			});
 
-			res.send(200, filterRides);
-
-		}).catch((err: any) => {
-
-			if(err == 404) res.send(404, {message: `I couldn't find the ride ${ req.params.id }`});
-			else res.send(500, err);
+			/*
+			 *
+			 * Return the filtered ride with a code 200
+			 *
+			 */
+			return filterRides;
 
 		})
 
 	}
 
-	public getRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+	/*
+	 * This entry point is used to get the request associated with a ride
+	 *
+	 * It gives a set of Link[] pointing to every users
+	 * having requesting to join the ride.
+	 *
+	 *
+	 * Will always answer a 200 with what he found
+	 */
+	@cat.catnapify('get', '/api/rides/:id/requests')
+	@logged
+	@cat.need('id')
+	@ridesController.checkRideHasDriver
+	//@cat.give((links: Link[]) => <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0)
+	public getRequests(req: cat.Request){
 
 		return db
 			.db
 			.collection("requests")
 			.find({to: {'@id': `/api/rides/${ req.params.id }`}})
 			.toArray()
-			.then((found) => {
-
-				res.send(200, found);  
-
-			})
 
 	}
 
-	public postRequests(req: restify.Request, res: restify.Response, next: restify.Next){
+	/*
+	 *
+	 * This entry point allow the client to post a ride request.
+	 *
+	 * @params from The user originally requesting the ride
+	 *
+	 */
+	@cat.catnapify('post', '/api/rides/:id/requests')
+	@logged
+	@cat.need(['id', 'from'])
+	@ridesController.checkRideHasDriver
+	@session.needAuthentification
+	public postRequests(req: sessionRequest){
+
+		/* 
+		 *
+		 * Check that the request if from the person it's supposed to be
+		 *
+		 */
+		if(req.params.from['@id'] != `/api/users/${ req.user._id }`) 
+			throw {code: 401, response: 'This is not for you'}
 
 		let toinsert: Request = {
 
@@ -289,11 +483,11 @@ export default class ridesController {
 			.collection("requests")
 			.insertOne(toinsert).then((ans) => {
 
-				res.json(201, ans);  
+				return { code: 201, response: 'Created' }	
 
 			}).catch((err) => {
 
-				res.json(400, {message: err});
+				return { code: 400, response: err };
 
 			});
 

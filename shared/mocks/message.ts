@@ -28,7 +28,6 @@ let MessagesMock: Message[] = [
 		"author": { '@id' : "/api/users/Moe"},
 		"date": 43214124
 	},
-
 	{
 		"ride":  { '@id' : "/api/rides/BruxellesLiege" },
 		"message": "Pourquoi personne ne veut que je conduise?",
@@ -37,4 +36,11 @@ let MessagesMock: Message[] = [
 	}
 ]
 
-export { MessagesMock };
+let messagePostExample = {
+	"ride": {'@id': '/api/rides/MaastrichtBruxelles'},
+	"message": "Voila, je suis la!",
+	"author": {"@id": "/api/users/princess77"},
+	"date": 43214128
+}
+
+export { MessagesMock, messagePostExample };

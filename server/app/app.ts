@@ -1,35 +1,44 @@
 import * as fs from 'fs';
 import * as restify from 'restify';
+
+import { Server } from 'catnapify';
+
 import { settings } from './config/config';
+
+import { messagesController } from './controllers/messages';
+import { ridesController } from './controllers/rides';
+import { usersController } from './controllers/users'
 
 import { logger } from './services/logger';
 import { db } from './services/db';
 
-export let api = restify.createServer({
-  name: settings.name
-});
-
-restify.CORS.ALLOW_HEADERS.push('authorization');
-api.use(restify.CORS());
-api.pre(restify.pre.sanitizePath());
-api.use(restify.acceptParser(api.acceptable));
-api.use(restify.bodyParser());
-api.use(restify.queryParser());
-api.use(restify.authorizationParser());
-api.use(restify.fullResponse());
+// catnapify.initialise(settings);
 
 db.connect().then( () => {
 
-  fs.readdirSync(__dirname + '/routes').forEach(function (routeConfig: string) {
-    if (routeConfig.substr(-3) === '.js') {
-      let route = require(__dirname + '/routes/' + routeConfig);
-      route.routes(api);
-    }
-  });
+	try {
+		//create a catnapify instance
+		let server = new Server(settings)
 
-  api.listen(settings.port, function () {
-    logger.info(`INFO: ${settings.name} is running at ${api.url}`);
-  });
+		let rides = new ridesController;
+		let users = new usersController;
+		let messages = new messagesController;
+
+		server.link(rides);
+		server.link(messages);
+		server.link(users);
+
+		server.listen()
+
+		logger.info(`INFO: Server is listening on port ${ settings.port }`)
+
+	}
+	catch(err) {
+
+		logger.error(`ERROR: Could not create server`)	
+		logger.error(err)
+
+	}
 
 }).catch((err:any) => {
 

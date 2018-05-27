@@ -1,6 +1,8 @@
 import * as bunyan from 'bunyan';
 import * as stream from 'stream';
 
+import { logger as catnapify_logger } from 'catnapify'
+
 let infoStream = new stream.Writable();
 infoStream.writable = true;
 
@@ -11,7 +13,7 @@ infoStream.write = (info: any): boolean => {
 };
 
 export let logger = bunyan.createLogger({
-  name: 'myapp',
+  name: 'openride',
   streams: [
     {
       level: 'info',
@@ -20,6 +22,12 @@ export let logger = bunyan.createLogger({
     {
       level: 'error',
       path: `error.log`
-    }
+		},
+		{
+			level: 'trace',
+			path: 'debug.log'
+		}
   ]
 });
+
+export let logged = catnapify_logger({logger: logger})

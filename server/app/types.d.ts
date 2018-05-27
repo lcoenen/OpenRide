@@ -5,4 +5,7 @@ export interface Config {
   version: string;
   mongoUrl: string;
   dbName: string;
+	sessionTTL: number;
 }
+
+declare module 'catnapify';

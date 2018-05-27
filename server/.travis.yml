@@ -1,0 +1,5 @@
+language: node
+services:
+  - redis
+  - mongodb
+before_script: npm run refresh

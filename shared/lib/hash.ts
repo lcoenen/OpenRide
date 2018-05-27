@@ -1,6 +1,6 @@
 // import * as crypto from 'crypto';
 //
-// From : https://gist.github.com/ducksoupdev/bbfcf8b9cee688b9786a5
+// From : https://gist.github.com/ducksoupdev/bbfcf8b9cee688b97865
 //
 	  var POW_2_24 = Math.pow(2, 24);
     

@@ -8,7 +8,8 @@ export let settings: Config = {
   port: 3000,
   env: 'dev',
   mongoUrl: 'mongodb://localhost:27017',
-  dbName: 'openride'
+	dbName: 'openride',
+	sessionTTL: 10000
 };
 
 if (env === 'production') {
