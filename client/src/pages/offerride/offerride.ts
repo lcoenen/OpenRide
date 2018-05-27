@@ -151,8 +151,6 @@ export class OfferRidePage  {
 
 		}
 
-		console.log(`Now destination is ${ this.destination }`)
-
 	}
 
 	set destination(theDestination: string){
@@ -262,9 +260,16 @@ export class OfferRidePage  {
 
 	}
 
+	/*
+	 * 
+	 * This function is validating and sending the ride to theEndpoint
+	 *
+	 *
+	 * It uses RideProvider to send the ride.
+	 */
 	valid() {
 
-		this.ridersProvider.offer_ride({
+		this.rideProvider.offer_ride({
 
 			origin: NominatimToGeoJSON(this.recent_addresses[this.originId]),
 			destination: NominatimToGeoJSON(this.recent_addresses[this.destinationId]),
@@ -272,6 +277,7 @@ export class OfferRidePage  {
 			payement: Number(this.payement),
 			riders: [],
 			type: RideType.OFFER
+
 		}).then(() => {
 
 			this.navCtrl.push(OfferInvitePage);

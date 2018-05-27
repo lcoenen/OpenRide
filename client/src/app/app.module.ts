@@ -20,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RidersProvider } from '../providers/riders/riders';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
-import { LeafletModule } from '@asymmetrik/angular2-leaflet';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 
