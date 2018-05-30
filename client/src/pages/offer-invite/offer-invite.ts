@@ -6,7 +6,7 @@ import { Ride } from 'shared/models/ride';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
 
-import { RidersProvider } from '../../providers/riders/riders';
+import { RideProvider } from '../../providers/ride/ride';
 
 /**
  * Generated class for the OfferInvitePage page.
@@ -22,17 +22,24 @@ import { RidersProvider } from '../../providers/riders/riders';
 })
 export class OfferInvitePage {
 
+	/*
+	 *
+	 * This is rides that the riders are looking for
+	 *
+	 */
   public rides: Ride[];
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
-    public ridersProvider: RidersProvider) {
+    public rideProvider: RideProvider) {
 
-		ridersProvider.invitable_riders().subscribe((rides: Ride[]) => {
-				console.log(`Recieved an answer: l.31`)
-				console.log(rides)
-        this.rides = rides  
-
+		/*
+		 *
+		 * Subscribe to a stream of ride from rideProviders
+		 *
+		 */
+		rideProvider.invitable_ride().then((rides: Ride[]) => {
+        this.rides = rides;  
 			})
 
   }

@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Ride } from 'shared/models/ride';
 
-import { RidersProvider } from '../../providers/riders/riders';
+import { RideProvider } from '../../providers/ride/ride';
 
 /**
  * Generated class for the RequestFindRidePage page.
@@ -19,13 +19,17 @@ import { RidersProvider } from '../../providers/riders/riders';
 })
 export class RequestFindRidePage {
 
-  drivers: Ride[];
+  rides: Ride[];
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
-    public ridersProvider: RidersProvider) {
+    public rideProvider: RideProvider) {
 
-    this.drivers = this.ridersProvider.request_find_ride();
+    this.rideProvider.request_find_ride().then((rides: Ride[]) => {
+
+      this.rides = rides; 
+
+    });
 
   }
 

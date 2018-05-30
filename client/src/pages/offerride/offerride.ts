@@ -19,7 +19,7 @@ import { OfferInvitePage } from '../offer-invite/offer-invite';
 
 import { AddressModalPage } from '../address-modal/address-modal'; 
 
-import { RidersProvider } from '../../providers/riders/riders';
+import { RideProvider } from '../../providers/ride/ride';
 
 import { NominatimToGeoJSON } from '../../providers/nominatim/nominatim';
 
@@ -60,7 +60,7 @@ export class OfferRidePage  {
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public modalCtrl: ModalController,
-		public ridersProvider: RidersProvider) {
+		public rideProvider: RideProvider) {
 		this.philosophy = 0;
 		this._next = false;
 	}
@@ -264,8 +264,8 @@ export class OfferRidePage  {
 	 * 
 	 * This function is validating and sending the ride to theEndpoint
 	 *
-	 *
 	 * It uses RideProvider to send the ride.
+	 *
 	 */
 	valid() {
 
@@ -281,6 +281,11 @@ export class OfferRidePage  {
 		}).then(() => {
 
 			this.navCtrl.push(OfferInvitePage);
+
+		}).catch((err) => {
+
+		  console.error(`ERROR: cannot put ride`)  
+			console.error(err)
 
 		})
 

@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import * as restify from 'restify';
 
+import * as corsMiddleware from 'restify-cors-middleware'
+
 import { Server } from 'catnapify';
 
 import { settings } from './config/config';
@@ -11,6 +13,7 @@ import { usersController } from './controllers/users'
 
 import { logger } from './services/logger';
 import { db } from './services/db';
+import { session, keyName } from './services/session';
 
 // catnapify.initialise(settings);
 
@@ -19,6 +22,15 @@ db.connect().then( () => {
 	try {
 		//create a catnapify instance
 		let server = new Server(settings)
+
+		let cors = corsMiddleware({
+			origins: ['*'],
+			allowHeaders: [keyName],
+			exposeHeaders: [keyName]
+		})
+
+		server.api.pre(cors.preflight)
+		server.api.use(cors.actual)
 
 		let rides = new ridesController;
 		let users = new usersController;

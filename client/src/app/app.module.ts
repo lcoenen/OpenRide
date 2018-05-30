@@ -17,7 +17,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule } from '@angular/common/http';
 
-import { RidersProvider } from '../providers/riders/riders';
+import { RideProvider } from '../providers/ride/ride';
+import { UserProvider } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -61,9 +62,10 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RidersProvider,
+    RideProvider,
+		UserProvider,
     NominatimProvider,
-    HttpClientModule
+    HttpClientModule,
   ]
 })
 export class AppModule {}

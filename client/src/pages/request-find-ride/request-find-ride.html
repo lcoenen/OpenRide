@@ -16,19 +16,19 @@
 
 <ion-content padding>
 
-  <ion-card *ngFor="let driver of drivers">
+  <ion-card *ngFor="let ride of rides">
   <ion-item>
     <ion-avatar item-start>
       <img src="assets/imgs/avatar_{{driver.id}}.png">
     </ion-avatar>
-    <h2>{{driver.name}}</h2>
-    <p>{{driver.age}} years old, from {{driver.place_of_origin}}</p>
+    <h2>{{ride.driver.name}}</h2>
+    <p>{{ride.driver.age}} years old, from {{ride.driver.place_of_origin}}</p>
   </ion-item>
 
   <ion-card-content>
 
-  <p>From {{driver.origin}} to {{driver.destination}}</p>
-  <p>{{driver.riding_time}}</p>
+  <p>From {{ride.origin}} to {{ride.destination}}</p>
+  <p>{{ride.riding_time}}</p>
   
   </ion-card-content>
 
@@ -42,7 +42,7 @@
     <ion-col center text-center>
       <ion-note>
         Reputation: 
-	<ion-badge item-end>{{driver.reputation}}</ion-badge>
+	<ion-badge item-end>{{ride.driver.reputation}}</ion-badge>
       </ion-note>
     </ion-col>
   </ion-row>

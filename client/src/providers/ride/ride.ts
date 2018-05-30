@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Ride } from 'shared/models/ride'
-import { RideMock } from 'shared/mocks/ride';
+import { Observable } from 'rxjs/Observable'
+;
+import { settings } from '../../config/config'
+
+import { Ride, hashRide } from 'shared/models/ride'
+import { RidesMock } from 'shared/mocks/ride';
 
 /*
   Generated class for the RidersProvider provider.
@@ -13,39 +17,71 @@ import { RideMock } from 'shared/mocks/ride';
 @Injectable()
 export class RideProvider {
 
+	private _currentRide: Ride;
+
   constructor(public httpClient: HttpClient) {
     console.log('Hello RidersProvider Provider');
   }
 
+	/*
+	 *
+	 * Used to  waits until an observer subscribes to it before it begins to emit items, and so such an ob waits until an observer subscribes to it before it begins to emit items, and so such an obshow which ride is currently selected
+	 *
+	 */
+	get currentRide() {
+
+		return this._currentRide;
+	
+	}
+
   /*
-    Used when a driver is offering a ride, to invite riders
+	 *
+	 * Used when a driver is offering a ride, to invite riders
+	 * 
+	 * It makes the link with the offer-invite and uses the entrypoint /api/rides/:id/matches
+	 *
   */
-  invitable_ride(): Rider[] {
+	invitable_ride(): Promise<Ride[]> {
 
-    console.log('Trying the API call');
-/*
-    this.httpClient.get('localhost:3000/api/ping').subscribe( data => {
+		return Promise.resolve([RidesMock[5]]) 
 
-      console.log('Answer from the API', data);
+  }
+		
+  /*
+	 *
+	 * Used when a rider request a ride, to show him matches
+	 *
+	 * It makes the link with the src/pages/request-find-ride/ page and use the entry point /api/rides/:id/matches
+	 *
+  */
+	request_find_ride(): Promise<Ride[]> {
 
-    }); 
-*/
-    console.log('Fetching invitable riders');
-    return RidersMock;
+
+		return Promise.resolve([RidesMock[3], RidesMock[4]]) 
 
   }
 
-  /*
-    Used when a rider request a ride, to show him matches
-  */
-  request_find_ride(): Rider[] {
+	/*
+	 *
+	 * This function is used to PUT the ride on the server.
+	 *
+	 * It uses the entrypoint PUT /api/rides/:id
+	 * After being computed, it leaves the ride as currentRide	
+	 *
+	 */
+	offer_ride(ride: Ride) : Promise<any> {
 
-    console.log('Fetching invitable riders');
-    return RidersMock;
+		ride._id = hashRide(ride) 
+		this._currentRide	= ride;
 
-  }
+		return new Promise((resolve, reject) => {
 
-  /*
-      
-  */
+			/*
+			 * THIS IS SENDING AN 'OPTIONS' REQUEST FOR WHATEVER REASON
+			 */
+			this.httpClient.put<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, ride).subscribe(data => resolve(data), error => reject(error))
+
+		})
+	}
+
 }

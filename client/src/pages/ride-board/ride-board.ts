@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Ride } from './ride';
-import { RidersMockData } from './rider-mock';
+import { Ride } from 'shared/models/ride.ts'
 
-import { RidersProvider } from '../../providers/riders/riders';
+import { RideProvider } from '../../providers/ride/ride';
 
 import { ProfilePage } from '../profile/profile';
 
@@ -27,10 +26,10 @@ export class RideBoardPage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
-		public ridersProvider: RidersProvider) {
+		public rideProvider: RideProvider) {
 
     this.boardpage = 'riders';
-		this.currentRide = this.ridersProvider.currentRide;
+		this.currentRide = this.rideProvider.currentRide;
 
   }
 
