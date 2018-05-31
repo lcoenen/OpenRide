@@ -2,6 +2,7 @@
   "name": "openride",
   "app_id": "",
   "type": "ionic-angular",
-  "integrations": {},
-  "defaultBrowser": "firefox"
+  "integrations": {
+    "cordova": {}
+  }
 }
