@@ -11,6 +11,11 @@ import { RidesMock } from '../mocks/ride';
 import { MessagesMock } from '../mocks/message';
 import { RequestsMock } from '../mocks/requests';
 
+/*
+ *
+ *	This will reset the mocks inside the datebase and apply the right indexes
+ *
+ */
 export function resetMock(){ 
 
 	return MongoClient.connect(settings.mongoUrl).then((client: MongoClient) => {
@@ -34,13 +39,20 @@ export function resetMock(){
 		}).then( () => {
 	
 
+			/*
+			 *
+			 *	This will create the geographical indexes needed to do a 
+			 *	proximity research.
+			 *
+			 *	See https://docs.mongodb.com/manual/core/2dsphere/
+			 *
+			 */
 			db.collection('rides').createIndex( { 'destination.geometry'  : "2dsphere" } );
 			db.collection('rides').createIndex( { 'origin.geometry'  : "2dsphere" } );
 
 			return db.collection('rides').insert(RidesMock);
 
 		}).then( () => {
-
 
 			return db.collection('messages').insert(MessagesMock);
 
@@ -49,7 +61,17 @@ export function resetMock(){
 
 			return db.collection('requests').insert(RequestsMock);
 
+		}).then( () => {
+
+			/*
+			 *
+			 *	This will create an index on name so that no user will have the same name
+			 *
+			 */
+			db.collection('users').createIndex( { name: 1 }, { unique: true } )
+
 		})
+
 	})
 
 }

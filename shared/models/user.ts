@@ -1,6 +1,16 @@
 
 import { Link } from './link';
 
+/*
+ *
+ *	This is an user. The interface will be used all along
+ *	the infoline, from the client to Mongo.
+ *
+ *	The ID is computed by the userProvider in the client. 
+ *	It is a SHA hash of the user itself. It's also the representation
+ *	of the user in Mongo and the RESTAPI.
+ *
+ */
 export interface User {
   _id?: string;
 	name: string;
@@ -8,7 +18,6 @@ export interface User {
   age: number;
   place_of_origin: string;
   reputation: number;
-	rides?: Link[];
 	email: string;
 }
 
@@ -27,11 +36,35 @@ export function isUser(x: any) : x is User {
 
 }
 
+/*
+ *
+ *	This is the credentials used to login.
+ *	It is produced by the identify-login view in the client
+ *	and consumed by the PUT /api/session/me route of the server.
+ *
+ */
 export interface Credentials {
 
 	login: string;
 	password: string;
 	rememberme?: boolean;
+
+}
+
+export type Signature = string;
+
+/*
+ *
+ *	This is the response the Server will give to
+ *	a signup request (i.e. the PUT /api/users/XXX route
+ *
+ */
+export interface SignupResponse {
+
+	key: Signature;
+	user: User;
+	message: string;
+	
 
 }
 

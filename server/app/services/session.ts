@@ -6,7 +6,7 @@ import * as cat from 'catnapify';
 import { Promise } from 'es6-promise'
 
 import { Link } from '../../../shared/models/link';
-import { User, Credentials } from '../../../shared/models/user';
+import { User, Signature, Credentials } from '../../../shared/models/user';
 
 import { UsersMock } from '../../../shared/mocks/user'
 
@@ -18,7 +18,6 @@ import { hash } from '../../../shared/lib/hash';
 
 export const salt = '5ce5be34c720d80d9d0075bccb47e7e56db9d36c';
 
-export type Signature = string;
 
 export const keyName = `${ settings.name }-session`
 

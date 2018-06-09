@@ -12,6 +12,11 @@ import { RideBoardPage } from '../pages/ride-board/ride-board'
 import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile';
+import { IdentifyPage } from '../pages/identify/identify'
+
+import { IdentifyLoginPage } from '../pages/identify-login/identify-login'
+import { IdentifySignupPage } from '../pages/identify-signup/identify-signup'
+
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -20,6 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RideProvider } from '../providers/ride/ride';
 import { UserProvider } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
+
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
@@ -36,7 +42,10 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
     RideBoardPage,
     RequestFindRidePage,
     MyRidesPage,
-    ProfilePage
+    ProfilePage,
+		IdentifyPage,
+		IdentifyLoginPage,
+		IdentifySignupPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +65,10 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
     RideBoardPage,
     RequestFindRidePage,
     MyRidesPage,
-    ProfilePage
+    ProfilePage,
+		IdentifyPage,
+		IdentifyLoginPage,
+		IdentifySignupPage
   ],
   providers: [
     StatusBar,

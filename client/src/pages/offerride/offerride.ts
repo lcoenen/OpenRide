@@ -81,6 +81,11 @@ export class OfferRidePage  {
 
 	}
 
+	/*
+	 *
+	 *	This will pass to the next page if something have been changed
+	 *
+	 */
 	next() { 
 
 		this.slides.slideNext();

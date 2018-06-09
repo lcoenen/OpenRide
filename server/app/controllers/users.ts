@@ -4,11 +4,13 @@ import { ObjectID } from 'mongodb';
 
 import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
-import { session, Signature, keyName, sessionRequest } from '../services/session';
+import { session, keyName, sessionRequest } from '../services/session';
 
 import { Promise } from 'es6-promise';
 
-import { User, Credentials, isCredentials, isUser, sanitize } from '../../../shared/models/user';
+import { User, Signature, Credentials, 
+	isCredentials, isUser, sanitize,
+	SignupResponse } from '../../../shared/models/user';
 
 import { hash } from '../../../shared/lib/hash';
 
@@ -75,12 +77,27 @@ export class usersController extends cat.Controller {
 	 * 
 	 * @params User the user to add
 	 *
+	 * There's a a security to prevent having two user with the same name
+	 * (i.e. recover internal errors with a .code 11000 - which means there's a duplicate)
+	 * The unique indexes have to be put on name
+	 *
 	 */
 	@cat.catnapify('put', '/api/users/:id')
 	@logged
 	@cat.need('user')
 	@cat.need((params: any) => isUser(params.user))
 	@cat.need('id')
+	@cat.give(['user', 'key', 'message'])
+	@cat.error((err: any) => {
+
+		if(err.code && err.code == 11000) throw {code: 401, 
+			response: {
+				message: 'The name or ID is a duplicate. Use PATCH for an update.',	
+				code: 'DUPLICATE'
+			}
+		} 
+
+	})
 	public signup(request: cat.Request) {
 
 		let user: User = request.params.user;
@@ -92,6 +109,12 @@ export class usersController extends cat.Controller {
 			.insertOne(user)
 			.then((ans: any) => {
 
+				/*
+				 *
+				 *	This will authentify the user after having inserted it
+				 *	inside the database
+				 *
+				 */
 				return session.authentify(user)
 
 			}).then((key: Signature) => {
@@ -99,12 +122,20 @@ export class usersController extends cat.Controller {
 				logger.trace(`TRACE: Recieved the API key`)
 				logger.trace(key)
 
+				/*
+				 *
+				 *	It it worked, answer the API KEY as a header
+				 *
+				 */
 				request.res.header(keyName, key)
-				return {code: 201, response: {
+
+				let _res: SignupResponse = {
 					user: user,
 					key: key,
-					message: `user ${ user._id } is signed in`
-				} }
+					message: `user ${ user.name } is signed in`
+				}  
+
+				return {code: 201, response: _res};
 
 			})
 
@@ -131,6 +162,9 @@ export class usersController extends cat.Controller {
 	@cat.catnapify('put', '/api/session/me')
 	@logged
 	@cat.need(isCredentials)
+	@cat.give('user', isUser)
+	@cat.give('key')
+	@cat.give('message')
 	public login(request: cat.Request) {
 
 		let login: string = request.params.login; 
@@ -140,7 +174,10 @@ export class usersController extends cat.Controller {
 			.db
 			.collection('users')
 			.findOne({
-				_id: login	
+				$or: [
+					{ name: login },
+					{ email: login },
+				]
 			})
 			.then((user: User) : Promise<cat.Answer<any>> => {
 
@@ -150,7 +187,9 @@ export class usersController extends cat.Controller {
 				 */
 
 				if(!user) 
-					return Promise.resolve({code: 404, response: 'I didn\'t find such user, sorry'  })
+					return Promise.reject({code: 404, response: {
+						message: 'I didn\'t find such user, sorry'  
+					}})
 				else {
 
 					if(password == user.password)  {
@@ -159,13 +198,14 @@ export class usersController extends cat.Controller {
 							request.res.header(keyName, key)
 							return {code: 201, response: {
 								message: 'All right',
-								key: key 
+								key: key,
+								user: sanitize(user)
 							}}
 
 						})
 					}
 					else
-						return Promise.resolve({code: 401, response: 'Password ain\'t good, brother'})
+						return Promise.reject({code: 401, response: { message: 'Password ain\'t good, brother'}})
 
 				}
 
