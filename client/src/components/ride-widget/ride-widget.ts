@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output,
+	EventEmitter } from '@angular/core';
 
 import { Ride } from 'shared/models/ride';
 
@@ -20,12 +21,35 @@ import { Ride } from 'shared/models/ride';
 })
 export class RideWidgetComponent {
 
-	@Input() ride: Ride;
+	@Input('ride') ride: Ride;
+	@Output() invite: EventEmitter<Ride> = new EventEmitter<Ride>();
 
   constructor() {
 
-		
+			
 
   }
+
+	ngOnInit(){
+	
+		console.trace('Creating the ride-widget widget with ')
+		console.trace(this.ride)
+
+	}
+
+	/*
+	 * 
+	 * This will return the rider from whom the request comes
+	 * from. 
+	 *
+	 * This is only supposed to be used if the ride is a request
+	 *
+	 */
+	
+	get rider(){
+	
+		return this.ride.riders[0]	
+	
+	}
 
 }
