@@ -99,7 +99,7 @@ export class RideProvider {
 	 */
 	invite(user: User) {
 	
-		return invitable_ride();	
+		return this.invitable_ride();	
 	
 	}
 

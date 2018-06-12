@@ -53,7 +53,7 @@ export class OfferInvitePage {
 	 * This will show the RideBoard
 	 *
 	 */
-  continue() {.
+  continue() {
   
     this.navCtrl.push(RideBoardPage);
   
@@ -66,7 +66,7 @@ export class OfferInvitePage {
 	 */
 	public invite(ride: Ride) {
 	
-		this.rideProvider.invite(ride.riders[0])
+		this.rideProvider.invite(<User>ride.riders[0])
 			.then((rides: Ride[]) => {
         this.rides = rides;  
 			})
