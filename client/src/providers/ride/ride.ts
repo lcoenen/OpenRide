@@ -43,7 +43,7 @@ export class RideProvider {
   */
 	invitable_ride(): Promise<Ride[]> {
 
-		return Promise.resolve([RidesMock[5]]) 
+		return this.httpClient.get<Ride[]>(`${ settings.apiEndpoint }/api/rides/${ this.currentRide._id }/matches`, ride).toPromise()
 
   }
 		
@@ -76,9 +76,6 @@ export class RideProvider {
 
 		return new Promise((resolve, reject) => {
 
-			/*
-			 * THIS IS SENDING AN 'OPTIONS' REQUEST FOR WHATEVER REASON
-			 */
 			this.httpClient.put<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, ride).subscribe(data => resolve(data), error => reject(error))
 
 		})

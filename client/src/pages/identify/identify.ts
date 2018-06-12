@@ -7,6 +7,8 @@ import { IdentifySignupPage } from '../identify-signup/identify-signup';
 
 import { User } from 'shared/models/user';
 
+import { Observable } from 'rxjs/Rx';
+
 /**
  * Generated class for the IdentifyPage page.
  *
@@ -49,6 +51,17 @@ export class IdentifyPage {
 	public authentified(user: User) {
 	
 		this.viewCtrl.dismiss(user);	
+	
+	}
+
+	/*
+	 *
+	 * This is triggered by the close button
+	 *
+	 */
+	public closeModal() {
+	
+		this.viewCtrl.dismiss()	
 	
 	}
 

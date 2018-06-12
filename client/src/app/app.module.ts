@@ -20,10 +20,10 @@ import { IdentifySignupPage } from '../pages/identify-signup/identify-signup'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { RideProvider } from '../providers/ride/ride';
-import { UserProvider } from '../providers/user/user';
+import { UserProvider, ApiKeyInterceptor } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
 
@@ -32,52 +32,57 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-    RequestRidePage,
-    OfferRidePage,
-    AddressModalPage, 
-    OfferInvitePage,
-    RideBoardPage,
-    RequestFindRidePage,
-    MyRidesPage,
-    ProfilePage,
+	declarations: [
+		MyApp,
+		HomePage,
+		RequestRidePage,
+		OfferRidePage,
+		AddressModalPage, 
+		OfferInvitePage,
+		RideBoardPage,
+		RequestFindRidePage,
+		MyRidesPage,
+		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp),
+	],
+	imports: [
+		BrowserModule,
+		IonicModule.forRoot(MyApp),
 		HttpClientModule,
 		LeafletModule,
 		AutoCompleteModule
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
-    RequestRidePage,
-    OfferRidePage,
-    AddressModalPage,
-    OfferInvitePage,
-    RideBoardPage,
-    RequestFindRidePage,
-    MyRidesPage,
-    ProfilePage,
+	],
+	bootstrap: [IonicApp],
+	entryComponents: [
+		MyApp,
+		HomePage,
+		RequestRidePage,
+		OfferRidePage,
+		AddressModalPage,
+		OfferInvitePage,
+		RideBoardPage,
+		RequestFindRidePage,
+		MyRidesPage,
+		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    RideProvider,
+	],
+	providers: [
+		StatusBar,
+		SplashScreen,
+		{provide: ErrorHandler, useClass: IonicErrorHandler},
+		RideProvider,
 		UserProvider,
-    NominatimProvider,
-    HttpClientModule,
-  ]
+		NominatimProvider,
+		HttpClientModule,
+		{ 
+			provide: HTTP_INTERCEPTORS, 
+			useClass: ApiKeyInterceptor, 
+			multi: true 
+		} 
+	]
 })
 export class AppModule {}

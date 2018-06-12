@@ -46,7 +46,7 @@ export class HomePage {
 				});
 				identifyModal.present();
 
-			}	
+			} else { resolve() }	
 		
 		})
 

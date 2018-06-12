@@ -1,0 +1,33 @@
+
+<ion-card> 
+	<ion-item>
+		<ion-avatar item-start>
+			<img src="assets/imgs/avatar_{{ride.riders[0].name}}.png">
+		</ion-avatar>
+		<h2>{{rider.name}}</h2>
+		<p>{{rider.age}} years old, from {{rider.place_of_origin}}</p>
+	</ion-item>
+
+	<ion-card-content>
+
+		<p>From {{ride.origin.properties.address}} to {{ride.destination.properties.address}}</p>
+		<p>{{ride.riding_time}}</p>
+
+	</ion-card-content>
+
+	<ion-row>
+		<ion-col>
+			<button ion-button icon-left clear small>
+				<ion-icon name="thumbs-up"></ion-icon>
+				<div>Invite</div>
+			</button>
+		</ion-col>
+		<ion-col center text-center>
+			<ion-note>
+				Reputation: 
+				<ion-badge item-end>{{rider.reputation}}</ion-badge>
+			</ion-note>
+		</ion-col>
+	</ion-row>
+
+</ion-card>
