@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable'
-;
+import { Observable } from 'rxjs/Observable';
+
+
 import { settings } from '../../config/config'
 
 import { Ride, hashRide } from 'shared/models/ride'
+import { User } from 'shared/models/user'
 import { Link } from 'shared/models/link'
+
 import { RidesMock } from 'shared/mocks/ride';
 
 /*
@@ -55,14 +58,49 @@ export class RideProvider {
 				return this.httpClient.get<Ride>(
 					`${ settings.apiEndpoint }${ ride['@id']}`)	
 
+			// Resolve the riders
+			}).mergeMap((ride: Ride) => {
+				
+				// Return an Observable that emit each rider link 
+				return Observable.from(<Link[]>ride.riders).mergeMap((rider: Link) => {
+
+					// Resolve the link to the rider user
+					return this.httpClient.get<User>(
+					`${ settings.apiEndpoint }${ rider['@id']}`)
+
+				// Rebuild the riders array and return the ride
+				}).toArray().mergeMap((riders: User[]) => {
+
+					ride.riders = riders;
+				  return Observable.of(ride);
+
+				}) 
+
+			})
 			// Re-create the array
-
-			}).toArray()	
-
+			.toArray()	
 
 		})
-		.toPromise()
+		.toPromise().then((rides: Ride[]) => {
 
+		 	console.trace('After resolution, the rides are ') 
+			console.trace(rides)
+
+			return rides;
+
+		})
+
+	}
+
+	/*
+	 *
+	 * The driver want to invite an user
+	 *
+	 */
+	invite(user: User) {
+	
+		return invitable_ride();	
+	
 	}
 
 	/*
@@ -73,7 +111,6 @@ export class RideProvider {
 	 *
 	 */
 	request_find_ride(): Promise<Ride[]> {
-
 
 		return Promise.resolve([RidesMock[3], RidesMock[4]]) 
 

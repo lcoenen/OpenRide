@@ -1,4 +1,3 @@
-
 <ion-card> 
 	<ion-item>
 		<ion-avatar item-start>
@@ -17,7 +16,7 @@
 
 	<ion-row>
 		<ion-col>
-			<button ion-button icon-left clear small>
+			<button (click)="invite.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
 				<div>Invite</div>
 			</button>

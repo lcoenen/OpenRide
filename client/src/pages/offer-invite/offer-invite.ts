@@ -48,10 +48,26 @@ export class OfferInvitePage {
     console.log('ionViewDidLoad OfferInvitePage');
   }
 
+	/*
+	 *
+	 * This will show the RideBoard
+	 *
+	 */
   continue() {
   
     this.navCtrl.push(RideBoardPage);
   
   }
+
+	/*
+	 *
+	 * The user want to invite a rider
+	 *
+	 */
+	public invite(ride: Ride) {
+	
+		this.rideProvider.invite(ride.riders[0])
+	
+	}
 
 }
