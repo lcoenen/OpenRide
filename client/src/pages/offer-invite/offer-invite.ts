@@ -53,7 +53,7 @@ export class OfferInvitePage {
 	 * This will show the RideBoard
 	 *
 	 */
-  continue() {.
+  continue() {
   
     this.navCtrl.push(RideBoardPage);
   
