@@ -26,6 +26,8 @@ import { RideProvider } from '../providers/ride/ride';
 import { UserProvider, ApiKeyInterceptor } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
+import { RideWidgetComponent } from '../components/ride-widget/ride-widget' 
+
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
@@ -45,7 +47,8 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
-		IdentifySignupPage
+		IdentifySignupPage,
+		RideWidgetComponent
 	],
 	imports: [
 		BrowserModule,
@@ -68,7 +71,8 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
-		IdentifySignupPage
+		IdentifySignupPage,
+		RideWidgetComponent
 	],
 	providers: [
 		StatusBar,

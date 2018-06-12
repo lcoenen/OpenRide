@@ -6,22 +6,23 @@ import { Observable } from 'rxjs/Observable'
 import { settings } from '../../config/config'
 
 import { Ride, hashRide } from 'shared/models/ride'
+import { Link } from 'shared/models/link'
 import { RidesMock } from 'shared/mocks/ride';
 
 /*
-  Generated class for the RidersProvider provider.
+	Generated class for the RidersProvider provider.
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+	See https://angular.io/guide/dependency-injection for more info on providers
+	and Angular DI.
+ */
 @Injectable()
 export class RideProvider {
 
 	private _currentRide: Ride;
 
-  constructor(public httpClient: HttpClient) {
-    console.log('Hello RidersProvider Provider');
-  }
+	constructor(public httpClient: HttpClient) {
+		console.log('Hello RidersProvider Provider');
+	}
 
 	/*
 	 *
@@ -31,35 +32,52 @@ export class RideProvider {
 	get currentRide() {
 
 		return this._currentRide;
-	
+
 	}
 
-  /*
+	/*
 	 *
 	 * Used when a driver is offering a ride, to invite riders
 	 * 
 	 * It makes the link with the offer-invite and uses the entrypoint /api/rides/:id/matches
 	 *
-  */
+	 */
 	invitable_ride(): Promise<Ride[]> {
 
-		return this.httpClient.get<Ride[]>(`${ settings.apiEndpoint }/api/rides/${ this.currentRide._id }/matches`, ride).toPromise()
+		return this.httpClient.get<Link[]>(
+			`${ settings.apiEndpoint }/api/rides/${ this.currentRide._id }/matches`)
+		.mergeMap((rides: Link[]) => {
 
-  }
-		
-  /*
+			// Create an observable that emit each value in the array
+			return Observable.from(rides).mergeMap((ride: Link) => {
+
+				// Resolve each value with a API call
+				return this.httpClient.get<Ride>(
+					`${ settings.apiEndpoint }${ ride['@id']}`)	
+
+			// Re-create the array
+
+			}).toArray()	
+
+
+		})
+		.toPromise()
+
+	}
+
+	/*
 	 *
 	 * Used when a rider request a ride, to show him matches
 	 *
 	 * It makes the link with the src/pages/request-find-ride/ page and use the entry point /api/rides/:id/matches
 	 *
-  */
+	 */
 	request_find_ride(): Promise<Ride[]> {
 
 
 		return Promise.resolve([RidesMock[3], RidesMock[4]]) 
 
-  }
+	}
 
 	/*
 	 *

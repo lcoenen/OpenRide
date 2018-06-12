@@ -1,10 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-/**
- * Generated class for the RideWidgetComponent component.
+import { Ride } from 'shared/models/ride';
+
+/*
  *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * This is the ride-widget component.
+ *
+ * It shows a card representing a ride. It is used by the offer-invite, request-find-ride
+ * and my-rides pages.
+ *
+ * It shows the right information wether the ride is a request or an offer
+ *
+ * See /shared/models/ride.ts
+ *
  */
 @Component({
   selector: 'ride-widget',
@@ -12,11 +20,12 @@ import { Component } from '@angular/core';
 })
 export class RideWidgetComponent {
 
-  text: string;
+	@Input() ride: Ride;
 
   constructor() {
-    console.log('Hello RideWidgetComponent Component');
-    this.text = 'Hello World';
+
+		
+
   }
 
 }

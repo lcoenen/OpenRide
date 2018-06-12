@@ -310,7 +310,13 @@ export class ridesController extends cat.Controller {
 	@cat.need('id')
 	@cat.give((links: Link[]) => {
 
-		return <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0
+		// links is an array
+		return <boolean>Array.isArray(links) && 
+			// everythink in links is a Link (have an @id property)
+			(links.filter((link) => link['@id'] !== undefined).length != 0 ||
+			// or links is empty
+			links.length == 0	
+			)
 
 	})
 	public getMatches(req: cat.Request){
