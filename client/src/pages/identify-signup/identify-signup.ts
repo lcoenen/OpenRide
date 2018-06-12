@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,
+	ToastController, Events } from 'ionic-angular';
 
 import { User } from 'shared/models/user';
 
 import { UserProvider } from '../../providers/user/user'
-import { ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the IdentifySignupPage page.
@@ -53,6 +53,7 @@ export class IdentifySignupPage {
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
 		public toastCtrl: ToastController,
+		public events: Events,
 		public userProvider: UserProvider) {
 	}
 
@@ -84,10 +85,14 @@ export class IdentifySignupPage {
 			// Sending the user to the service
 			this.userProvider.signup(this.user).then((user: User) => {
 
-		   	this.navCtrl.parent.authentified(user) 
+
+				this.events.publish('identify:identified', user)
 			  console.log('User have been signed up')  
 
 			}).catch((error) => {
+
+				console.error('User cannot be signed up')
+				console.error(error)
 
 				if(error == 'DUPLICATE') { 
 
