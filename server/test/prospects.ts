@@ -115,7 +115,7 @@ describe('prospects', () => {
 
 
 
-	it.only('should allow to send an invite', ( ) => {
+	it('should allow to send an invite', ( ) => {
 
 		return (() => {
 
@@ -235,7 +235,7 @@ describe('prospects', () => {
 				.set('openride-server-session', PBKey)
 				.send({'join': PB._id})
 				.then((res: any) => {
-					expect(res).to.have.status(200)
+					expect(res).to.have.status(204)
 
 					/* 
 					 *
@@ -491,7 +491,7 @@ describe('prospects', () => {
 	});
 
 
-	it('should only allow an user to join a ride if there is a prospect', ( ) => {
+	it.only('should only allow an user to join a ride if there is a prospect', ( ) => {
 
 		/*
 		 *
@@ -652,7 +652,7 @@ describe('prospects', () => {
 
 		}).then((res: any) => {
 
-			expect(res).to.have.status(200);   
+			expect(res).to.have.status(204);   
 
 		}).then((res: any) => {
 
