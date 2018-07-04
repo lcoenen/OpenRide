@@ -71,7 +71,7 @@ describe.only('rides',  () => {
 			})
 
 	});
-	it("should delete ride when needed", () => {
+	it.skip("should delete ride when needed", () => {
 
 		return chai.request(url)
 			.delete(`/api/rides/${ RidesMock[3]._id }`)
@@ -87,6 +87,8 @@ describe.only('rides',  () => {
 
 			}).then((res: any) => {
 
+				expect(res).to.have.status(200)
+
 				let ans = JSON.parse(res.text);
 				// ans should be a list of ride Link
 				let promises : Promise<Ride>[] = ans.map((link: Link) => {
@@ -97,10 +99,9 @@ describe.only('rides',  () => {
 
 				return Promise.all(promises)
 
-			}).then((res: any) => {
+			}).then((rides: Link[]) => {
 
-				expect(res).to.have.status(200)
-				expect(res.body.length).to.be.equal(RidesMock.length - 1)	
+				expect(rides.length).to.be.equal(RidesMock.length - 1)	
 
 			});
 
@@ -131,10 +132,14 @@ describe.only('rides',  () => {
 
 				return Promise.all(promises)
 
-			}).then((res: any) => {
+			}).then((answers: any[]) => {
 
-				let rides: Ride[] = JSON.parse(res.text);
+				let rides : Ride[] = answers.map((ans: any) => {
 
+				  return ans.body  
+
+				})
+				
 				expect(rides[rides.length - 1].payement).to.equal(postDriverExample.payement);
 
 			}).then(() => {
@@ -174,9 +179,10 @@ describe.only('rides',  () => {
 
 			}).then((res: any) => {
 
-				let ans = JSON.parse(res.text);
+				let rides: Link[] = res.body;
+
 				// ans should be a list of ride Link
-				let promises : Promise<Ride>[] = ans.map((link: Link) => {
+				let promises : Promise<Ride>[] = rides.map((link: Link) => {
 
 					return chai.request(url).get(link['@id'])  
 
