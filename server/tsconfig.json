@@ -7,6 +7,7 @@
     "baseUrl": ".",
     "removeComments": false,
     "noImplicitReturns": true,
+		"lib": ["es5","es2015.promise","dom", "scripthost"],
     "paths": 
       {"shared/*": ["../shared/*"]},
     "noImplicitAny": true,
