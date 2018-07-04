@@ -77,13 +77,6 @@ describe('prospects', () => {
 
 		}
 
-		/*
-		 * THERE'S A PROBLEM HERE
-		 *
-		 * WHEN I LOOK AT THE LOG, PB IS CONNECTED 2 TIMES AND NO RICK
-		 *
-		 */
-
 		return Promise.all([
 			connect(userSignupCredentials).then((key: Signature) => {
 
@@ -121,7 +114,7 @@ describe('prospects', () => {
 
 			/*
 			 *
-			 * Post the rider's request
+			 * Post the PB's request
 			 *
 			 */
 			return chai.request(url)
@@ -137,7 +130,7 @@ describe('prospects', () => {
 
 			/*
 			 *
-			 * Post the driver proposition
+			 * Post Louise ride offer
 			 *
 			 */
 			return chai.request(url)
@@ -153,7 +146,7 @@ describe('prospects', () => {
 
 			/*
 			 *
-			 * Send the invite
+			 *	Louise send an invite to PB 
 			 *
 			 */
 			return chai.request(url)
@@ -225,7 +218,7 @@ describe('prospects', () => {
 
 			/*
 			 *
-			 * Try to make the user join the ride
+			 * Try to make PB join the ride
 			 * Since PB have been invited by Louise, it 
 			 * should not be an issue
 			 *
@@ -491,7 +484,7 @@ describe('prospects', () => {
 	});
 
 
-	it.only('should only allow an user to join a ride if there is a prospect', ( ) => {
+	it('should only allow an user to join a ride if there is a prospect', ( ) => {
 
 		/*
 		 *
@@ -545,7 +538,7 @@ describe('prospects', () => {
 
 	})
 
-	it('should go through the complete workflow', ( ) => {
+	it.only('should go through the complete workflow', ( ) => {
 
 		/*
 		 *
@@ -656,6 +649,10 @@ describe('prospects', () => {
 
 		}).then((res: any) => {
 
+			return chai.request(url)
+				.get(`/api/rides/${ postDriverExample._id }`)
+
+		}).then((res: any) => {
 			/*
 			 *
 			 * Checking that the user is in the ride 
