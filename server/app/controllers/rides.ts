@@ -2,6 +2,8 @@ import * as restify from 'restify';
 import * as turf from 'turf';
 import * as moment from 'moment';
 
+import {Promise} from 'es6-promise'
+
 import { ObjectID } from 'mongodb';
 import * as cat from 'catnapify';
 
