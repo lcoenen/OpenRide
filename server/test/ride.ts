@@ -49,19 +49,12 @@ describe('rides',  () => {
 
 	})
 
-	it("should get a list of rides", () => {
+	it("should NOT get a list of rides", () => {
 
-		return chai.request(url)
+		expect(chai.request(url)
 			.get('/api/rides/')
 			.set('openride-server-session', key)
-			.then((res: any) => {
-
-				let arrayOfRide: Ride[] = res.body;
-				expect(Array.isArray(arrayOfRide)).to.be.equal(true)
-
-				for(let ride of arrayOfRide) expect(isRide(ride)).to.be.equal(true)
-
-			})
+			).to.be.rejectedWith('Unauthorized')
 
 	});
 
@@ -118,8 +111,8 @@ describe('rides',  () => {
 
 				let riders_ids_matching: string[] = res.body.riders.filter((link: Link) => {
 
-
 					return link['@id'] == `/api/users/${ UsersMock[3]._id }`;
+
 				})
 
 				expect(riders_ids_matching.length).to.be.equal(1)

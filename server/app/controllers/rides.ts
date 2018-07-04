@@ -2,6 +2,8 @@ import * as restify from 'restify';
 import * as turf from 'turf';
 import * as moment from 'moment';
 
+import {Promise} from 'es6-promise'
+
 import { ObjectID } from 'mongodb';
 import * as cat from 'catnapify';
 
@@ -10,9 +12,10 @@ import { db } from '../services/db';
 import { session, sessionRequest } from '../services/session';
 
 
+
 import { Ride, RideType, isRide } from '../../../shared/models/ride';
-import { Link } from '../../../shared/models/link';
-import { Request } from '../../../shared/models/request';
+import { Link, idLink } from '../../../shared/models/link';
+import { Prospect, ProspectType } from '../../../shared/models/prospect';
 
 const maxDistance: number = 30;
 
@@ -33,14 +36,14 @@ export class ridesController extends cat.Controller {
 	}
 
 
+	/*
+	 *
+	 * Check that the rides have a driver (is 
+	 * a proposition and not a request)
+	 *
+	 */
 	static checkRideHasDriver = cat.before((request: cat.Request) => {
 
-		/*
-		 *
-		 * Check that the rides have a driver (is a proposition) and not a request
-		 *
-		 */
-		logger.debug('DEBUG: checking the ride')
 		return db.db.collection('rides')
 			.findOne({'_id': request.params['id']})
 			.then((ride: Ride) => {
@@ -151,6 +154,7 @@ export class ridesController extends cat.Controller {
 	@cat.catnapify('patch', '/api/rides/:id')
 	@logged
 	@cat.need((params: any) => (params.join !== undefined) || (params.depart !== undefined))
+	@ridesController.checkRideHasDriver
 	@session.needAuthentification
 	public patch(request: sessionRequest) {
 
@@ -170,43 +174,75 @@ export class ridesController extends cat.Controller {
 
 				return ans;
 
-			}).then(( ride: Ride) => {
+			}).then((ride: Ride) => {
 
 				let params = request.params;
 
 				/*
 				 *
-				 * Throw an unauthorised error if the requester is not the right person
+				 * This will throw an unauthorized error if the requestor is not the right person
 				 *
-				 * - For join, only the driver can send the request
-				 * - For depart, the driver and the person can send the request
-				 *
-				 */
-				let requester = JSON.stringify({'@id' : `/api/users/${ request.user['_id'] }`});
-				let driver = JSON.stringify(<Link>ride.driver);
-				let target = JSON.stringify({'@id' : `/api/users/${ params.join ? params.join: params.depart }`}); 
-
-				if(params.join && requester != driver) throw {code: 401, response: 'Sorry, you are not the driver (guru meditation)'}
-				if(params.depart && requester != driver && requester != target) throw {code: 401, response: 'Sorry, that has nothing to do with you'}
-
-				/*
-				 *
-				 * Throw an unauthorised error if the requester tries to add somebody that haven't requested it
+				 * - To join, a prospect should exist
+				 * - To depart, the requestor should be the rider or the driver
 				 *
 				 */
 
-				params.join? db.db
-					.collection("requests")
-					.findOne({
-						to: {'@id': `/api/rides/${ request.params.id }`},
-						from: {'@id' : `/api/users/${ params.join ? params.join: params.depart }`} 
-					}).then((request: Request) => {
+				// Find the prospects that could match
 
-						if(!request) throw {code: 401, response: 'The person has not requested to be in the ride'}; 
+				let requestor = request.user._id;
+				let target = params.join ? params.join : params.depart;
 
-					}) : null; 
+				db.db.collection('prospects')
+					.find({'$or': [
+						{ with: {'@id': `/api/rides/${ request.params.id }`}},
+						{ ride: {'@id': `/api/rides/${ request.params.id }`}}
+					]})
+					.toArray()
+					.then((prospects: Prospect[]) => {
 
+						// For each prospectsa 
+						// Promise.all is there to flatten the Promise<prospects>[] into Promise<prospects[]>
 
+						return Promise.all(prospects.map((prospect: Prospect) => {
+
+							let populatedProspect:any = prospect;
+
+							// Find the rides
+
+							return db.db.collection('rides').findOne({
+								'_id': idLink(prospect.with)
+							}).then((withRide: Ride) => {
+
+								populatedProspect.with = withRide;  
+
+							}).then(( ) => {
+
+								return db.db.collection('rides').findOne({
+									'_id': idLink(prospect.ride)	
+								})
+
+							}).then((ride: Ride) => {
+
+								populatedProspect.ride = ride;
+								return populatedProspect;
+
+							})  
+
+						}))
+
+					}).then((populatedProspects: any[]) => {
+
+						// Check that the users ID checks out
+
+						populatedProspects.filter((prospect: any) => {
+
+							return (prospect.with.type == RideType.OFFER? prospect.with.driver: prospect.with.riders[0] )['@id'] == `/api/users/${ target }` 
+
+						})
+
+						if(populatedProspects.length == 0) throw {code: 401, response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
+
+					})				
 
 			}).then( (): Promise<any> => {
 
@@ -220,10 +256,14 @@ export class ridesController extends cat.Controller {
 					 * and thus that is's REST compliant
 					 *
 					 */
-					return db.db.collection('rides').updateOne({
+					return <Promise<any>> db.db.collection('rides').updateOne({
 						_id: request.req.params.id
 					}, {
 						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
+					}).then(() : cat.Answer<string> => {
+
+						return {code: 204, response: 'The user have been added'} 
+
 					});
 
 				}
@@ -231,16 +271,21 @@ export class ridesController extends cat.Controller {
 
 					/* 
 					 *
-					 * If the 'depart' function is set, then remove the user from the set
+					 * If the 'depart' parameters is set, then remove the user from the set
 					 *
 					 */
 					return db.db.collection('rides').updateOne({
 						_id: request.req.params.id
 					}, {
 						$pull: { riders: { '@id': `/api/users/${request.req.params.depart}`}}
+					}).then(( ) : cat.Answer<string> => {
+
+						return {code: 204, response: 'The user have been removed'} 
+
 					});
 
 				}
+
 			})
 
 	}
@@ -314,8 +359,8 @@ export class ridesController extends cat.Controller {
 		return <boolean>Array.isArray(links) && 
 			// everythink in links is a Link (have an @id property)
 			(links.filter((link) => link['@id'] !== undefined).length != 0 ||
-			// or links is empty
-			links.length == 0	
+				// or links is empty
+				links.length == 0	
 			)
 
 	})
@@ -432,6 +477,7 @@ export class ridesController extends cat.Controller {
 	}
 
 	/*
+	 *
 	 * This entry point is used to get the request associated with a ride
 	 *
 	 * It gives a set of Link[] pointing to every users
@@ -439,18 +485,21 @@ export class ridesController extends cat.Controller {
 	 *
 	 *
 	 * Will always answer a 200 with what he found
+	 *
 	 */
-	@cat.catnapify('get', '/api/rides/:id/requests')
+	@cat.catnapify('get', '/api/rides/:id/prospects')
 	@logged
 	@cat.need('id')
-	@ridesController.checkRideHasDriver
-	//@cat.give((links: Link[]) => <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0)
-	public getRequests(req: cat.Request){
+	// @cat.give((links: Link[]) => <boolean>Array.isArray(links) && links.filter((link) => link['@id'] !== undefined).length != 0)
+	public getProspects(req: cat.Request){
 
 		return db
 			.db
-			.collection("requests")
-			.find({to: {'@id': `/api/rides/${ req.params.id }`}})
+			.collection("prospects")
+			.find({'$or': [
+				{with: {'@id': `/api/rides/${ req.params.id }`}},
+				{ride: {'@id': `/api/rides/${ req.params.id }`}}
+			]})
 			.toArray()
 
 	}
@@ -459,44 +508,72 @@ export class ridesController extends cat.Controller {
 	 *
 	 * This entry point allow the client to post a ride request.
 	 *
-	 * @params from The user originally requesting the ride
+	 * @params ride The target ride. 
+	 * @params with The origin ride, the one that's owned by the user
 	 *
 	 */
-	@cat.catnapify('post', '/api/rides/:id/requests')
+	@cat.catnapify('post', '/api/rides/:ride/prospects')
 	@logged
-	@cat.need(['id', 'from'])
-	@ridesController.checkRideHasDriver
+	@cat.need(['ride', 'with'])
 	@session.needAuthentification
-	public postRequests(req: sessionRequest){
+	public postProspects(req: sessionRequest){
 
-		/* 
+		/*
 		 *
-		 * Check that the request if from the person it's supposed to be
+		 * Check that the user is the owner of the 'with' ride
+		 * 
+		 */
+		return db.db.collection('rides')
+			.findOne({'_id': idLink(req.params.with['@id'])})
+			.then((withRide: Ride) => {
+
+				if(!withRide) throw { code: 404, response: 'There is no such ride' }
+
+				let owner: Link = withRide.type == RideType.REQUEST?
+					(<Link[]>withRide.riders)[0] : <Link>withRide.driver;
+
+				logger.debug(`owner is ${ owner['@id'] }`)
+				logger.debug(`connected user is ${ req.user._id }`)
+
+				if(idLink(owner) != req.user._id) {
+
+					throw { code: 401, response: 'It is not your ride, sorry' };
+
+				}	
+
+				return withRide;
+
+			})	
+
+		/*
+		 *
+		 * Add the prospects with the right type
 		 *
 		 */
-		if(req.params.from['@id'] != `/api/users/${ req.user._id }`) 
-			throw {code: 401, response: 'This is not for you'}
+			.then((withRide: Ride ) => {
 
-		let toinsert: Request = {
 
-			from: req.params.from,
-			to: { '@id': `/api/rides/${ req.params.id }` }
+				logger.debug('Found a withRide: ', withRide)
+				logger.debug('withRide type: ', withRide.type == RideType.REQUEST ? 'Request' : 'Offer')
 
-		};
+				let toInsert: Prospect = {
+					ride: <Link>{'@id': `/api/rides/${ req.params.ride }`},
+					with: req.params.with, // 'with' is already a Link
+					type: ((withRide.type == RideType.REQUEST) ? 
+						ProspectType.APPLY: ProspectType.INVITE)
+				};
 
-		return db
-			.db
-			.collection("requests")
-			.insertOne(toinsert).then((ans) => {
+				logger.debug('toInsert', toInsert);
+				logger.debug('toInsert type', toInsert.type == ProspectType.INVITE? 'Invite': 'Apply')
 
-				return { code: 201, response: 'Created' }	
+				return db.db.collection('prospects')
+					.insertOne(toInsert).then((ans: any) => {
 
-			}).catch((err) => {
+						return { code: 201, response: 'Created' };  
 
-				return { code: 400, response: err };
+					})
 
-			});
-
+			})
 
 	}
 

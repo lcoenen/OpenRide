@@ -171,7 +171,7 @@ describe('session',  () => {
 		}).then((res: any) => {
 
 			let user: User = JSON.parse(res.text);
-			expect(user._id).to.be.equal(userSignupCredentials.login);
+			expect(user.name).to.be.equal(userSignupCredentials.login);
 			expect(user.password).not.to.exist;
 
 		}).catch((err: any) => {

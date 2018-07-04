@@ -68,16 +68,18 @@ const userSignupExample: User = {
 	age: 17,
 	place_of_origin: 'The Park',
 	reputation: 32
-}
+};
 
 const userSignupCredentials	= {
 
-	'login': 'princess77',
+	'login': 'PB',
 	'password': '6afd4731177767192adaf5f064fc0fa88097d109',
 	'rememberMe': true
 
-}
+};
 
-let PB = UsersMock[5]
+let Rick = UsersMock[2];
+let Louise = UsersMock[3];
+let PB = UsersMock[4];
 
-export { UsersMock, userSignupExample, userSignupCredentials, PB };
+export { UsersMock, userSignupExample, userSignupCredentials, PB, Louise, Rick };
