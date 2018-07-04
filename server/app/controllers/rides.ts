@@ -235,9 +235,19 @@ export class ridesController extends cat.Controller {
 						logger.trace(`TRACE: before filtration: `, populatedProspects)
 						populatedProspects = populatedProspects.filter((prospect: any) => {
 
-							logger.trace(`TRACE: this prospect is from ${ prospect.with['@id'] }`)
+							logger.trace(`TRACE: this prospect is from ${ (prospect.with.type == RideType.OFFER? prospect.with.driver: prospect.with.riders[0] )['@id'] }`)
 
-							return (prospect.with.type == RideType.OFFER? prospect.with.driver: prospect.with.riders[0] )['@id'] == `/api/users/${ target }` 
+							logger.trace(`TRACE: target`, target)
+							logger.trace(`TRACE: requestor`, requestor)
+
+							let rider: string;
+
+							if(prospect.type == ProspectType.APPLY) 
+								rider = idLink(prospect.with.riders[0])		
+							else 
+								rider = idLink(prospect.ride.riders[0])
+
+							return rider == target
 
 						})
 						logger.trace('After filtration', populatedProspects)
