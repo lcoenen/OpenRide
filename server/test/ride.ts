@@ -31,7 +31,7 @@ beforeEach(() => {
 
 })
 
-describe.only('rides',  () => {
+describe('rides',  () => {
 
 	before(( ) => {
 
@@ -71,23 +71,21 @@ describe.only('rides',  () => {
 			})
 
 	});
-	it.skip("should delete ride when needed", () => {
+
+	it("should delete ride when needed", () => {
 
 		return chai.request(url)
-			.delete(`/api/rides/${ RidesMock[3]._id }`)
+			.put(`/api/rides/${postDriverExample._id}`)
+			.send(postDriverExample)
 			.set('openride-server-session', key)
 			.then((res: any) => {
+				expect(res).to.have.status(201);
 
-				expect(res).to.have.status(204)	
-
-			})
-			.then(() => {
+			}).then(() => {
 
 				return chai.request(url).get(`/api/users/${ PB._id }/rides`)
 
 			}).then((res: any) => {
-
-				expect(res).to.have.status(200)
 
 				let ans = JSON.parse(res.text);
 				// ans should be a list of ride Link
@@ -99,13 +97,79 @@ describe.only('rides',  () => {
 
 				return Promise.all(promises)
 
-			}).then((rides: Link[]) => {
+			}).then((answers: any[]) => {
 
-				expect(rides.length).to.be.equal(RidesMock.length - 1)	
+				let rides : Ride[] = answers.map((ans: any) => {
 
-			});
+					return ans.body  
+
+				})
+
+				expect(rides[rides.length - 1].payement).to.equal(postDriverExample.payement);
+
+			}).then(() => {
+
+				return chai.request(url).get(`/api/rides/${postDriverExample._id}`).catch((err: any) => {
+
+					throw err;
+
+				});
+
+			}).then((res: any) : void => {
+
+				let ans = JSON.parse(res.text);
+				expect(ans.destination.properties.address).to.be.equal(postDriverExample.destination.properties.address);
+
+			})
+
+			.then(( ) => {
+
+				return chai.request(url)
+					.delete(`/api/rides/${ postDriverExample._id }`)
+					.set('openride-server-session', key)
+					.then((res: any) => {
+
+						expect(res).to.have.status(204)	
+
+					})
+					.then(() => {
+
+						return chai.request(url).get(`/api/users/${ PB._id }/rides`)
+
+					}).then((res: any) => {
+
+						expect(res).to.have.status(200)
+
+						let ans = JSON.parse(res.text);
+						// ans should be a list of ride Link
+						let promises : Promise<Ride>[] = ans.map((link: Link) => {
+
+							return chai.request(url).get(link['@id'])  
+
+						})
+
+						return Promise.all(promises)
+
+					}).then((answers: any[]) => {
+
+						let rides: Ride[] = answers.map((ans: any) => ans.body);
+
+						rides = rides.filter((ride: Ride) => {
+
+						  return ride._id == postDriverExample._id  
+
+						})
+
+						expect(rides.length == 0)
+
+					});
+
+			})
 
 	});
+
+	it('should not be allowed to delete a ride that is not yours')
+	it('should not be allowed to post a ride on somebody else name')
 
 	it("should post a new ride", () => {
 
@@ -136,10 +200,10 @@ describe.only('rides',  () => {
 
 				let rides : Ride[] = answers.map((ans: any) => {
 
-				  return ans.body  
+					return ans.body  
 
 				})
-				
+
 				expect(rides[rides.length - 1].payement).to.equal(postDriverExample.payement);
 
 			}).then(() => {
@@ -194,7 +258,7 @@ describe.only('rides',  () => {
 
 				let rides : Ride[] = answers.map((ans: any) => {
 
-				  return ans.body  
+					return ans.body  
 
 				})
 
