@@ -538,7 +538,7 @@ describe('prospects', () => {
 
 	})
 
-	it.only('should go through the complete workflow', ( ) => {
+	it('should go through the complete workflow', ( ) => {
 
 		/*
 		 *

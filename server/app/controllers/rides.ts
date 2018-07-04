@@ -241,13 +241,16 @@ export class ridesController extends cat.Controller {
 							else 
 								rider = idLink(prospect.ride.riders[0])
 
-							let prospectTarget: string = (
+							let prospectTarget: string = idLink((
 								(prospect.ride['type'] == RideType.OFFER)? 
 								prospect.ride.driver: 
-								prospect.ride.riders[0]) 
+								prospect.ride.riders[0]))
 
 							// Keep all the prospect with a rider equal to the user supposed to enter the ride
 							// Exclude it if the request doesn't come from the person being invited / requested
+							
+							logger.debug(`TRACE: requestor ${ requestor }`)
+							logger.debug(`DEBUG: prospectTarget`)
 
 							return rider == target && requestor == prospectTarget;
 
