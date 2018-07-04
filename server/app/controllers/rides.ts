@@ -241,15 +241,23 @@ export class ridesController extends cat.Controller {
 							else 
 								rider = idLink(prospect.ride.riders[0])
 
-							// Keep all the prospect with a rider equal to the user supposed to enter the ride
+							let prospectTarget: string = (
+								(prospect.ride['type'] == RideType.OFFER)? 
+								prospect.ride.driver: 
+								prospect.ride.riders[0]) 
 
-							return rider == target
+							// Keep all the prospect with a rider equal to the user supposed to enter the ride
+							// Exclude it if the request doesn't come from the person being invited / requested
+
+							return rider == target && requestor == prospectTarget;
 
 						})
 
 						if(populatedProspects.length == 0) 
 							throw {code: 401, 
 								response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
+
+						// Check that the requestor is the owner of the prospect ride
 
 					})				
 
