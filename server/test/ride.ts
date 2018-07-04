@@ -190,9 +190,13 @@ describe.only('rides',  () => {
 
 				return Promise.all(promises)
 
-			}).then((res: any) => {
+			}).then((answers: any[]) => {
 
-				let rides: Ride[] = JSON.parse(res.text);
+				let rides : Ride[] = answers.map((ans: any) => {
+
+				  return ans.body  
+
+				})
 
 				expect(rides[rides.length - 1].payement).to.equal(postRiderExample.payement);
 
