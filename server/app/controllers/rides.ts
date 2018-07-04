@@ -232,13 +232,7 @@ export class ridesController extends cat.Controller {
 
 						// Check that the users ID checks out
 
-						logger.trace(`TRACE: before filtration: `, populatedProspects)
 						populatedProspects = populatedProspects.filter((prospect: any) => {
-
-							logger.trace(`TRACE: this prospect is from ${ (prospect.with.type == RideType.OFFER? prospect.with.driver: prospect.with.riders[0] )['@id'] }`)
-
-							logger.trace(`TRACE: target`, target)
-							logger.trace(`TRACE: requestor`, requestor)
 
 							let rider: string;
 
@@ -247,13 +241,15 @@ export class ridesController extends cat.Controller {
 							else 
 								rider = idLink(prospect.ride.riders[0])
 
+							// Keep all the prospect with a rider equal to the user supposed to enter the ride
+
 							return rider == target
 
 						})
-						logger.trace('After filtration', populatedProspects)
 
-
-						if(populatedProspects.length == 0) throw {code: 401, response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
+						if(populatedProspects.length == 0) 
+							throw {code: 401, 
+								response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
 
 					})				
 
