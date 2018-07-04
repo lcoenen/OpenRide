@@ -31,7 +31,7 @@ beforeEach(() => {
 
 })
 
-describe('rides',  () => {
+describe.only('rides',  () => {
 
 	before(( ) => {
 
@@ -51,7 +51,7 @@ describe('rides',  () => {
 
 	it("should NOT get a list of rides", () => {
 
-		expect(chai.request(url)
+		return expect(chai.request(url)
 			.get('/api/rides/')
 			.set('openride-server-session', key)
 			).to.be.rejectedWith('Unauthorized')
