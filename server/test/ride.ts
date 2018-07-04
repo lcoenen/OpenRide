@@ -17,7 +17,7 @@ import { postDriverExample, postRiderExample } from '../../shared/mocks/ride';
 import { Link } from '../../shared/models/link';
 
 import { RidesMock } from '../../shared/mocks/ride';
-import { UsersMock, userSignupCredentials } from '../../shared/mocks/user';
+import { UsersMock, userSignupCredentials, PB } from '../../shared/mocks/user';
 
 import { resetMock } from '../../shared/bin/resetmock';
 
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 })
 
-describe('rides',  () => {
+describe.only('rides',  () => {
 
 	before(( ) => {
 
@@ -54,7 +54,7 @@ describe('rides',  () => {
 		return expect(chai.request(url)
 			.get('/api/rides/')
 			.set('openride-server-session', key)
-			).to.be.rejectedWith('Unauthorized')
+		).to.be.rejectedWith('Unauthorized')
 
 	});
 
@@ -81,22 +81,28 @@ describe('rides',  () => {
 				expect(res).to.have.status(204)	
 
 			})
-		/*
-		 * This will be used when /api/rides/me will be implemented
 			.then(() => {
 
-				return chai.request(url)
-					.get('/api/rides')
-					.set('openride-server-session', key)
-					.then((res: any) => {
+				return chai.request(url).get(`/api/users/${ PB._id }/rides`)
 
-						expect(res).to.have.status(200)
-						expect(res.body.length).to.be.equal(RidesMock.length - 1)	
+			}).then((res: any) => {
 
-					})
+				let ans = JSON.parse(res.text);
+				// ans should be a list of ride Link
+				let promises : Promise<Ride>[] = ans.map((link: Link) => {
 
-			})
-		 */
+					return chai.request(url).get(link['@id'])  
+
+				})
+
+				return Promise.all(promises)
+
+			}).then((res: any) => {
+
+				expect(res).to.have.status(200)
+				expect(res.body.length).to.be.equal(RidesMock.length - 1)	
+
+			});
 
 	});
 
@@ -111,17 +117,28 @@ describe('rides',  () => {
 
 			}).then(() => {
 
-				/*
-				return chai.request(url).get('/api/users/me/rides')
+				return chai.request(url).get(`/api/users/${ PB._id }/rides`)
 
 			}).then((res: any) => {
 
 				let ans = JSON.parse(res.text);
-				expect(ans[ans.length - 1].payement).to.equal(postDriverExample.payement);
+				// ans should be a list of ride Link
+				let promises : Promise<Ride>[] = ans.map((link: Link) => {
+
+					return chai.request(url).get(link['@id'])  
+
+				})
+
+				return Promise.all(promises)
+
+			}).then((res: any) => {
+
+				let rides: Ride[] = JSON.parse(res.text);
+
+				expect(rides[rides.length - 1].payement).to.equal(postDriverExample.payement);
 
 			}).then(() => {
 
-				 */
 				return chai.request(url).get(`/api/rides/${postDriverExample._id}`).catch((err: any) => {
 
 					throw err;
@@ -151,21 +168,29 @@ describe('rides',  () => {
 				expect(res).to.have.status(201);
 
 			})
-			
-		/*
-		 * .then(() => {
+			.then(( ) => {
 
-				return chai.request(url).get('/api/rides/')
+				return chai.request(url).get(`/api/users/${ PB._id }/rides`)
 
 			}).then((res: any) => {
 
 				let ans = JSON.parse(res.text);
-				expect(ans[ans.length - 1].payement).to.equal(postRiderExample.payement);
+				// ans should be a list of ride Link
+				let promises : Promise<Ride>[] = ans.map((link: Link) => {
+
+					return chai.request(url).get(link['@id'])  
+
+				})
+
+				return Promise.all(promises)
+
+			}).then((res: any) => {
+
+				let rides: Ride[] = JSON.parse(res.text);
+
+				expect(rides[rides.length - 1].payement).to.equal(postRiderExample.payement);
 
 			});
-
-		 */
-
-	});
+	})
 
 });
