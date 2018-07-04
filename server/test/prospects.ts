@@ -209,8 +209,6 @@ describe('prospects', () => {
 
 			let prospects: Prospect[] = res.body;
 
-			console.log(`prospect`)
-
 			expect(prospects.length).to.be.equal(1)
 			expect(prospects[0]).to.be.deep.equal(riderProspects[0])
 
