@@ -190,7 +190,7 @@ export class ridesController extends cat.Controller {
 				let requestor = request.user._id;
 				let target = params.join ? params.join : params.depart;
 
-				db.db.collection('prospects')
+				return db.db.collection('prospects')
 					.find({'$or': [
 						{ with: {'@id': `/api/rides/${ request.params.id }`}},
 						{ ride: {'@id': `/api/rides/${ request.params.id }`}}
@@ -232,7 +232,7 @@ export class ridesController extends cat.Controller {
 
 						// Check that the users ID checks out
 
-						populatedProspects.filter((prospect: any) => {
+						populatedProspects = populatedProspects.filter((prospect: any) => {
 
 							return (prospect.with.type == RideType.OFFER? prospect.with.driver: prospect.with.riders[0] )['@id'] == `/api/users/${ target }` 
 
