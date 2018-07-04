@@ -89,6 +89,7 @@ export class ridesController extends cat.Controller {
 	@cat.give(isArrayOfRides)
 	public getAll(request: cat.Request) {
 
+		throw {code: 401, response: 'Guru meditation' }
 
 		return db
 			.db
