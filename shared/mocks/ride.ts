@@ -90,11 +90,10 @@ export const postDriverExample: Ride = {
 	},
 	'riding_time': moment().add(1, 'days').hour(10).minute(10).toDate(),
 	'payement': 32,
-	'driver': { '@id': '/api/users/Moe' },
 	'riders': []
 }
 
-export const postRiderExample = {
+export const postRiderExample: Ride = {
 	'_id': 'EindhovenMaastrichtRequest',
 	'type': RideType.REQUEST,
 	'origin': {
@@ -119,7 +118,7 @@ export const postRiderExample = {
 	},
 	'riding_time': moment().add(1, 'days').hour(14).minute(30).toDate(),
 	'payement': 23,
-	'riders': [{ '@id': '/api/users/Moe' }]
+	'riders': []
 }
 
 export const postDriverLesserExample: Ride = {

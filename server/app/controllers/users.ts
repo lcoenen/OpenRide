@@ -11,6 +11,8 @@ import { Promise } from 'es6-promise';
 import { User, Signature, Credentials, 
 	isCredentials, isUser, sanitize,
 	SignupResponse } from '../../../shared/models/user';
+import { Ride } from '../../../shared/models/ride';
+import { Link } from '../../../shared/models/link';
 
 import { hash } from '../../../shared/lib/hash';
 
@@ -214,6 +216,11 @@ export class usersController extends cat.Controller {
 
 	}
 
+	/*
+	 *
+	 * This route return the connected user
+	 *
+	 */
 	@cat.catnapify('get', '/api/session/me')
 	@logged
 	@cat.give(isUser)
@@ -221,6 +228,40 @@ export class usersController extends cat.Controller {
 	public connected_user(request: sessionRequest) {
 
 		return {code: 200, response: sanitize(request.user)};
+
+	}
+
+
+	/*
+	 * 
+	 * This return a list of link to all rides linked to an user
+	 *
+	 */
+	@cat.catnapify('get', '/api/users/:id/rides')
+	@logged
+	@cat.need('id')
+	public my_rides(request: sessionRequest) {
+
+		return db.db.collection('rides').find({
+			'$or': [
+				{
+					driver: {'@id': `/api/users/${ request.params.id }`}	
+				},
+				{
+					riders: {'@id': `/api/users/${ request.params.id }`}	
+				}
+			]	
+		})
+		.toArray()
+		.then((rides: Ride[]) => {
+
+			return rides.map((ride: Ride): Link => {
+
+				return {'@id': `/api/rides/${ ride._id }`} 
+
+			})  
+
+		})
 
 	}
 

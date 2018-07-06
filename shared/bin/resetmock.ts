@@ -9,7 +9,7 @@ import { settings } from '../../server/app/config/config';
 import { UsersMock } from '../mocks/user';
 import { RidesMock } from '../mocks/ride';
 import { MessagesMock } from '../mocks/message';
-import { RequestsMock } from '../mocks/requests';
+import { ProspectsMock } from '../mocks/prospects';
 
 /*
  *
@@ -25,12 +25,12 @@ export function resetMock(){
 		return Promise.all([
 			db.collection('users').drop(),
 			db.collection('rides').drop(),
-			db.collection('requests').drop(),
+			db.collection('prospects').drop(),
 			db.collection('messages').drop()
 		])
 		.catch((err) => {
 
-		 	console.log(`Error while dropping the collections. ${ err.message }`); 
+			// console.info(`Error while dropping the collections. ${ err.message }`); 
 
 		}).then(() => {
 
@@ -54,12 +54,11 @@ export function resetMock(){
 
 		}).then( () => {
 
-			return db.collection('messages').insert(MessagesMock);
+			return db.collection('prospects').insert(ProspectsMock);
 
 		}).then( () => {
 
-
-			return db.collection('requests').insert(RequestsMock);
+			return db.collection('messages').insert(MessagesMock);
 
 		}).then( () => {
 
@@ -69,6 +68,10 @@ export function resetMock(){
 			 *
 			 */
 			db.collection('users').createIndex( { name: 1 }, { unique: true } )
+
+		}).catch((err:any) => {
+
+		  console.log(`Error while inserting the mocked collection: ${ err.message }`)  
 
 		})
 
