@@ -10,6 +10,17 @@ export enum RideType {
 	OFFER
 }
 
+/*
+ *
+ * This represent a Ride. 
+ * 
+ * A ride can be either a request or an offer
+ * If it's a request, riders will be an array with exactly one User and
+ * no driver. If it's an offer, the driver will be the owner of the ride.
+ *
+ * The type property (see RideType) can be either REQUEST or OFFER
+ *
+ */
 export interface Ride {
   _id?: string;
   origin: Feature<Point>;
@@ -21,6 +32,41 @@ export interface Ride {
 	type: RideType;
 };
 
+
+/*
+ *
+ * These represents the rides type shown in the MyRides page
+ *
+ */
+export interface MyRides{
+
+
+	/*
+	 *
+	 * This will represent all the rides I'm in. This will only be 
+	 * OFFERs. I can be the driver or a rider.
+	 *
+	 */
+  myRides: Ride[];
+
+	/*
+	 *
+	 * This will be my requests.
+	 *
+	 */
+	myRequests: Ride[];
+
+	/*
+	 *
+	 * This will be all my prospects (the rides I applied, the ones I've been invited to,
+	 * the ones I invited and the ones I've been applied from
+	 *
+	 * See shared/models/prospect.ts
+	 *
+	 */
+	myProspects: Ride[]
+
+}
 
 /*
  *

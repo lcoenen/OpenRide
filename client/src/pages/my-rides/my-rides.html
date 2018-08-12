@@ -14,6 +14,30 @@
 
 
 <ion-content padding>
+
+	<ion-list>
+		<ion-list-header>My rides</ion-list-header>
+		<ion-item *ngFor="let ride of myRides">		
+			<ride-widget [ride]="ride"></ride-widget>
+		</ion-item>
+	</ion-list>
+
+	<ion-list>
+		<ion-list-header>My requests</ion-list-header>
+		<ion-item *ngFor="let ride of myRequests">		
+			<ride-widget [ride]="ride"></ride-widget>
+		</ion-item>
+	</ion-list>
+		
+	<ion-list>
+		<ion-list-header>My prospects</ion-list-header>
+		<ion-item *ngFor="let ride of myProspects">		
+			<ride-widget [ride]="ride"></ride-widget>
+		</ion-item>
+	</ion-list>
+		
+
+	<!-- 
   <ion-card *ngFor="let rider of riders">
   <ion-item>
     <ion-avatar item-start>
@@ -45,5 +69,7 @@
     </ion-col>
   </ion-row>
 
+
 </ion-card>
+-->
 </ion-content>

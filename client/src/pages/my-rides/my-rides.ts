@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Rider } from './rider';
-import { RidersMockData } from './rider-mock';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
+
+import { RideProvider, MyRides } from '../../providers/ride/ride';
 
 /**
  * Generated class for the MyRidesPage page.
@@ -20,16 +21,20 @@ import { RideBoardPage } from '../ride-board/ride-board';
 })
 export class MyRidesPage {
 
-  riders: Rider[];
+	myRides: myRides;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-
-    this.riders = RidersMockData;
-
+	constructor(public navCtrl: NavController, 
+		public navParams: NavParams,
+		public rideProvider: RideProvider	) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MyRidesPage');
+		
+		 this.rideProvider.myRides().then((myRides: MyRides) => {
+
+		    this.myRides = myRides;
+
+		 })
   }
 
   open_board(rider){
