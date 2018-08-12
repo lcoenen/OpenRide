@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable'
 ;
 import { settings } from '../../config/config'
 
-import { Ride, hashRide } from 'shared/models/ride'
+import { Ride, hashRide, RideType } from 'shared/models/ride'
+import { User } from 'shared/models/user'
 import { Link } from 'shared/models/link'
 import { RidesMock } from 'shared/mocks/ride';
 
@@ -45,29 +46,72 @@ export class RideProvider {
 	invitable_ride(): Promise<Ride[]> {
 
 		return this.httpClient.get<Link[]>(
-			`${ settings.apiEndpoint }/api/rides/${ this.currentRide._id }/matches`)
+			`${ settings.apiEndpoint }/api/rides/BruxellesLiege/matches`)
 		.mergeMap((rides: Link[]) => {
+
+			console.log(`I recieved a list of ride`)
+			console.log(rides)
 
 			// Create an observable that emit each value in the array
 			return Observable.from(rides).mergeMap((ride: Link) => {
 
+				console.log(`Pour ce ride`)
+				console.log(ride)
+
 				// Resolve each value with a API call
 				return this.httpClient.get<Ride>(
-					`${ settings.apiEndpoint }${ ride['@id']}`) /*.then((ride: Ride) => {
+					`${ settings.apiEndpoint }${ ride['@id']}`)
 
-						// Populate the riders and drivers
-						return 
-
-					})	
-															 */
-
-						// Re-create the array
-
-					}).toArray()	
-
+				// Re-create the array
+			}).toArray()	
 
 		})
 		.toPromise()
+		.then((rides: Ride[]) => {
+
+			// For each ride
+			return Promise.all(rides.map((ride: Ride) => {
+
+				// Populate the driver			
+				if(ride.type == RideType.OFFER) {
+
+					return this.httpClient.get<User>(
+						`${ settings.apiEndpoint }/api/users/${ ride.driver['@id'] }`
+					).toPromise().then((user: User) => {
+
+						return ride.driver = user, ride;  
+
+					})
+
+				}
+
+			}))
+				.then((rides: Ride[]) => {
+
+					// For each ride
+					return Promise.all(rides.map((ride: Ride) => {
+
+						// Populate the riders			
+						// For each rider
+
+						return Promise.all(ride.riders.map((rider: Link) => {
+
+							// Populte the user
+							return this.httpClient.get<User>(
+								`${ settings.apiEndpoint }/api/users/${ rider['@id'] }`
+							).toPromise()
+
+						})).then((riders: User[]) => {
+
+							return ride.riders = riders, ride; 
+
+						})
+
+					}))
+
+				})
+
+		})
 
 	}
 
