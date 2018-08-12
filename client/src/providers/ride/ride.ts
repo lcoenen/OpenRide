@@ -38,6 +38,56 @@ export class RideProvider {
 
 	/*
 	 *
+	 * This is used to populate the ride (link the rides and drivers)
+	 *
+	 */
+	populateRide(ride: Ride): Promise<Ride> {
+
+		// Populate the driver
+		let populate_driver = (ride: Ride) => {
+
+			if(ride.type == RideType.OFFER) 
+				return this.httpClient.get<User>(
+					`${ settings.apiEndpoint }${ ride.driver['@id'] }`
+				).toPromise().then((user: User) => {
+					return ride.driver = user, ride
+				}	
+				)
+			else 		
+				return Promise.resolve(ride);
+
+		}
+
+		let populate_riders = (ride: Ride) => {
+
+			// Populate the riders			
+			// For each rider
+
+			return Promise.all((<Link[]>ride.riders).map((rider: Link) => {
+
+				// Populte the user
+				return this.httpClient.get<User>(
+					`${ settings.apiEndpoint }${ rider['@id'] }`
+				).toPromise()
+
+			})).then((riders: User[]) => {
+
+				return ride.riders = riders, ride; 
+
+			})
+
+		}
+
+		return populate_driver(ride).then((ride) => {
+
+		  return populate_riders(ride)  
+
+		})
+
+	}
+
+	/*
+	 *
 	 * Used when a driver is offering a ride, to invite riders
 	 * 
 	 * It makes the link with the offer-invite and uses the entrypoint /api/rides/:id/matches
@@ -70,45 +120,7 @@ export class RideProvider {
 		.then((rides: Ride[]) => {
 
 			// For each ride
-			return Promise.all(rides.map((ride: Ride) => {
-
-				// Populate the driver			
-				if(ride.type == RideType.OFFER) 
-					return this.httpClient.get<User>(
-						`${ settings.apiEndpoint }${ ride.driver['@id'] }`
-					).toPromise().then((user: User) => {
-						return ride.driver = user, ride
-					}	
-					)
-				else 		
-					return Promise.resolve(ride);
-
-
-			}))
-				.then((rides: Ride[]) => {
-
-					// For each ride
-					return Promise.all(rides.map((ride: Ride) => {
-
-						// Populate the riders			
-						// For each rider
-
-						return Promise.all((<Link[]>ride.riders).map((rider: Link) => {
-
-							// Populte the user
-							return this.httpClient.get<User>(
-								`${ settings.apiEndpoint }${ rider['@id'] }`
-							).toPromise()
-
-						})).then((riders: User[]) => {
-
-							return ride.riders = riders, ride; 
-
-						})
-
-					}))
-
-				})
+			return Promise.all(rides.map((ride: Ride) => this.populateRide(ride)))
 
 		})
 
@@ -174,8 +186,14 @@ export class RideProvider {
 
 			this.httpClient.get<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`).toPromise().then((createdRide: Ride) => {
 
-				this._currentRide = createdRide;
+				this.populateRide(createdRide).then((populatedRide: Ride) => {
+
+				  this._currentRide = populatedRide  
+
+				});
+
 				return answer;
+
 
 			})
 
