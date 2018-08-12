@@ -28,4 +28,11 @@ export class RideWidgetComponent {
 
   }
 
+	ngOnChanges() {
+	
+		console.log(`ride:`)
+		console.log(this.ride)
+	
+	}
+
 }

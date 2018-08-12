@@ -53,11 +53,17 @@ export class RideProvider {
 
 				// Resolve each value with a API call
 				return this.httpClient.get<Ride>(
-					`${ settings.apiEndpoint }${ ride['@id']}`)	
+					`${ settings.apiEndpoint }${ ride['@id']}`) /*.then((ride: Ride) => {
 
-			// Re-create the array
+						// Populate the riders and drivers
+						return 
 
-			}).toArray()	
+					})	
+															 */
+
+						// Re-create the array
+
+					}).toArray()	
 
 
 		})

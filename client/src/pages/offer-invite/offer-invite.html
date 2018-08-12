@@ -16,7 +16,7 @@ Ionic pages and navigation.
 <ion-content padding>
 	<ul>
 		<li *ngFor="let ride of rides">
-			<ride-widget ride="ride"></ride-widget>
+			<ride-widget [ride]="ride"></ride-widget>
 		</li>
 	</ul>
 	<div *ngIf="rides === undefined || rides.length == 0">
