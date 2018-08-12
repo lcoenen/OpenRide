@@ -126,11 +126,16 @@ export class RideProvider {
 		
 		// Put a prosepct for that ride
 		return this.httpClient.post(
-			`${ settings.apiEndpoint }/api/rides/${ ride['_id'] }`, {
+			`${ settings.apiEndpoint }/api/rides/${ ride['_id'] }/prospects`, {
 				with: {
 					'@id': `/api/rides/${ this._currentRide._id }`	
 				}	
-			} ).toPromise()
+			} ).toPromise().catch((error: any) => {
+
+			  console.log(`error:`)  
+				console.log(error)
+
+			})
 	
 	}
 	
