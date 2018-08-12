@@ -111,7 +111,7 @@ export class RideProvider {
 				})
 
 		})
-	
+
 	}
 
 	/*
@@ -123,7 +123,7 @@ export class RideProvider {
 
 		console.log(`Sending an invite to ride`)
 		console.log(ride)
-		
+
 		// Put a prosepct for that ride
 		return this.httpClient.post(
 			`${ settings.apiEndpoint }/api/rides/${ ride['_id'] }/prospects`, {
@@ -132,13 +132,13 @@ export class RideProvider {
 				}	
 			} ).toPromise().catch((error: any) => {
 
-			  console.log(`error:`)  
+				console.log(`error:`)  
 				console.log(error)
 
 			})
-	
+
 	}
-	
+
 
 	/*
 	 *
@@ -165,11 +165,19 @@ export class RideProvider {
 	offer_ride(ride: Ride) : Promise<any> {
 
 		ride._id = hashRide(ride) 
-		this._currentRide	= ride;
 
 		return new Promise((resolve, reject) => {
 
 			this.httpClient.put<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, ride).subscribe(data => resolve(data), error => reject(error))
+
+		}).then((answer: any) => {
+
+			this.httpClient.get<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`).toPromise().then((createdRide: Ride) => {
+
+				this._currentRide = createdRide;
+				return answer;
+
+			})
 
 		})
 	}
