@@ -18,21 +18,21 @@
 	<ion-list>
 		<ion-list-header>My rides</ion-list-header>
 		<ion-item *ngFor="let ride of myRides">		
-			<ride-widget [ride]="ride"></ride-widget>
+			<ride-widget [ride]="ride" (enter)="open_board(ride)" [showEnter]="true"></ride-widget>
 		</ion-item>
 	</ion-list>
 
 	<ion-list>
 		<ion-list-header>My requests</ion-list-header>
 		<ion-item *ngFor="let ride of myRequests">		
-			<ride-widget [ride]="ride"></ride-widget>
+			<ride-widget [ride]="ride" (enter)="open_board(ride)" [showEnter]="true"></ride-widget>
 		</ion-item>
 	</ion-list>
 		
 	<ion-list>
 		<ion-list-header>My prospects</ion-list-header>
 		<ion-item *ngFor="let ride of myProspects">		
-			<ride-widget [ride]="ride"></ride-widget>
+			<ride-widget [ride]="ride" (enter)="open_board(ride)" [showEnter]="true"></ride-widget>
 		</ion-item>
 	</ion-list>
 		

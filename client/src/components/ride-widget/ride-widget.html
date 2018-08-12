@@ -10,17 +10,26 @@
 
 	<ion-card-content>
 
-		<p>From {{ride.origin.properties.address}} to {{ride.destination.properties.address}}</p>
-		<p>{{ride.riding_time}}</p>
+		<p>is <strong *ngIf="ride.type == RideType.OFFER">offering</span>
+			<strong *ngIf="ride.type == RideType.REQUEST">requesting</span> a ride
+			from {{ride.origin.properties.address}} to {{ride.destination.properties.address}}</p>
+		<p> in {{ride.riding_time}}</p>
+		<p *ngIf="ride.payement">Price: {{ride.payement}}€</p>
 
 	</ion-card-content>
 
 	<ion-row>
 		<ion-col>
-			<button (click)="invite.emit(ride)" ion-button icon-left clear small>
+			<!-- This will be used for request as well - it have to be renamed -->
+			<button *ngIf="showProspect" (click)="invite.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
-				<div>Invite</div>
+				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
+				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
 			</button>
+      <button (click)="enter.emit(ride)" ion-button icon-left clear small>
+        <ion-icon name="log-in"></ion-icon>
+        <div>Enter</div>
+      </button>
 		</ion-col>
 		<ion-col center text-center>
 			<ion-note>

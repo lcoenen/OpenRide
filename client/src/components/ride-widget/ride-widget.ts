@@ -21,11 +21,14 @@ import { Ride, RideType } from 'shared/models/ride';
 export class RideWidgetComponent {
 
 	@Input() ride: Ride;
-	@Output() invite: EventEmitter<Ride> = new EventEmitter<Ride>();
+	@Input() showProspect: boolean = false;
+	@Output() prospect: EventEmitter<Ride> = new EventEmitter<Ride>();
+	@Input() showEnter: boolean = false;
+	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
 
   constructor() {
 
-		
+		this.RideType = RideType;	
 
   }
 
