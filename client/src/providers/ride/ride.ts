@@ -126,7 +126,7 @@ export class RideProvider {
 		
 		// Put a prosepct for that ride
 		return this.httpClient.post(
-			`${ settings.apiEndpoint }${ ride['@id'] }`, {
+			`${ settings.apiEndpoint }/api/rides/${ ride['_id'] }`, {
 				with: {
 					'@id': `/api/rides/${ this._currentRide._id }`	
 				}	
