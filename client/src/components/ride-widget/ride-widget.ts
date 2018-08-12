@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Ride } from 'shared/models/ride';
+import { Ride, RideType } from 'shared/models/ride';
 
 /*
  *
@@ -32,6 +32,13 @@ export class RideWidgetComponent {
 	
 		console.log(`ride:`)
 		console.log(this.ride)
+	
+	}
+
+	get user() {
+
+		return this.ride.type == RideType.OFFER?
+			this.ride.driver: this.ride.riders[0];
 	
 	}
 

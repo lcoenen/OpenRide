@@ -2,10 +2,10 @@
 <ion-card> 
 	<ion-item>
 		<ion-avatar item-start>
-			<img src="assets/imgs/avatar_{{ride.riders[0].name}}.png">
+			<img src="assets/imgs/avatar_{{user.name}}.png">
 		</ion-avatar>
-		<h2>{{rider.name}}</h2>
-		<p>{{rider.age}} years old, from {{rider.place_of_origin}}</p>
+		<h2>{{user.name}}</h2>
+		<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
 	</ion-item>
 
 	<ion-card-content>
@@ -25,7 +25,7 @@
 		<ion-col center text-center>
 			<ion-note>
 				Reputation: 
-				<ion-badge item-end>{{rider.reputation}}</ion-badge>
+				<ion-badge item-end>{{user.reputation}}</ion-badge>
 			</ion-note>
 		</ion-col>
 	</ion-row>

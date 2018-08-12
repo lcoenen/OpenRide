@@ -73,45 +73,48 @@ export class RideProvider {
 			return Promise.all(rides.map((ride: Ride) => {
 
 				// Populate the driver			
-				if(ride.type == RideType.OFFER) {
-
+				if(ride.type == RideType.OFFER) 
 					return this.httpClient.get<User>(
 						`${ settings.apiEndpoint }/api/users/${ ride.driver['@id'] }`
 					).toPromise().then((user: User) => {
+						return ride.driver = user, ride
+					}	
+					)
+				else 		
+					return Promise.resolve(ride);
 
-						ride.driver = user;  
-
-					})
-
-				}
-
-				return ride;
 
 			}))
-				// .then((rides: Ride[]) => {
+				.then((rides: Ride[]) => {
 
-				// 	// For each ride
-				// 	return Promise.all(rides.map((ride: Ride) => {
+					// For each ride
+					return Promise.all(rides.map((ride: Ride) => {
 
-				// 		// Populate the riders			
-				// 		// For each rider
+						// Populate the riders			
+						// For each rider
 
-				// 		return Promise.all(ride.riders.map((rider: Link) => {
+						return Promise.all((<Link[]>ride.riders).map((rider: Link) => {
 
-				// 			// Populte the user
-				// 			return this.httpClient.get<User>(
-				// 				`${ settings.apiEndpoint }/api/users/${ rider['@id'] }`
-				// 			).toPromise()
+							// Populte the user
+							return this.httpClient.get<User>(
+								`${ settings.apiEndpoint }/api/users/${ rider['@id'] }`
+							).toPromise()
 
-				// 		})).then((riders: User[]) => {
+						})).then((riders: User[]) => {
 
-				// 			return ride.riders = riders, ride; 
+							return ride.riders = riders, ride; 
 
-				// 		})
+						})
 
-				// 	}))
+					}))
 
-				// })
+				})
+
+		}).then((ans: any) => {
+
+			console.log(`answer: ans`)
+			console.log(ans)
+		  return ans  
 
 		})
 
