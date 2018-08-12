@@ -75,7 +75,7 @@ export class RideProvider {
 				// Populate the driver			
 				if(ride.type == RideType.OFFER) 
 					return this.httpClient.get<User>(
-						`${ settings.apiEndpoint }/api/users/${ ride.driver['@id'] }`
+						`${ settings.apiEndpoint }${ ride.driver['@id'] }`
 					).toPromise().then((user: User) => {
 						return ride.driver = user, ride
 					}	
@@ -97,7 +97,7 @@ export class RideProvider {
 
 							// Populte the user
 							return this.httpClient.get<User>(
-								`${ settings.apiEndpoint }/api/users/${ rider['@id'] }`
+								`${ settings.apiEndpoint }${ rider['@id'] }`
 							).toPromise()
 
 						})).then((riders: User[]) => {
@@ -110,14 +110,8 @@ export class RideProvider {
 
 				})
 
-		}).then((ans: any) => {
-
-			console.log(`answer: ans`)
-			console.log(ans)
-		  return ans  
-
 		})
-
+	
 	}
 
 	/*
