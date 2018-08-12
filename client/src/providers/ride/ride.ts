@@ -116,6 +116,27 @@ export class RideProvider {
 
 	/*
 	 *
+	 * This is used to send an invite to a ride
+	 *
+	 */
+	invite(ride: Ride) {
+
+		console.log(`Sending an invite to ride`)
+		console.log(ride)
+		
+		// Put a prosepct for that ride
+		return this.httpClient.post(
+			`${ settings.apiEndpoint }${ ride['@id'] }`, {
+				with: {
+					'@id': `/api/rides/${ this._currentRide._id }`	
+				}	
+			} ).toPromise()
+	
+	}
+	
+
+	/*
+	 *
 	 * Used when a rider request a ride, to show him matches
 	 *
 	 * It makes the link with the src/pages/request-find-ride/ page and use the entry point /api/rides/:id/matches

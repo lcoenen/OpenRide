@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 
 import { User } from 'shared/models/user';
 import { Ride } from 'shared/models/ride';
@@ -31,6 +31,7 @@ export class OfferInvitePage {
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
+		public toastCtrl: ToastController,
     public rideProvider: RideProvider) {
 
 		/*
@@ -48,10 +49,36 @@ export class OfferInvitePage {
     console.log('ionViewDidLoad OfferInvitePage');
   }
 
+	/* 
+	 *
+	 * This redirect to the ride board
+	 *
+	 */
   continue() {
   
     this.navCtrl.push(RideBoardPage);
   
   }
+
+	/*
+	 * 
+	 * This means the user is inviting a ride request
+	 *
+	 */
+	invite(invitedRide: Ride) {
+	
+		this.rideProvider.invite(invitedRide).then((answer) => {
+
+		  const toast = this.toastCtrl.create({
+				message: 'Invite sent', 
+				duration: 3000
+			})
+			toast.present();
+
+			this.rides = this.rides.filter((ride: Ride) => ride._id != invitedRide._id)
+
+		})
+	
+	}
 
 }

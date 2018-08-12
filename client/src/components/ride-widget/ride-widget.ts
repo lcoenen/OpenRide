@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { Ride, RideType } from 'shared/models/ride';
 
@@ -21,6 +21,7 @@ import { Ride, RideType } from 'shared/models/ride';
 export class RideWidgetComponent {
 
 	@Input() ride: Ride;
+	@Output() invite: EventEmitter<Ride> = new EventEmitter<Ride>();
 
   constructor() {
 
@@ -35,6 +36,12 @@ export class RideWidgetComponent {
 	
 	}
 
+	/*
+	 *
+	 * This is the user of the ride (the driver if it's an OFFER 
+	 * and the riders[0] (the requester) if it's a request
+	 *
+	 */
 	get user() {
 
 		return this.ride.type == RideType.OFFER?
