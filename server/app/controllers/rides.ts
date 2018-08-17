@@ -11,7 +11,7 @@ import { session, sessionRequest } from '../services/session';
 
 
 
-import { Ride, RideType, isRide } from '../../../shared/models/ride';
+import { Ride, RideType, isRide, MyRides } from '../../../shared/models/ride';
 import { Link, idLink } from '../../../shared/models/link';
 import { Prospect, ProspectType } from '../../../shared/models/prospect';
 
@@ -595,6 +595,27 @@ export class ridesController extends cat.Controller {
 					})
 
 			})
+
+
+	}
+
+	/*
+	 * 
+	 * Return the myRides object for the my-rides view
+	 *
+	 */
+	@cat.catnapify('post', '/api/session/me/rides')
+	@logged
+	@session.needAuthentification
+	public my_rides(req: sessionRequest) {
+	
+		return db.db.collection('rides').find({
+			'$or': [
+				/* ICIIIIII */
+				{'driver': { '@id': `/api/users/${ req.user }`}},
+				{'riders': {'@id': `/api/users/${ req.user }`}}
+			]
+		})
 
 	}
 
