@@ -13,7 +13,7 @@ export namespace db {
   export function connect() {
 
     return MongoClient
-      .connect(settings.mongoUrl)
+			.connect(settings.mongoUrl, { useNewUrlParser: true })
       .then((client:MongoClient) => {
      
         logger.info(`INFO: ${settings.name} is connected to database ${settings.mongoUrl}`);
