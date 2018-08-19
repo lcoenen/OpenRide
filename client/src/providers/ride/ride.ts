@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable'
 ;
 import { settings } from '../../config/config'
 
-import { Ride, hashRide, RideType MyRides } from 'shared/models/ride'
+import { Ride, hashRide, RideType, MyRides } from 'shared/models/ride'
 import { User } from 'shared/models/user'
 import { Link } from 'shared/models/link'
 import { Prospect } from 'shared/models/prospect'
@@ -196,7 +196,7 @@ export class RideProvider {
 
 		return this.httpClient.get(`${ settings.apiEndpoint }/api/session/me/rides`).toPromise()
 		//Solve the rides
-		.then((rides: Link[]) => this.solveRides(rides))
+		//.then((rides: Link[]) => this.solveRides(rides))
 		//Populate the rides
 		.then((rides: Ride[]) => Promise.all(rides.map((ride: Ride) => this.populateRide(ride))))
 		// Grab all the prospects
@@ -219,13 +219,13 @@ export class RideProvider {
 					// Now I have a list of adjacents ride, but having an array for each ride. I have to flatten everything
 				))
 				.then((adjacentsRides: Ride[][]) : Ride[] => [].concat.apply([], adjacentsRides))
-				.then((adjacentsRides: Ride[]) : MyRides =>  
+				.then((adjacentsRides: Ride[]) : MyRides => ( 
 					{
 						myRides: rides.filter((ride: Ride) => ride.type == RideType.OFFER),
-						myRequests: rides.filter((ride: Ride) => ride.type == RideType.OFFER),
+						myRequests: rides.filter((ride: Ride) => ride.type == RideType.REQUEST),
 						myProspects: adjacentsRides
 					}	
-				)
+				))
 
 			))
 
