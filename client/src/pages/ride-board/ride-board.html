@@ -119,24 +119,20 @@ Ionic pages and navigation.
 
 		</div>
 		<div *ngSwitchCase="'chat'">
-			<ion-list>
-				<ion-item>
+			<ion-list >
+				<ion-item *ngFor="let message of messages">
 					<ion-avatar item-start>
-						<img src="assets/imgs/avatar_Rick.png">
-					</ion-avatar>
+						<img src="assets/imgs/avatar_{{message.author.name}}.png">
+					</ion-avatar>
 
-					<h2>Rick</h2>
-					<p>Near the swimming-pool?</p>
+					<h2>{{message.author.name}}</h2>
+					<p>{{message.message}}</p>
+				</ion-item>
+			
+				<ion-item *ngIf="messages.length == 0">
+					<strong>No messages yet</strong>
 				</ion-item>
 
-				<ion-item>
-
-					<ion-avatar item-start>
-						<img src="assets/imgs/avatar_Stephane.png">
-					</ion-avatar>
-					<h2>Stephane</h2>
-					<p>Hey where do we meet?</p>
-				</ion-item>
 			</ion-list>
 
 
@@ -155,10 +151,10 @@ Ionic pages and navigation.
 	<ion-grid>
 		<ion-row>
 			<ion-col col-10>
-				<ion-input type="text"></ion-input>
+				<ion-input [(ngModel)]="messageBuffer" type="text"></ion-input>
 			</ion-col>
 			<ion-col col-2>
-				<button ion-button icon-right>
+				<button ion-button (click)="postMessage()" icon-right>
 					<ion-icon name="send"></ion-icon>
 				</button>
 			</ion-col>

@@ -5,7 +5,7 @@ export interface Message {
   _id?: string;
 	ride: Link;
   message: string;
-  author: Link;
+  author: Link | User;
   date: number;
 }
 

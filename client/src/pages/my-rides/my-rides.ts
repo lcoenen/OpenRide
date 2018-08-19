@@ -50,10 +50,17 @@ export class MyRidesPage {
 		})
 	}
 
+	/*
+	 *
+	 * This will open the RideBoard
+	 *
+	 */
 	open_board(ride){
 
 		console.log("Ouverture du ride", ride); 
-		this.rideProvider.currentRide = ride
+		this.rideProvider.currentRide = ride;
+		console.log(`setting this.rideProvider.currentRide with `)
+		console.log(ride)
 		this.navCtrl.push(RideBoardPage);
 
 	}

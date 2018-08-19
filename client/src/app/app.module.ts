@@ -32,6 +32,7 @@ import { RideWidgetComponent } from '../components/ride-widget/ride-widget'
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AutoCompleteModule } from 'ionic2-auto-complete';
+import { MessageProvider } from '../providers/message/message';
 
 @NgModule({
 	declarations: [
@@ -86,7 +87,8 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 			provide: HTTP_INTERCEPTORS, 
 			useClass: ApiKeyInterceptor, 
 			multi: true 
-		} 
+		},
+    MessageProvider 
 	]
 })
 export class AppModule {}
