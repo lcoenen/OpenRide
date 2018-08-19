@@ -18,7 +18,7 @@ import { ProspectsMock } from '../mocks/prospects';
  */
 export function resetMock(){ 
 
-	return MongoClient.connect(settings.mongoUrl).then((client: MongoClient) => {
+	return MongoClient.connect(settings.mongoUrl, { useNewUrlParser: true} ).then((client: MongoClient) => {
 
 		let db: Db = client.db(settings.dbName);
 
@@ -34,7 +34,7 @@ export function resetMock(){
 
 		}).then(() => {
 
-			return db.collection('users').insert(UsersMock);
+			return db.collection('users').insertMany(UsersMock);
 
 		}).then( () => {
 	
@@ -50,15 +50,15 @@ export function resetMock(){
 			db.collection('rides').createIndex( { 'destination.geometry'  : "2dsphere" } );
 			db.collection('rides').createIndex( { 'origin.geometry'  : "2dsphere" } );
 
-			return db.collection('rides').insert(RidesMock);
+			return db.collection('rides').insertMany(RidesMock);
 
 		}).then( () => {
 
-			return db.collection('prospects').insert(ProspectsMock);
+			return db.collection('prospects').insertMany(ProspectsMock);
 
 		}).then( () => {
 
-			return db.collection('messages').insert(MessagesMock);
+			return db.collection('messages').insertMany(MessagesMock);
 
 		}).then( () => {
 
