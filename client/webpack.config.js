@@ -73,7 +73,7 @@ var devConfig = {
   devtool: process.env.IONIC_SOURCE_MAP_TYPE,
 
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.scss', '.json'],
     modules: [path.resolve('node_modules')],
     alias: {
       'shared': path.resolve(__dirname, '../shared')
