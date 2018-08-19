@@ -26,6 +26,9 @@ export class RideWidgetComponent {
 	@Input() showEnter: boolean = false;
 	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
 
+	// RideType is the enum itself
+	RideType: any;
+
   constructor() {
 
 		this.RideType = RideType;	

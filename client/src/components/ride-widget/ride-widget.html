@@ -10,8 +10,8 @@
 
 	<ion-card-content>
 
-		<p>is <strong *ngIf="ride.type == RideType.OFFER">offering</span>
-			<strong *ngIf="ride.type == RideType.REQUEST">requesting</span> a ride
+		<p>is <strong *ngIf="ride.type == RideType.OFFER">offering</strong>
+			<strong *ngIf="ride.type == RideType.REQUEST">requesting</strong> a ride
 			from {{ride.origin.properties.address}} to {{ride.destination.properties.address}}</p>
 		<p> in {{ride.riding_time}}</p>
 		<p *ngIf="ride.payement">Price: {{ride.payement}}€</p>

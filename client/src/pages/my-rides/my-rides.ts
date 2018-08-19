@@ -21,7 +21,7 @@ import { RideProvider, MyRides } from '../../providers/ride/ride';
 })
 export class MyRidesPage {
 
-	myRides: myRides;
+	myRides: MyRides;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,

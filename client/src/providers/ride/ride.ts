@@ -11,6 +11,11 @@ import { Link } from 'shared/models/link'
 import { Prospect } from 'shared/models/prospect'
 import { RidesMock } from 'shared/mocks/ride';
 
+function flatten_arrays_of_arrays<T>(ts: T[][]) : T[] {
+
+	return [].concat.apply([], ts) 
+
+}
 
 /*
 	Generated class for the RidersProvider provider.
@@ -97,7 +102,8 @@ export class RideProvider {
 
 		return Promise.all(rides.map((link: Link) => {
 
-			return this.httpClient.get(`${ settings.apiEndpoint }${ link['@id'] }`).toPromise()	
+			return <Promise<Ride>>
+				this.httpClient.get(`${ settings.apiEndpoint }${ link['@id'] }`).toPromise()	
 
 		}))
 
@@ -194,31 +200,47 @@ export class RideProvider {
 	 */
 	myRides() : Promise<MyRides> {
 
+		// Takes a ride and a prospect and return the link to the 
+		// adjacent ride (the ride that is not the target one)
+		let find_adjacent_ride = (prospect: Prospect, ride: Ride) : Link => 
+			prospect.with['@id'] == `/api/rides/${ ride._id }` ?
+			prospect.ride:
+			prospect.with
+
+		// Resolve a ride form a prospect
+		// Return a Promise<Ride>
+		let resolve_ride_from_prospect = (prospect: Prospect, ride: Ride) : Promise<Ride> => 
+			this.solveRides([find_adjacent_ride(prospect, ride)])
+				.then((rides: Ride[]) => 
+					this.populateRide(rides[0])	
+				)
+
+		// Find all the rides linked with one specific ride
+		// Take a ride and return a Promise of a list of Ride
+		let find_prospect_rides_from_ride = (ride: Ride) : Promise<Ride[]> =>
+			this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
+			.then((prospects: Prospect[]) : Promise<Ride[]> => (
+				Promise.all(prospects.map(
+					(prospect: Prospect) : Promise<Ride> => resolve_ride_from_prospect(prospect, ride)	
+				))	
+			))
+
+		// Find the list of prospects
+		// Takes a list of rides and return a Promise<Ride[]>
+		let find_prospect_list = (rides: Ride[]) : Promise<Ride[]> => (
+			Promise.all(rides.map((ride: Ride): Promise<Ride[]> => find_prospect_rides_from_ride(ride)))
+			.then((adjacents_rides_per_ride: Ride[][]): Ride[] => (
+				flatten_arrays_of_arrays(adjacents_rides_per_ride)		
+			))
+		)
+
 		return this.httpClient.get(`${ settings.apiEndpoint }/api/session/me/rides`).toPromise()
-		//Solve the rides
-		//.then((rides: Link[]) => this.solveRides(rides))
 		//Populate the rides
 		.then((rides: Ride[]) => Promise.all(rides.map((ride: Ride) => this.populateRide(ride))))
 		// Grab all the prospects
 		.then((rides: Ride[]) => 
-			// From one ride, grab the list of adjacent ride
-			Promise.all(rides.map((ride: Ride): Promise<Ride[]> =>
-				this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
-				// From the prospect list, grab the list of adjacent ride
-				.then((prospects: Prospect[]) : Promise<Ride[]> => 
-					// Now that I have all the prospect, find the partner ride (the one I've been invited / requested to join)
-					// I'll get a Link, so solve it, then populate it
-					Promise.all(prospects.map((prospect: Prospect): Promise<Ride> =>
-						this.solveRides(
-							prospect.with['@id'] == `/api/rides/${ ride._id }` ?
-							prospect.ride:
-							prospect.with
-						).then(this.populateRide)
 
-					))
-					// Now I have a list of adjacents ride, but having an array for each ride. I have to flatten everything
-				))
-				.then((adjacentsRides: Ride[][]) : Ride[] => [].concat.apply([], adjacentsRides))
+			find_prospect_list(rides)	
 				.then((adjacentsRides: Ride[]) : MyRides => ( 
 					{
 						myRides: rides.filter((ride: Ride) => ride.type == RideType.OFFER),
@@ -227,8 +249,35 @@ export class RideProvider {
 					}	
 				))
 
-			))
+		)
+
+			//// From one ride, grab the list of adjacent ride
+			//Promise.all(rides.map((ride: Ride): Promise<Ride[]> =>
+
+				// this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
+			//	// From the prospect list, grab the list of adjacent ride
+			//	.then((prospects: Prospect[]) : Promise<Ride[]> => 
+			//		// Now that I have all the prospect, find the partner ride (the one I've been invited / requested to join)
+			//		// I'll get a Link, so solve it, then populate it
+			//		<Promise<Ride[]>>
+			//			Promise.all(prospects.map((prospect: Prospect) : Promise<Ride> =>
+			//				resolve_ride_from_prospect(prospect, ride)))
+			//		//					Promise.all(prospects.map((prospect: Prospect): Promise<Ride> =>
+			//		//						this.solveRides([find_adjacent_ride(prospect, ride)]).then(this.populateRide)
+
+			//		// Now I have a list of adjacents ride, but having an array for each ride. I have to flatten everything
+			//	))
+			//	.then((adjacentsRidesPerProspects: Ride[][]) : Ride[] => 
+			//		[].concat.apply([], adjacentsRidesPerProspects))
+			//	.then((adjacentRidesPerRide: Ride[][]) : Ride[] => 
+			//		[].concat.apply([], adjacentRidesPerRide))
+
+			//)
+
+	
 
 	}
 
 }
+
+export { MyRides }
