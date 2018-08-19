@@ -16,32 +16,45 @@ import { RideProvider, MyRides } from '../../providers/ride/ride';
 
 @IonicPage()
 @Component({
-  selector: 'page-my-rides',
-  templateUrl: 'my-rides.html',
+	selector: 'page-my-rides',
+	templateUrl: 'my-rides.html',
 })
 export class MyRidesPage {
 
 	myRides: MyRides;
+	loading: boolean;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
 		public rideProvider: RideProvider	) {
-  }
 
-  ionViewDidLoad() {
-		
-		 this.rideProvider.myRides().then((myRides: MyRides) => {
+		this.myRides = {
+			myRides: [],		
+			myRequests: [],		
+			myProspects: [],		
+		}
 
-		    this.myRides = myRides;
+	}
 
-		 })
-  }
+	ionViewDidLoad() {
 
-  open_board(rider){
-  
-    console.log("Ouverture du rider", rider); 
-    this.navCtrl.push(RideBoardPage);
-  
-  }
+		this.rideProvider.myRides().then((myRides: MyRides) => {
+
+			this.loading = true;
+			
+			console.log(`myRides recieved`)
+			console.log(myRides)
+
+			this.myRides = myRides;
+
+		})
+	}
+
+	open_board(rider){
+
+		console.log("Ouverture du rider", rider); 
+		this.navCtrl.push(RideBoardPage);
+
+	}
 
 }
