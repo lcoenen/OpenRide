@@ -23,7 +23,7 @@ Ionic pages and navigation.
 			Riders
 		</ion-segment-button>
 		<ion-segment-button value="chat">
-			Chat <ion-badge color="primary">3</ion-badge>
+			Chat <ion-badge *ngIf="messages.length != 0" color="primary">{{messages.length}}</ion-badge>
 		</ion-segment-button>
 	</ion-segment>
 

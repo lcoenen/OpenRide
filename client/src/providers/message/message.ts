@@ -47,4 +47,29 @@ export class MessageProvider {
 	
 	}
 
+	/*
+	 *
+	 * This will post a message
+	 *
+	 */
+	postMessage(message: Message, ride: Ride) {
+
+		console.log(`message`)
+		console.log(message)
+	
+		return this.http.post(`${ settings.apiEndpoint }/api/rides/${ ride._id }/messages`, 
+			{ message: message } )
+			.toPromise()
+			.then((ans) => 'OK')
+			.catch((error: any) => {
+
+				console.error(`Couldn't post message`)
+			  console.error(error)  
+
+				return 'NOT_OK';
+
+			})
+	
+	}
+
 }
