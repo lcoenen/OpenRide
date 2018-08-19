@@ -41,7 +41,7 @@ beforeEach(() => {
 
 })
 
-describe('my-rides', () => {
+describe.only('my-rides', () => {
 
 	before(( ) => {
 
@@ -94,8 +94,8 @@ describe('my-rides', () => {
 		.then((res:any) => {
 
 			let myRides: any = JSON.parse(res.text)		    
-			let matching = myRides.myRides.filter((ride: Link) => 
-				ride['@id'] == `/api/rides/${ postDriverExample._id }`)
+			let matching = myRides.filter((ride: Ride) => 
+				ride['_id'] == postDriverExample._id )
 
 			expect(matching.length).to.be.equal(1)
 
@@ -113,8 +113,8 @@ describe('my-rides', () => {
 
 		  let myRides: any = JSON.parse(res.text)  
 
-			let matching = myRides.myRides.filter((ride: Link) => 
-				ride['@id'] == `/api/rides/${ RidesMock[1]._id }`)
+			let matching = myRides.filter((ride: Ride) => 
+				ride['_id'] == RidesMock[1]._id )
 
 			expect(matching.length).to.be.equal(1)
 
@@ -143,8 +143,8 @@ describe('my-rides', () => {
 		.then((res:any) => {
 
 			let myRides: any = JSON.parse(res.text)		    
-			let matching = myRides.myRequests.filter((ride: Link) => 
-				ride['@id'] == `/api/rides/${ postRiderExample._id }`)
+			let matching = myRides.filter((ride: Ride) => 
+				ride['_id'] ==  postRiderExample._id) 
 
 			expect(matching.length).to.be.equal(1)
 

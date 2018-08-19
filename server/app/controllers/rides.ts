@@ -604,17 +604,32 @@ export class ridesController extends cat.Controller {
 	 * Return the myRides object for the my-rides view
 	 *
 	 */
-	@cat.catnapify('post', '/api/session/me/rides')
+	@cat.catnapify('get', '/api/session/me/rides')
 	@logged
 	@session.needAuthentification
 	public my_rides(req: sessionRequest) {
 	
-		return db.db.collection('rides').find({
+
+		logger.info(`INFO: req.user`, req.user)
+
+		let request = {
 			'$or': [
-				/* ICIIIIII */
-				{'driver': { '@id': `/api/users/${ req.user }`}},
-				{'riders': {'@id': `/api/users/${ req.user }`}}
+				{'driver': { '@id': `/api/users/${ req.user._id }`}},
+				{'riders': { '@id': `/api/users/${ req.user._id }`}}
 			]
+		}
+
+		logger.info(`INFO: Trying to find `, request)
+		logger.info(request)
+		
+		return db.db.collection('rides').find(request).toArray()
+		.then((rides: Ride[]) => {
+
+		 	logger.info(`INFO: returned`) 
+			logger.info(rides)
+
+			return rides;
+
 		})
 
 	}
