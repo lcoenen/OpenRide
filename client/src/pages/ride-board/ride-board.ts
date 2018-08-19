@@ -41,7 +41,6 @@ export class RideBoardPage {
 
   ionViewDidLoad() {
 
-		console.log(`now currentRide is`)
 		console.log(this.rideProvider.currentRide)
 
 

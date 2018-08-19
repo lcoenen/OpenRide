@@ -42,9 +42,6 @@ export class MyRidesPage {
 
 			this.loading = true;
 			
-			console.log(`myRides recieved`)
-			console.log(myRides)
-
 			this.myRides = myRides;
 
 		})
@@ -57,10 +54,7 @@ export class MyRidesPage {
 	 */
 	open_board(ride){
 
-		console.log("Ouverture du ride", ride); 
 		this.rideProvider.currentRide = ride;
-		console.log(`setting this.rideProvider.currentRide with `)
-		console.log(ride)
 		this.navCtrl.push(RideBoardPage);
 
 	}

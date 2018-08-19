@@ -45,9 +45,6 @@ export class RideProvider {
 
 	set currentRide(ride: Ride) {
 
-		console.log(`setting ride provider with `)
-		console.log(ride)
-	
 		this._currentRide = ride;	
 	
 	}
