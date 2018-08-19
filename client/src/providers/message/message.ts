@@ -31,7 +31,7 @@ export class MessageProvider {
 	getMessages(ride: Ride) {
 
 		// Get the messages
-		return this.http.get(`${ settings.apiEndpoint }/rides/${ ride._id }/messages`).toPromise()
+		return this.http.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/messages`).toPromise()
 			.then((messages: Message[]) => (
 
 				// For each message
