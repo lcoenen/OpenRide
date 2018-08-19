@@ -50,9 +50,10 @@ export class MyRidesPage {
 		})
 	}
 
-	open_board(rider){
+	open_board(ride){
 
-		console.log("Ouverture du rider", rider); 
+		console.log("Ouverture du ride", ride); 
+		this.rideProvider.currentRide = ride
 		this.navCtrl.push(RideBoardPage);
 
 	}

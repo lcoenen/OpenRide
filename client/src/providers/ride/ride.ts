@@ -43,6 +43,12 @@ export class RideProvider {
 
 	}
 
+	set currentRide(ride: Ride) {
+	
+		this._currentRide = ride;	
+	
+	}
+
 	/*
 	 *
 	 * This is used to populate the ride (link the rides and drivers)
