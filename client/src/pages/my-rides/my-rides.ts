@@ -1,22 +1,14 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Rider } from './rider';
-
 import { RideBoardPage } from '../ride-board/ride-board'; 
 
-import { RideProvider, MyRides } from '../../providers/ride/ride';
+import { RideProvider, MyRides, ProspectType } from '../../providers/ride/ride';
 
 /**
  * Generated class for the MyRidesPage page.
  *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
-@IonicPage()
-@Component({
-	selector: 'page-my-rides',
+ * See https://ionicframework.com/docs/components/#navigation for more info on * Ionic pages and navigation.  */ @IonicPage() @Component({ selector: 'page-my-rides',
 	templateUrl: 'my-rides.html',
 })
 export class MyRidesPage {
@@ -65,8 +57,11 @@ export class MyRidesPage {
 	 *
 	 */
 	join(ride) {
+
+		let targetRide = ride.prospect.type == ProspectType.APPLY ?
+			ride.prospect.with : ride.prospect.ride;
 		
-		this.rideProvider.join(ride).then((ride) => {
+		this.rideProvider.join(targetRide).then((ride) => {
 
 		  this.navCtrl.push(RideBoardPage)  
 

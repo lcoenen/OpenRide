@@ -1,5 +1,6 @@
 import { User } from './user';
 import { Link } from './link';
+import { Prospect } from './prospect';
 
 import { hash } from '../lib/hash';
 
@@ -29,6 +30,7 @@ export interface Ride {
   payement?: number;
   driver?: Link | User;
 	riders: Link[] | User[];
+	prospect?: Prospect; 
 	type: RideType;
 };
 

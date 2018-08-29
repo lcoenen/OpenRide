@@ -10,7 +10,7 @@ import { UserProvider } from '../user/user'
 import { Ride, hashRide, RideType, MyRides } from 'shared/models/ride'
 import { User } from 'shared/models/user'
 import { Link } from 'shared/models/link'
-import { Prospect } from 'shared/models/prospect'
+import { Prospect, ProspectType } from 'shared/models/prospect'
 import { RidesMock } from 'shared/mocks/ride';
 
 function flatten_arrays_of_arrays<T>(ts: T[][]) : T[] {
@@ -224,7 +224,10 @@ export class RideProvider {
 			let resolve_ride_from_prospect = (prospect: Prospect, ride: Ride) : Promise<Ride> => 
 			this.solveRides([find_adjacent_ride(prospect, ride)])
 			.then((rides: Ride[]) => 
-				this.populateRide(rides[0])	
+				this.populateRide(rides[0]).then((ride: Ride) =>  {
+					ride.prospect = prospect; 
+					return ride;
+				})
 			)
 
 			// Find all the rides linked with one specific ride
@@ -319,4 +322,4 @@ export class RideProvider {
 
 }
 
-export { MyRides }
+export { MyRides, ProspectType }
