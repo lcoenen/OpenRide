@@ -233,12 +233,14 @@ export class RideProvider {
 			// Find all the rides linked with one specific ride
 			// Take a ride and return a Promise of a list of Ride
 			let find_prospect_rides_from_ride = (ride: Ride) : Promise<Ride[]> =>
-			this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
-			.then((prospects: Prospect[]) : Promise<Ride[]> => (
-				Promise.all(prospects.map(
-					(prospect: Prospect) : Promise<Ride> => resolve_ride_from_prospect(prospect, ride)	
-				))	
-			))
+				this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
+				.then((prospects: Prospect[]) : Promise<Ride[]> => (
+					//	Only take the prospect I have not created
+					Promise.all(prospects.filter((prospect: Prospect) => prospect.ride['@id'] == `/api/rides/${ ride._id }`)
+						.map(
+							(prospect: Prospect) : Promise<Ride> => resolve_ride_from_prospect(prospect, ride)	
+					))	
+				))
 
 			// Find the list of prospects
 			// Takes a list of rides and return a Promise<Ride[]>
@@ -295,10 +297,13 @@ export class RideProvider {
 		* This will be called when an user want to join a ride he's been invited to or requested
 		*
 		*/
-		join(ride: Ride) {
+		join(ride: Link) {
+
+			console.log('RideProvider.join() here - hey I recieved this ride. Is it good?')
+			console.log(ride);
 
 			return this.httpClient.patch(
-				`${ settings.apiEndpoint }/api/rides/${ ride._id }`, {join: `/api/users/${ this.userProvider.me._id }` }).toPromise()
+				`${ settings.apiEndpoint }${ ride['@id'] }`, {join: `/api/users/${ this.userProvider.me._id }` }).toPromise()
 				.then(() => {
 
 					return 'OK'	
@@ -312,13 +317,13 @@ export class RideProvider {
 		*
 		* This will be called when the driver want to accept a request to join 
 		*
-		*/
 		accept(ride: Ride) {
 
 			// Find the adjacent ride
 			// Join the adjacent ride
 
 		}
+		*/
 
 }
 
