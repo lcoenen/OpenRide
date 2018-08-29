@@ -1,6 +1,4 @@
-
-<ion-card> 
-	<ion-item>
+<ion-card> <ion-item>
 		<ion-avatar item-start>
 			<img src="assets/imgs/avatar_{{user.name}}.png">
 		</ion-avatar>
@@ -21,14 +19,16 @@
 	<ion-row>
 		<ion-col>
 			<!-- This will be used for request as well - it have to be renamed -->
-			<button *ngIf="showProspect" (click)="invite.emit(ride)" ion-button icon-left clear small>
+			<button *ngIf="mine" (click)="invite.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
 				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
 				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
 			</button>
       <button (click)="enter.emit(ride)" ion-button icon-left clear small>
         <ion-icon name="log-in"></ion-icon>
-        <div>Enter</div>
+        <div *ngIf="type == 'mine'">Enter</div>
+        <div *ngIf="type == 'prospect' && ride.type == RideType.OFFER">Join</div>
+        <div *ngIf="type == 'prospect' && ride.type == RideType.REQUEST">Accept</div>
       </button>
 		</ion-col>
 		<ion-col center text-center>

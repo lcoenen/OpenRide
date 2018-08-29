@@ -30,6 +30,9 @@ Ionic pages and navigation.
 
 	<div [ngSwitch]="boardpage">
 		<div *ngSwitchCase="'summary'">
+
+			<ride-widget (ride)="currentRide"></ride-widget>
+
 			<ion-list no-border>
 					<ion-item>
 					<ion-icon name='arrow-dropleft-circle' item-start></ion-icon>

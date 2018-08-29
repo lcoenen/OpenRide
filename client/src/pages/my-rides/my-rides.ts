@@ -59,4 +59,19 @@ export class MyRidesPage {
 
 	}
 
+	/*
+	 *
+	 * This will join and open the ride
+	 *
+	 */
+	join(ride) {
+		
+		this.rideProvider.join(ride).then((ride) => {
+
+		  this.navCtrl.push(RideBoardPage)  
+
+		})
+		
+	}
+
 }

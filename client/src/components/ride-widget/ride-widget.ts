@@ -21,9 +21,12 @@ import { Ride, RideType } from 'shared/models/ride';
 export class RideWidgetComponent {
 
 	@Input() ride: Ride;
-	@Input() showProspect: boolean = false;
+
+	@Input() mine: boolean = false;
+	@Input() type: string = 'match';
+
+
 	@Output() prospect: EventEmitter<Ride> = new EventEmitter<Ride>();
-	@Input() showEnter: boolean = false;
 	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
 
 	// RideType is the enum itself
