@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { RequestRidePage } from './requestride';
+import { EditRidePage } from './editride';
 
 import { AddressModalPage } from '../address-modal/address-modal';
 
 @NgModule({
   declarations: [
-    RequestRidePage,
+    EditRidePage,
   ],
   imports: [
-    IonicPageModule.forChild(RequestRidePage),
+    IonicPageModule.forChild(EditRidePage),
   ]
 })
-export class RequestRidePageModule {}
+export class EditRidePageModule {}

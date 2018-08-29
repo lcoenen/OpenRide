@@ -17,10 +17,10 @@ import { RideProvider } from '../../providers/ride/ride';
 
 @IonicPage()
 @Component({
-  selector: 'page-offer-invite',
-  templateUrl: 'offer-invite.html',
+  selector: 'page-matches',
+  templateUrl: 'matches.html',
 })
-export class OfferInvitePage {
+export class MatchesPage {
 
 	/*
 	 *

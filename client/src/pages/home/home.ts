@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 
-import { RequestRidePage } from '../requestride/requestride'
-import { OfferRidePage } from '../offerride/offerride'
+import { EditRidePage } from '../editride/editride'
 import { MyRidesPage } from '../my-rides/my-rides'
 import { IdentifyPage } from '../identify/identify';
 
@@ -61,7 +60,7 @@ export class HomePage {
 
 		this.identify().then(( ) => {
 
-			this.navCtrl.push(RequestRidePage);
+			this.navCtrl.push(EditRidePage);
 
 		}).catch(() => {}) // Do nothing if the user could not be signed up
 
@@ -91,7 +90,7 @@ export class HomePage {
 	
 		this.identify().then(( ) => {
 
-			this.navCtrl.push(OfferRidePage);
+			this.navCtrl.push(EditRidePage);
 
 		}).catch(() => {}) // Do nothing if the user could not be signed up
 

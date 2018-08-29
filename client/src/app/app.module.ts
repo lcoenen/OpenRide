@@ -4,12 +4,10 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { RequestRidePage } from '../pages/requestride/requestride';
-import { OfferRidePage } from '../pages/offerride/offerride';
+import { EditRidePage } from '../pages/editride/editride';
 import { AddressModalPage} from '../pages/address-modal/address-modal'
-import { OfferInvitePage } from '../pages/offer-invite/offer-invite'
+import { MatchesPage } from '../pages/matches/matches'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
-import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile';
 import { IdentifyPage } from '../pages/identify/identify'
@@ -38,12 +36,10 @@ import { MessageProvider } from '../providers/message/message';
 	declarations: [
 		MyApp,
 		HomePage,
-		RequestRidePage,
-		OfferRidePage,
+		EditRidePage,
 		AddressModalPage, 
-		OfferInvitePage,
+		MatchesPage,
 		RideBoardPage,
-		RequestFindRidePage,
 		MyRidesPage,
 		ProfilePage,
 		IdentifyPage,
@@ -62,12 +58,10 @@ import { MessageProvider } from '../providers/message/message';
 	entryComponents: [
 		MyApp,
 		HomePage,
-		RequestRidePage,
-		OfferRidePage,
+		EditRidePage,
 		AddressModalPage,
-		OfferInvitePage,
+		MatchesPage,
 		RideBoardPage,
-		RequestFindRidePage,
 		MyRidesPage,
 		ProfilePage,
 		IdentifyPage,

@@ -15,7 +15,7 @@ import { ModalController, NavParams, IonicPage, NavController } from 'ionic-angu
 import { Component } from '@angular/core';
 // import { Input, OnChanges, SimpleChange } from '@angular/core';
 
-import { OfferInvitePage } from '../offer-invite/offer-invite'; 
+import { MatchesPage } from '../matches/matches'; 
 
 import { AddressModalPage } from '../address-modal/address-modal'; 
 
@@ -34,10 +34,10 @@ enum PayementPhilosophy {
 
 @IonicPage()
 @Component({
-	selector: 'page-offerride',
-	templateUrl: 'offerride.html',
+	selector: 'page-editride',
+	templateUrl: 'editride.html',
 })
-export class OfferRidePage  {
+export class EditRidePage  {
 
 	public philosophy: PayementPhilosophy;
 
@@ -285,7 +285,7 @@ export class OfferRidePage  {
 
 		}).then(() => {
 
-			this.navCtrl.push(OfferInvitePage);
+			this.navCtrl.push(MatchesPage);
 
 		}).catch((err) => {
 
