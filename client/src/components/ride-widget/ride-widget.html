@@ -19,7 +19,7 @@
 	<ion-row>
 		<ion-col>
 			<!-- This will be used for request as well - it have to be renamed -->
-			<button *ngIf="mine" (click)="invite.emit(ride)" ion-button icon-left clear small>
+			<button *ngIf="minei || type == 'invite'" (click)="invite.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
 				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
 				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
