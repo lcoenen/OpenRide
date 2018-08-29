@@ -10,8 +10,10 @@
 
 		is <strong *ngIf="ride.type == RideType.OFFER">offering</strong>
 			<strong *ngIf="ride.type == RideType.REQUEST">requesting</strong> a ride
+			<ion-icon *ngIf="ride.type == RideType.REQUEST" name="thumbs-up"></ion-icon>
+			<ion-icon *ngIf="ride.type == RideType.OFFER" name="car"></ion-icon>
 			from {{ride.origin.properties.address}} to {{ride.destination.properties.address}}
-		in {{ride.riding_time}}>
+		in {{ride.riding_time}}
 		<span *ngIf="ride.payement">Price: {{ride.payement}}€</span>
 
 	</ion-card-content>
