@@ -24,6 +24,9 @@ import { RideProvider } from '../providers/ride/ride';
 import { UserProvider, ApiKeyInterceptor } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
+import { PayementSelectorComponent } from '../components/payement-selector/payement-selector' 
+import { PlaceSelectorComponent } from '../components/place-selector/place-selector'
+import { TimeSelectorComponent } from '../components/time-selector/time-selector'
 import { RideWidgetComponent } from '../components/ride-widget/ride-widget' 
 
 
@@ -45,7 +48,10 @@ import { MessageProvider } from '../providers/message/message';
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage,
-		RideWidgetComponent
+		RideWidgetComponent,
+		PlaceSelectorComponent,
+		TimeSelectorComponent,
+		PayementSelectorComponent
 	],
 	imports: [
 		BrowserModule,
@@ -67,7 +73,11 @@ import { MessageProvider } from '../providers/message/message';
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage,
-		RideWidgetComponent
+		RideWidgetComponent,
+		PlaceSelectorComponent,
+		TimeSelectorComponent,
+		PayementSelectorComponent
+
 	],
 	providers: [
 		StatusBar,

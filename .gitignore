@@ -62,4 +62,5 @@ www
 .sourcemaps
 
 # Remove swap files from vim
+.swo
 .swp

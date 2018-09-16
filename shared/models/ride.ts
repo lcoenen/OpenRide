@@ -24,9 +24,9 @@ export enum RideType {
  */
 export interface Ride {
   _id?: string;
-  origin: Feature<Point>;
-  destination: Feature<Point>;
-  riding_time: Date | string;
+  origin?: Feature<Point>;
+  destination?: Feature<Point>;
+  riding_time?: Date | string;
   payement?: number;
   driver?: Link | User;
 	riders: Link[] | User[];
@@ -34,6 +34,19 @@ export interface Ride {
 	type: RideType;
 };
 
+/*
+ *
+ * This will represent the different payement philosophy
+ *
+ */
+export enum PayementPhilosophy {
+
+	FREE,
+	PART,
+ 	REFUNDED, 
+	PAID
+
+}
 
 /*
  *

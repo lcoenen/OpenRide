@@ -141,6 +141,7 @@ export class EditRidePage  {
 
 	}
 
+	/*
 	setDestination(){
 
 		if(this.destination == 'address'){
@@ -171,6 +172,7 @@ export class EditRidePage  {
 
 	}
 
+
 	setOrigin(){
 
 		if(this.origin == 'address'){
@@ -200,68 +202,6 @@ export class EditRidePage  {
 	get origin(): string {
 
 		return this._origin
-
-	}
-
-	set riding_time(theRidingTime: string){
-
-		this._riding_time = theRidingTime
-		this.refresh_allow_next()
-
-	}
-
-	get riding_time(): string {
-
-		return this._riding_time
-
-	}
-
-
-	set asap(theAsap: boolean){
-
-		if(theAsap)
-			this.riding_time = 'asap';
-		else
-			this.riding_time = '';
-	}
-
-
-
-	get asap(): boolean {
-
-		return this.riding_time == 'asap';
-
-	}
-
-	set payement(thePayement: string){
-
-		this._payement = thePayement
-		this.refresh_allow_next()
-
-
-		const _boundaries = {
-
-			10: PayementPhilosophy.FREE,
-			40: PayementPhilosophy.PART,
-			60: PayementPhilosophy.REFUNDED,
-			80: PayementPhilosophy.PAID
-
-		}
-
-		for (let i in _boundaries) {
-
-			let boundary = _boundaries[i];
-
-			if(thePayement > i)
-				this.philosophy = boundary;
-
-		}
-
-	}
-
-	get payement(): string {
-
-		return this._payement
 
 	}
 
