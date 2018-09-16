@@ -34,11 +34,14 @@ export class WizardComponent {
 
 	ngAfterViewInit() {
 
+		console.log('Wizard component after view init()')
+
 		//this.slides.lockSwipeToNext(true);
 
 		// Show the first page
 
 		this.wizardPages.first.shown = true;
+		this.slides.update()
 
 		// Everytime something change on a page
 
@@ -85,6 +88,8 @@ export class WizardComponent {
 	*/
 	get showBack() {
 
+		if(this.slides._slides === undefined) return true;
+
 		return !this.slides.isBeginning();
 
 	}
@@ -96,6 +101,8 @@ export class WizardComponent {
 	*/
 	get showNext() {
 
+		if(this.slides._slides === undefined) return true;
+
 		return !this.slides.isEnd()
 
 	}
@@ -106,6 +113,8 @@ export class WizardComponent {
 	 *
 	 */
 	get showLast() {
+
+		if(this.slides._slides === undefined) return true;
 
 		return this.slides.length() == this.wizardPages.length 
 
