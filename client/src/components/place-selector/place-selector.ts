@@ -23,8 +23,8 @@ templateUrl: 'place-selector.html'
 export class PlaceSelectorComponent {
 
 	@Input() place: Feature<Point>;
-	@Output() placeChange: EventEmitter<Feature<Point>>;
-
+	@Output() placeChange: EventEmitter<Feature<Point>> = new EventEmitter<Feature<Point>>();
+ 
 	public address: any;
 	public center: number[];
 	public zoom: number;

@@ -13,7 +13,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class TimeSelectorComponent {
 
 	@Input() time: string;	
-	@Output() timeChange: EventEmitter<string>;
+	@Output() timeChange: EventEmitter<string> = new EventEmitter<string>();
 
 
 	set asap(theAsap: boolean){
