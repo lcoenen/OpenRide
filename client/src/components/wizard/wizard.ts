@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewChildren, QueryList, Input } from '@angular/core';
+import { Component, ViewChild, ViewChildren, QueryList, Input, EventEmitter, Output } from '@angular/core';
 
 import { Slides } from 'ionic-angular';
 

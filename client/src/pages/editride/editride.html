@@ -20,19 +20,19 @@ Ionic pages and navigation.
 		<place-selector [(place)]="ride.origin"></place-selector>
 	</wizard-page>
 
-	<wizard-page [link]="ride.destination">
+	<wizard-page [linked]="ride.destination">
 		<img class="wizard_step_caption" src="assets/imgs/destination.png"/>
 		<h2>Destination</h2>
 		<place-selector [(place)]="ride.destination"></place-selector>
 	</wizard-page>
 
-	<wizard-page [link]="ride.riding_time">
+	<wizard-page [linked]="ride.riding_time">
 		<img class="wizard_step_caption" src="assets/imgs/riding_time.png"/>
 		<h2>Riding time</h2>
 		<time-selector [(time)]="ride.riding_time"></time-selector>
 	</wizard-page>
 
-	<wizard-page [link]="ride.payement" *ngIf="ride.type == RideType.OFFER">
+	<wizard-page [linked]="ride.payement" *ngIf="ride.type == RideType.OFFER">
 		<img class="wizard_step_caption" src="assets/imgs/money.png"/>
 		<h2>Payement</h2>
 		<payement-selector [(payement)]="ride.payement"></payement-selector>

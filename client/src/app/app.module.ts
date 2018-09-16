@@ -28,6 +28,8 @@ import { PayementSelectorComponent } from '../components/payement-selector/payem
 import { PlaceSelectorComponent } from '../components/place-selector/place-selector'
 import { TimeSelectorComponent } from '../components/time-selector/time-selector'
 import { RideWidgetComponent } from '../components/ride-widget/ride-widget' 
+import { WizardComponent } from '../components/wizard/wizard' 
+import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
 
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -51,7 +53,9 @@ import { MessageProvider } from '../providers/message/message';
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,
-		PayementSelectorComponent
+		PayementSelectorComponent,
+		WizardComponent,
+		WizardPageComponent
 	],
 	imports: [
 		BrowserModule,
@@ -76,8 +80,9 @@ import { MessageProvider } from '../providers/message/message';
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,
-		PayementSelectorComponent
-
+		PayementSelectorComponent,
+		WizardComponent,
+		WizardPageComponent
 	],
 	providers: [
 		StatusBar,

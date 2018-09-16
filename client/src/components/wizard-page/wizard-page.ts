@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 /**
  * Generated class for the WizardPageComponent component.
@@ -13,7 +13,7 @@ import { Component, Input, EventEmitter } from '@angular/core';
 export class WizardPageComponent {
 
 	@Input() linked;
-	public changed: EventEmitter<boolean>;
+	@Output() changed: EventEmitter<boolean>;
 
   constructor() {
   }
