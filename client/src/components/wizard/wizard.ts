@@ -1,4 +1,4 @@
-import { Component, ContentChild, ViewChildren, QueryList, Input, EventEmitter } from '@angular/core';
+import { Component, ContentChild, ContentChildren, QueryList, Input, EventEmitter } from '@angular/core';
 
 import { Slides } from 'ionic-angular';
 
@@ -24,7 +24,7 @@ export class WizardComponent {
 	@Input() mode: EditMode;
 
 	@ContentChild(Slides) slides: Slides;
-	@ViewChildren(WizardPageComponent)	wizardPages: QueryList<WizardPageComponent>;
+	@ContentChildren(WizardPageComponent)	wizardPages: QueryList<WizardPageComponent>;
 
 
   constructor() {
@@ -33,9 +33,17 @@ export class WizardComponent {
 	ngAfterViewInit() {
 
 		this.slides.lockSwipeToNext(true);
+
+		console.log('Trying to get event from children')
+		console.log(this.wizardPages.toArray())
+
+		// WizardPage is empty? Why?
+
 		this.wizardPages.map((page: WizardPageComponent) => {
 
-			page.changed.subscribe(this.refresh_allow_next);
+			console.log('Calling subscribe on page')
+
+			page.changed.subscribe(() => { this.refresh_allow_next() } );
 
 		})
 
@@ -91,6 +99,8 @@ export class WizardComponent {
 	 *
 	*/
 	refresh_allow_next(){
+
+		console.log('Refreshing the next button')
 
 		let page = this.slides.getActiveIndex() 
 		

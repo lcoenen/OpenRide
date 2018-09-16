@@ -20,6 +20,8 @@ export class WizardPageComponent implements OnChanges {
 
 	ngOnChanges(){
 
+		console.log('ngOnChanges have been called')
+
 		this.changed.emit()
 
 	}

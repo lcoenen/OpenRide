@@ -13,28 +13,29 @@
 
 	</ion-slides>
 
-	<ion-footer>
-		<ion-toolbar>
-			<ion-buttons *ngIf="!isFirst()">
-				<button (click)="previous()" ion-button icon-left color="royal">
-					<ion-icon name="arrow-back"></ion-icon>
-					Back
-				</button>	
-			</ion-buttons>
-			<ion-buttons *ngIf="!isLast()" end>
-				<button (click)="next()" ion-button icon-right color="royal">
-					Next
-					<ion-icon name="arrow-forward"></ion-icon>
-				</button>	
-			</ion-buttons>
-
-			<ion-buttons *ngIf="isValid()" end>
-				<button (click)="valid()" ion-button icon-right color="royal">
-					Offer the ride	
-					<ion-icon name="send"></ion-icon>
-				</button>	
-			</ion-buttons>
-		</ion-toolbar>
-	</ion-footer>
-
 </ion-content>
+
+<ion-footer>
+	<ion-toolbar>
+		<ion-buttons *ngIf="!isFirst()">
+			<button (click)="previous()" ion-button icon-left color="royal">
+				<ion-icon name="arrow-back"></ion-icon>
+				Back
+			</button>	
+		</ion-buttons>
+		<ion-buttons *ngIf="!isLast()" end>
+			<button (click)="next()" ion-button icon-right color="royal">
+				Next
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>	
+		</ion-buttons>
+
+		<ion-buttons *ngIf="isValid()" end>
+			<button (click)="valid()" ion-button icon-right color="royal">
+				Offer the ride	
+				<ion-icon name="send"></ion-icon>
+			</button>	
+		</ion-buttons>
+	</ion-toolbar>
+</ion-footer>
+
