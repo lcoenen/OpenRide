@@ -99,7 +99,7 @@ import { MessageProvider } from '../providers/message/message';
 			multi: true 
 		},
 		MessageProvider,
-		Slides 
+		Slides
 	]
 })
 export class AppModule {}
