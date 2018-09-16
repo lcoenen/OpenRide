@@ -39,7 +39,7 @@ export class MatchesPage {
 		 * Subscribe to a stream of ride from rideProviders
 		 *
 		 */
-		rideProvider.invitable_ride().then((rides: Ride[]) => {
+		rideProvider.matches().then((rides: Ride[]) => {
         this.rides = rides;  
 			})
 

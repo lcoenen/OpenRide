@@ -6,8 +6,10 @@ import { MyRidesPage } from '../my-rides/my-rides'
 import { IdentifyPage } from '../identify/identify';
 
 import { UserProvider } from '../../providers/user/user'
+import { RideProvider } from '../../providers/ride/ride'
 
 import { User } from 'shared/models/user'
+import { Ride, RideType } from 'shared/models/ride'
 
 @Component({
 	selector: 'page-home',
@@ -15,10 +17,14 @@ import { User } from 'shared/models/user'
 })
 export class HomePage {
 
+	public RideType: any;
 
 	constructor(public navCtrl: NavController,
 		public modalCtrl: ModalController,
-		public userProvider: UserProvider) {
+		public userProvider: UserProvider,
+		public rideProvider: RideProvider) {
+
+		this.RideType = RideType;
 		
 	}
 
@@ -53,12 +59,16 @@ export class HomePage {
 
 	/*
 	 *
-	 *	This will be called when the user request a ride
+	 *	This will be called when the user request or create a ride
 	 *
 	 */
-	request_a_ride() {
+	create_ride(type: RideType) {
 
-		this.identify().then(( ) => {
+		this.identify().then( () => {
+		
+			return this.rideProvider.createRide(type);
+		
+		}).then(( ) => {
 
 			this.navCtrl.push(EditRidePage);
 
@@ -76,21 +86,6 @@ export class HomePage {
 		this.identify().then(( ) => {
 
 			this.navCtrl.push(MyRidesPage);
-
-		}).catch(() => {}) // Do nothing if the user could not be signed up
-
-	}
-
-	/*
-	 *	This will be called if the user click on the card 'Offer a ride'
-	 *
-	 *
-	 */
-	offer_a_ride() {
-	
-		this.identify().then(( ) => {
-
-			this.navCtrl.push(EditRidePage);
 
 		}).catch(() => {}) // Do nothing if the user could not be signed up
 

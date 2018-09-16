@@ -20,6 +20,18 @@ function flatten_arrays_of_arrays<T>(ts: T[][]) : T[] {
 }
 
 /*
+ *
+ * This define if the ride is currently being created or edited
+ *
+ */
+export enum EditMode {
+
+	EDIT,
+	CREATE
+
+}
+
+/*
 Generated class for the RidersProvider provider.
 
 	See https://angular.io/guide/dependency-injection for more info on providers
@@ -28,6 +40,7 @@ and Angular DI.
 	@Injectable()
 export class RideProvider {
 
+	public mode: EditMode;
 	private _currentRide: Ride;
 
 	constructor(
@@ -40,7 +53,7 @@ export class RideProvider {
 
 	/*
 		*
-		* Used to  waits until an observer subscribes to it before it begins to emit items, and so such an ob waits until an observer subscribes to it before it begins to emit items, and so such an obshow which ride is currently selected
+		* Used to waits until an observer subscribes to it before it begins to emit items, and so such an ob waits until an observer subscribes to it before it begins to emit items, and so such an obshow which ride is currently selected
 		*
 		*/
 		get currentRide() {
@@ -128,7 +141,7 @@ export class RideProvider {
 		* It makes the link with the offer-invite and uses the entrypoint /api/rides/:id/matches
 		*
 		*/
-		invitable_ride(): Promise<Ride[]> {
+		matches(): Promise<Ride[]> {
 
 			return this.httpClient.get<Link[]>(
 				`${ settings.apiEndpoint }/api/rides/BruxellesLiege/matches`)
@@ -324,6 +337,24 @@ export class RideProvider {
 
 		}
 		*/
+
+	/*
+	 *
+	 * This will be called when the user want to create a ride
+	 *
+	 */
+	createRide(type: RideType) {
+
+		this.mode = EditMode.CREATE;
+
+		this.currentRide = {
+			
+			type: type,
+			riders: []
+
+		}
+
+	}
 
 }
 

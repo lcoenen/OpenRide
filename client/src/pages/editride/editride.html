@@ -7,97 +7,36 @@ Ionic pages and navigation.
 <ion-header>
 
 	<ion-navbar>
-		<ion-title>Offer a ride</ion-title>
+		<ion-title *ngIf="ride.type == RideType.OFFER">Offer a ride</ion-title>
+		<ion-title *ngIf="ride.type == RideType.REQUEST">Request a ride</ion-title>
 	</ion-navbar>
 
 </ion-header>
 
+<wizard (valid)="valid($event)" mode="mode">
+	<wizard-page [linked]="ride.origin">
+		<img class="wizard_step_caption" src="assets/imgs/origin.png"/>
+		<h2>Origin</h2>
+		<place-selector [(place)]="ride.origin"></place-selector>
+	</wizard-page>
 
-<ion-content padding>
+	<wizard-page [link]="ride.destination">
+		<img class="wizard_step_caption" src="assets/imgs/destination.png"/>
+		<h2>Destination</h2>
+		<place-selector [(place)]="ride.destination"></place-selector>
+	</wizard-page>
 
-<ion-slides pager>
+	<wizard-page [link]="ride.riding_time">
+		<img class="wizard_step_caption" src="assets/imgs/riding_time.png"/>
+		<h2>Riding time</h2>
+		<time-selector [(time)]="ride.riding_time"></time-selector>
+	</wizard-page>
 
-  <ion-slide>
-    <img class="wizard_step_caption" src="assets/imgs/origin.png"/>
-    <h2>Origin</h2>
-		<place-selector [(place)]="origin"></place-selector>
-<!--    <ion-item>
-    <ion-label floating>Where are you going?</ion-label>
-    <ion-select (ionChange)="setDestination()" multiple="false" [(ngModel)]="destination">
-      <ion-option value="here">Here</ion-option>
-      <ion-option value="address">Pick an address
-				<ion-icon name="arrow-dropdown" icon-right></ion-icon>
-				</ion-option>
+	<wizard-page [link]="ride.payement" *ngIf="ride.type == RideType.OFFER">
+		<img class="wizard_step_caption" src="assets/imgs/money.png"/>
+		<h2>Payement</h2>
+		<payement-selector [(payement)]="ride.payement"></payement-selector>
+	</wizard-page>
 
-				<ion-option *ngFor="let address of recent_addresses; index as i" value="address{{i}}">{{address.display_name}}
-					</ion-option>
+</wizard>
 
-    </ion-select>
-    </ion-item>
--->
-
-  </ion-slide>
-
-  <ion-slide>
-    <img class="wizard_step_caption" src="assets/imgs/destination.png"/>
-    <h2>Destination</h2>
-		<place-selector [(place)]="destination"></place-selector>
-<!--
-    <ion-item>
-	    <ion-label floating>From where will you depart?</ion-label>
-
-			
-    <ion-select (ionChange)="setOrigin()" multiple="false" [(ngModel)]="origin">
-      <ion-option value="here">Here</ion-option>
-      <ion-option value="address">Pick an address
-				<ion-icon name="arrow-dropdown" icon-right></ion-icon>
-				</ion-option>
-
-				<ion-option *ngFor="let address of recent_addresses; index as i" value="address{{i}}">{{address.display_name}}
-					</ion-option>
-
-    </ion-select>
-    </ion-item>
--->
-  </ion-slide>
-
-  <ion-slide>
-    <img class="wizard_step_caption" src="assets/imgs/riding_time.png"/>
-    <h2>Riding time</h2>
-		<time-selector [(time)]="riding_time"></time-selector>
-
-  </ion-slide>
-
-  <ion-slide>
-    <img class="wizard_step_caption" src="assets/imgs/money.png"/>
-    <h2>Payement</h2>
-		<payement-selector [(payement)]="payement"></payement-selector>
-  </ion-slide>
-
-</ion-slides>
-
-	<ion-footer>
-		<ion-toolbar>
-					<ion-buttons *ngIf="!isFirst()">
-							<button (click)="previous()" ion-button icon-left color="royal">
-							<ion-icon name="arrow-back"></ion-icon>
-							Back
-							</button>	
-					</ion-buttons>
-					<ion-buttons *ngIf="!isLast()" end>
-							<button (click)="next()" ion-button icon-right color="royal">
-								Next
-								<ion-icon name="arrow-forward"></ion-icon>
-							</button>	
-					</ion-buttons>
-
-					<ion-buttons *ngIf="isValid()" end>
-							<button (click)="valid()" ion-button icon-right color="royal">
-								Offer the ride	
-								<ion-icon name="send"></ion-icon>
-							</button>	
-					</ion-buttons>
-		</ion-toolbar>
-	</ion-footer>
-
-</ion-content>

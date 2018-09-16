@@ -26,9 +26,9 @@ import { NominatimToGeoJSON } from '../../providers/nominatim/nominatim';
 enum PayementPhilosophy {
 
 	FREE,
-		PART,
-		REFUNDED, 
-		PAID
+	PART,
+	REFUNDED, 
+	PAID
 
 }
 
@@ -39,180 +39,21 @@ enum PayementPhilosophy {
 })
 export class EditRidePage  {
 
-	public philosophy: PayementPhilosophy;
-
-	public recent_addresses: any[] = [];
-
-	private _destination: string;
-	private _origin: string;
-	private _riding_time: string;
-	private _payement: string;
-
-	private _next: boolean;
-
-	public destination_address: string;
-	public origin_address: string;
-
-	public destinationId: number;
-	public originId: number;
+	public ride: Ride;
 
 	constructor(
 		public navCtrl: NavController, 
 		public navParams: NavParams,
 		public modalCtrl: ModalController,
 		public rideProvider: RideProvider) {
-		this.philosophy = 0;
-		this._next = false;
 	}
 
 	ionViewDidLoad() {
-		this.slides.lockSwipeToNext(true);
-		console.log('ionViewDidLoad OfferridePage');
-
 	}
 
-	@ViewChild(Slides) slides: Slides;
-
-	previous() {
-
-		this.slides.slidePrev();
-
-		this.refresh_allow_next()
-
-	}
-
-	/*
-	 *
-	 *	This will pass to the next page if something have been changed
-	 *
-	 */
-	next() { 
-
-		this.slides.slideNext();
-
-		this.refresh_allow_next()
-
-	}
-
-	isFirst(){
-
-		return this.slides.isBeginning()
-
-	}
-
-
-	isLast(){
-
-		return !this._next || this.slides.isEnd()
-
-	}
-
-	isValid(){
-
-		return this.slides.isEnd()
-
-	}
-
-	refresh_allow_next(){
-
-		let page = this.slides.getActiveIndex() 
-
-		const relevant_vars: string[] = [
-			'destination',
-			'origin',
-			'riding_time',
-			'payement'
-		]
-
-		console.log(relevant_vars[page]);
-		console.log(this[relevant_vars[page]]);
-
-		let allow_next: boolean = this[relevant_vars[page]] != undefined;
-
-		this._next = allow_next;
-		this.slides.lockSwipeToNext(!allow_next) 
-		console.log('this._next', this._next);
-
-	}
-
-	address_modal(){
-
-		console.log('Address modal')
-
-	}
-
-	/*
-	setDestination(){
-
-		if(this.destination == 'address'){
-
-			let addressModal = this.modalCtrl.create(AddressModalPage);
-			addressModal.onDidDismiss(data => {
-				let l = this.recent_addresses.push(data.address);
-				this.destination = `address${l-1}`;
-				this.destinationId = l-1;
-				// ugly shit over here...
-			});
-			addressModal.present();
-
-		}
-
-	}
-
-	set destination(theDestination: string){
-
-		this._destination = theDestination
-		this.refresh_allow_next()
-
-	}
-
-	get destination(): string {
-
-		return this._destination
-
-	}
-
-
-	setOrigin(){
-
-		if(this.origin == 'address'){
-
-			let addressModal = this.modalCtrl.create(AddressModalPage);
-			addressModal.onDidDismiss(data => {
-				let l = this.recent_addresses.push(data.address)
-				this.origin = `address${l-1}`;
-				this.originId = l-1;
-				// ugly shit over here...
-			});
-			addressModal.present();
-
-		}
-
-		console.log(`Now origin is ${ this.origin }`)
-
-	}
-
-	set origin(theOrigin: string){
-
-		this._origin = theOrigin
-		this.refresh_allow_next()
-
-	}
-
-	get origin(): string {
-
-		return this._origin
-
-	}
-
-	/*
-	 * 
-	 * This function is validating and sending the ride to theEndpoint
-	 *
-	 * It uses RideProvider to send the ride.
-	 *
-	 */
 	valid() {
+
+	/*
 
 		this.rideProvider.offer_ride({
 
@@ -223,7 +64,9 @@ export class EditRidePage  {
 			riders: [],
 			type: RideType.OFFER
 
-		}).then(() => {
+		*/
+
+		this.rideProvider.offer_ride(this.ride).then(() => {
 
 			this.navCtrl.push(MatchesPage);
 

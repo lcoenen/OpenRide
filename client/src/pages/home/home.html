@@ -15,13 +15,13 @@
     <div class="card-subtitle">3 rides planned</div>
   </ion-card>
 
-  <ion-card (click)="offer_a_ride()">
+  <ion-card (click)="create_ride(RideType.OFFER)">
     <img src="assets/imgs/offer_a_ride.png"/>
     <div class="card-title">Offer a ride</div>
     <div class="card-subtitle">23 riders looking for a ride</div>
   </ion-card>
 
-  <ion-card (click)="request_a_ride()">
+  <ion-card (click)="create_ride(RideType.REQUEST)">
     <img src="assets/imgs/request_a_ride.png"/>
     <div class="card-title">Request a ride</div>
     <div class="card-subtitle">45 drivers looking for riders</div>
