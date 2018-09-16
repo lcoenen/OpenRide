@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewChildren, QueryList, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ContentChild, ViewChildren, QueryList, Input, EventEmitter } from '@angular/core';
 
 import { Slides } from 'ionic-angular';
 
@@ -22,8 +22,9 @@ export class WizardComponent {
 
 	@Input() mode: EditMode;
 
-	@ViewChild(Slides) slides: Slides;
-	@ViewChildren(WizardPageComponent) wizardPages: QueryList<WizardPageComponent>;
+	@ContentChild(Slides) slides: Slides;
+	@ViewChildren(WizardPageComponent)	wizardPages: QueryList<WizardPageComponent>;
+
 
   constructor() {
   }

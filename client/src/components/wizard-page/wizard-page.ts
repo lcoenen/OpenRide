@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 
 /**
  * Generated class for the WizardPageComponent component.
@@ -10,7 +10,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
   selector: 'wizard-page',
   templateUrl: 'wizard-page.html'
 })
-export class WizardPageComponent {
+export class WizardPageComponent implements OnChanges {
 
 	@Input() linked;
 	@Output() changed: EventEmitter<boolean> = new EventEmitter<boolean>();

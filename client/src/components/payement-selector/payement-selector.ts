@@ -32,7 +32,7 @@ export class PayementSelectorComponent {
 
 	@Input() payement: number;
 
-	@Output() payementChange: EventEmitter<number>;
+	@Output() payementChange: EventEmitter<number> = new EventEmitter<number>();
 
 	public philosophy: PayementPhilosophy = 0;
 
