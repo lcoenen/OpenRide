@@ -14,7 +14,8 @@ import { EditMode } from '../../providers/ride/ride';
  */
 @Component({
   selector: 'wizard',
-  templateUrl: 'wizard.html'
+	templateUrl: 'wizard.html',
+	providers: [Slides]
 })
 export class WizardComponent {
 
