@@ -6,6 +6,8 @@ import { WizardPageComponent } from '../wizard-page/wizard-page';
 
 import { EditMode } from '../../providers/ride/ride';
 
+import { RideType } from 'shared/models/ride'
+
 /**
  * Generated class for the WizardComponent component.
  *
@@ -19,7 +21,7 @@ import { EditMode } from '../../providers/ride/ride';
 })
 export class WizardComponent {
 
-	private _next: boolean;
+	public RideType: any = RideType;
 
 	@Input() mode: EditMode;
 
@@ -32,20 +34,25 @@ export class WizardComponent {
 
 	ngAfterViewInit() {
 
-		this.slides.lockSwipeToNext(true);
+		//this.slides.lockSwipeToNext(true);
 
-		console.log('Trying to get event from children')
-		console.log(this.wizardPages.toArray())
+		// Show the first page
 
-		// WizardPage is empty? Why?
+		this.wizardPages.first.shown = true;
 
-		this.wizardPages.map((page: WizardPageComponent) => {
+		// Everytime something change on a page
 
-			console.log('Calling subscribe on page')
+		this.wizardPages.map((page: WizardPageComponent, index: number) => 
 
-			page.changed.subscribe(() => { this.refresh_allow_next() } );
+			page.changed.subscribe(() =>  
 
-		})
+				// Show the next page if the linked value is defined
+				this.wizardPages.toArray()[index + 1].shown = page.linked !== undefined, 
+				this.slides.update()
+
+			)
+
+		)
 
 	}
 
@@ -58,8 +65,6 @@ export class WizardComponent {
 
 		this.slides.slidePrev();
 
-		this.refresh_allow_next()
-
 	}
 
 	/*
@@ -71,50 +76,38 @@ export class WizardComponent {
 
 		this.slides.slideNext();
 
-		this.refresh_allow_next()
-
 	}
 
-	isFirst(){
+	/*
+	 * 
+	 * The back button will be shown if it's not the first slide
+	 *
+	*/
+	get showBack() {
 
-		return this.slides.isBeginning()
-
-	}
-
-	isLast(){
-
-		return !this._next || this.slides.isEnd()
-
-	}
-
-	isValid(){
-
-		return this.slides.isEnd()
+		return !this.slides.isBeginning();
 
 	}
 
 	/*
 	 *
-	 * This will check if the next button can be shown when creating a ride
-	 *
+	 * The next button will be shown if it's not the last slide
+	 * 
 	*/
-	refresh_allow_next(){
+	get showNext() {
 
-		console.log('Refreshing the next button')
+		return !this.slides.isEnd()
 
-		let page = this.slides.getActiveIndex() 
-		
-		// Always allow in edit mode
-		let allow_next = this.mode == EditMode.EDIT;
+	}
 
-		// Check that current page property is defined
+	/*
+	 *
+	 * The last button will be shown if every slide have been shown
+	 *
+	 */
+	get showLast() {
 
-		let current_page_defined = this.wizardPages.toArray()[page].linked != undefined;
-
-		allow_next = allow_next || current_page_defined;	
-
-		this._next = allow_next;
-		this.slides.lockSwipeToNext(!allow_next) 
+		return this.slides.length() == this.wizardPages.length 
 
 	}
 

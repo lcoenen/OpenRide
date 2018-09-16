@@ -12,15 +12,21 @@ import { Component, Input, EventEmitter, Output, OnChanges } from '@angular/core
 })
 export class WizardPageComponent implements OnChanges {
 
-	@Input() linked;
+	public shown: boolean = true;
+	@Input() linked: any;
 	@Output() changed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor() {
   }
 
-	ngOnChanges(){
+	ngAfterViewInit(){
 
-		console.log('ngOnChanges have been called')
+		this.shown = this.linked !== undefined;
+		this.changed.emit();
+
+	}
+
+	ngOnChanges(){
 
 		this.changed.emit()
 

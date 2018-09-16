@@ -17,22 +17,26 @@
 
 <ion-footer>
 	<ion-toolbar>
-		<ion-buttons *ngIf="!isFirst()">
+		<ion-buttons *ngIf="showBack">
 			<button (click)="previous()" ion-button icon-left color="royal">
 				<ion-icon name="arrow-back"></ion-icon>
 				Back
 			</button>	
 		</ion-buttons>
-		<ion-buttons *ngIf="!isLast()" end>
+		<ion-buttons *ngIf="showNext" end>
 			<button (click)="next()" ion-button icon-right color="royal">
 				Next
 				<ion-icon name="arrow-forward"></ion-icon>
 			</button>	
 		</ion-buttons>
 
-		<ion-buttons *ngIf="isValid()" end>
-			<button (click)="valid()" ion-button icon-right color="royal">
+		<ion-buttons *ngIf="showLast" end>
+			<button *ngIf="ride.type == RideType.OFFER" (click)="valid()" ion-button icon-right color="royal">
 				Offer the ride	
+				<ion-icon name="send"></ion-icon>
+			</button>	
+			<button *ngIf="ride.type == RideType.REQUEST" (click)="valid()" ion-button icon-right color="royal">
+				Request the ride	
 				<ion-icon name="send"></ion-icon>
 			</button>	
 		</ion-buttons>
