@@ -98,8 +98,7 @@ import { MessageProvider } from '../providers/message/message';
 			useClass: ApiKeyInterceptor, 
 			multi: true 
 		},
-		MessageProvider,
-		Slides
+		MessageProvider
 	]
 })
 export class AppModule {}
