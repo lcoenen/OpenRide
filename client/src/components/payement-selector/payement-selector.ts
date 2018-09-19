@@ -48,17 +48,12 @@ export class PayementSelectorComponent {
 
 		/* TW ugly code */
 
-		for (let i = 0; i < 4; i++) {
-
-			let boundary: number = _boundaries[i]
-
-			if(thePayement > boundary) {
-
+		for (let i = 0; i < 4; i++) 
+			if(thePayement > _boundaries[i]) 
 				this.philosophy = i;
 
-			}
-
-		}
+		this.payement = thePayement;
+		this.payementChange.emit(thePayement);
 
 	}
 

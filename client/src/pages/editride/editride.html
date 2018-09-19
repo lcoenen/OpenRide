@@ -1,8 +1,8 @@
 <!--
-Generated template for the OfferridePage page.
+	Generated template for the OfferridePage page.
 
-See http://ionicframework.com/docs/components/#navigation for more info on
-Ionic pages and navigation.
+	See http://ionicframework.com/docs/components/#navigation for more info on
+	Ionic pages and navigation.
 -->
 <ion-header>
 
@@ -13,7 +13,7 @@ Ionic pages and navigation.
 
 </ion-header>
 
-<wizard (valid)="valid($event)" mode="mode">
+<wizard (valid)="valid($event)" mode="mode" [type]="ride.type">
 	<wizard-page [linked]="ride.origin">
 		<img class="wizard_step_caption" src="assets/imgs/origin.png"/>
 		<h2>Origin</h2>
@@ -38,5 +38,11 @@ Ionic pages and navigation.
 		<payement-selector [(payement)]="ride.payement"></payement-selector>
 	</wizard-page>
 
-</wizard>
+	<button  (click)="valid()" ion-button icon-right color="royal">
+		<span *ngIf="type == RideType.OFFER">Offer</span>
+		<span *ngIf="type == RideType.REQUEST">Request</span>
+		the ride	
+		<ion-icon name="send"></ion-icon>
+	</button>	
 
+</wizard>

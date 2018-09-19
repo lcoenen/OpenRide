@@ -22,6 +22,7 @@ import { RideType } from 'shared/models/ride'
 export class WizardComponent {
 
 	public RideType: any = RideType;
+	@Input() type: RideType;
 
 	@Input() mode: EditMode;
 
@@ -47,11 +48,14 @@ export class WizardComponent {
 
 		this.wizardPages.map((page: WizardPageComponent, index: number) => 
 
-			page.changed.subscribe(() =>  
+			page.changed.subscribe(() => { 
 
 				// Show the next page if the linked value is defined
-				this.wizardPages.toArray()[index + 1].shown = page.linked !== undefined, 
-				this.slides.update()
+					(index < this.wizardPages.length - 1)? 
+					(this.wizardPages.toArray()[index + 1].shown = page.linked !== undefined, 
+					this.slides.update()) : undefined
+					
+				}
 
 			)
 
@@ -114,9 +118,18 @@ export class WizardComponent {
 	 */
 	get showLast() {
 
+		console.log('should it be shown last')
+
 		if(this.slides._slides === undefined) return true;
 
-		return this.slides.length() == this.wizardPages.length 
+		return this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  {
+			
+				console.log('defined', defined)
+				console.log('page linked', page.linked)	
+				console.log('page', page)
+				return defined && page.linked !== undefined
+
+			}), true)
 
 	}
 

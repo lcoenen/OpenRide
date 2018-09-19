@@ -6,6 +6,5 @@
 
 <ion-item *ngIf="!asap">
 	<ion-label floating>When will you ride?</ion-label>
-	<ion-datetime displayFormat="DD MMM YYYY HH:mm" [(ngModel)]="riding_time"></ion-datetime>
+	<ion-datetime displayFormat="DD MMM YYYY HH:mm" [ngModel]="time" (ngModelChange)="setTime($event)"></ion-datetime>
 </ion-item>
-

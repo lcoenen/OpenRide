@@ -13,6 +13,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class TimeSelectorComponent {
 
 	@Input() time: string;	
+	private _time: string;
 	@Output() timeChange: EventEmitter<string> = new EventEmitter<string>();
 
 
@@ -23,6 +24,8 @@ export class TimeSelectorComponent {
 		else
 			this.time = '';
 
+		this.timeChange.emit(this.time);	
+
 	}
 
 
@@ -32,9 +35,17 @@ export class TimeSelectorComponent {
 
 	}
 
+	setTime(time:string) {
+
+		this.time = time;
+		this.timeChange.emit(time);	
+
+	}
 
   constructor() {
-    console.log('Hello TimeSelectorComponent Component');
+	
+		this._time = this.time;
+
   }
 
 }

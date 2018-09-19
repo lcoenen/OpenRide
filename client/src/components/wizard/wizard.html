@@ -9,7 +9,7 @@
 
 	<ion-slides #slides pager>
 
-		<ng-content></ng-content>
+		<ng-content select="wizard-page"></ng-content>
 
 	</ion-slides>
 
@@ -28,18 +28,9 @@
 				Next
 				<ion-icon name="arrow-forward"></ion-icon>
 			</button>	
+			<ng-content selec="button" *ngIf="showLast"></ng-content>
 		</ion-buttons>
 
-		<ion-buttons *ngIf="showLast" end>
-			<button *ngIf="ride.type == RideType.OFFER" (click)="valid()" ion-button icon-right color="royal">
-				Offer the ride	
-				<ion-icon name="send"></ion-icon>
-			</button>	
-			<button *ngIf="ride.type == RideType.REQUEST" (click)="valid()" ion-button icon-right color="royal">
-				Request the ride	
-				<ion-icon name="send"></ion-icon>
-			</button>	
-		</ion-buttons>
 	</ion-toolbar>
 </ion-footer>
 
