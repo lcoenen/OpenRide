@@ -42,6 +42,8 @@ export class RideWidgetComponent {
 	
 		console.log(`ride:`)
 		console.log(this.ride)
+		if(this.ride.type == RideType.REQUEST) 
+			throw Error('Ride board is not supposed to be used for request')
 	
 	}
 

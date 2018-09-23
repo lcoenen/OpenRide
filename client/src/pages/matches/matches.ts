@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 
 import { User } from 'shared/models/user';
-import { Ride } from 'shared/models/ride';
+import { Ride, RideType } from 'shared/models/ride';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
+import { MyRidesPage } from '../my-rides/my-rides';
 
 import { RideProvider } from '../../providers/ride/ride';
 
@@ -55,8 +56,11 @@ export class MatchesPage {
 	 *
 	 */
   continue() {
-  
-    this.navCtrl.push(RideBoardPage);
+
+		if(this.rideProvider.currentRide.type == RideType.OFFER) 
+			this.navCtrl.push(RideBoardPage);
+		else
+			this.navCtrl.push(MyRidesPage);
   
   }
 

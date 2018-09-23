@@ -144,7 +144,7 @@ export class RideProvider {
 		matches(): Promise<Ride[]> {
 
 			return this.httpClient.get<Link[]>(
-				`${ settings.apiEndpoint }/api/rides/BruxellesLiege/matches`)
+				`${ settings.apiEndpoint }/api/rides/${ this.currentRide._id }/matches`)
 			.toPromise()
 			//	Solve the list of Link
 			.then((ridesLinks: Link[]) => this.solveRides(ridesLinks))
