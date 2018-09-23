@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
+import { MatchesPage } from '../matches/matches'; 
+
+import { Ride } from 'shared/models/ride';
 
 import { RideProvider, MyRides, ProspectType } from '../../providers/ride/ride';
 
@@ -44,7 +47,7 @@ export class MyRidesPage {
 	 * This will open the RideBoard
 	 *
 	 */
-	open_board(ride){
+	open_board(ride: Ride){
 
 		this.rideProvider.currentRide = ride;
 		this.navCtrl.push(RideBoardPage);
@@ -56,10 +59,7 @@ export class MyRidesPage {
 	 * This will join and open the ride
 	 *
 	 */
-	join(ride) {
-
-		//let targetRide = ride.prospect.type == ProspectType.APPLY ?
-		//		ride.prospect.ride : ride.prospect.with;
+	join(ride: Ride) {
 
 		this.rideProvider.join(ride).then((ride) => {
 
@@ -67,6 +67,18 @@ export class MyRidesPage {
 
 		})
 		
+	}
+
+	/*
+	 *
+	 * This will open the matches page
+	 *
+	 */
+	matches(ride: Ride){ 
+
+		this.rideProvider.currentRide = ride;
+		this.navCtrl.push(MatchesPage);
+
 	}
 
 }

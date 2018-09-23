@@ -28,10 +28,15 @@
 			</button>
       <button (click)="enter.emit(ride)" ion-button icon-left clear small>
         <ion-icon name="log-in"></ion-icon>
-        <div *ngIf="type == 'mine' && ride.type == RideType.OFFER">Enter</div>
+        <div *ngIf="ride.type == RideType.OFFER && type == 'mine'">Enter</div>
         <div *ngIf="type == 'prospect' && ride.type == RideType.OFFER">Join</div>
         <div *ngIf="type == 'prospect' && ride.type == RideType.REQUEST">Accept</div>
       </button>
+			<button *ngIf="mine" (click)="matches.emit(ride)" ion-button icon-left clear small>
+				<ion-icon name="add-circle"></ion-icon>
+        <div *ngIf="ride.type == RideType.OFFER">Find drivers</div>
+        <div *ngIf="ride.type == RideType.REQUEST">Find riders</div>
+			</button>
 		</ion-col>
 		<ion-col center text-center>
 			<ion-note>

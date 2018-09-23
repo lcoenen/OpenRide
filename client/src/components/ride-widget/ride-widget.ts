@@ -39,6 +39,13 @@ export class RideWidgetComponent {
 	 */
 	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
 
+	/*
+	 *
+	 * This event will be fired when the user want to add some people to the ride
+	 *
+	 */
+	@Output() matches: EventEmitter<Ride> = new EventEmitter<Ride>();
+
 	// RideType is the enum itself
 	RideType: any;
 
