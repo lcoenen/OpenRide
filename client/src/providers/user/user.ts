@@ -198,7 +198,7 @@ public login(credentials: Credentials)  {
 
 	// If there's no cookie, return a failed promise
 	if(key === null) 
-		return Promise.reject(0)	
+		return Promise.reject('There is no session cookie')	
 
 	// If there's a cookie, retrieve the user
 	ApiKeyInterceptor._key = key;	
@@ -208,7 +208,14 @@ public login(credentials: Credentials)  {
 		this._me = response.user;
 		return this._me;
 
-	})
+	}).catch((error) => { 
+
+		console.log('The server answered the key is invalid')
+		ApiKeyInterceptor._key = undefined;
+
+		throw error;
+
+	});
 		
 }
 
