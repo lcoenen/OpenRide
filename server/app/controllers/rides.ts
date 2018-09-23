@@ -289,13 +289,15 @@ export class ridesController extends cat.Controller {
 					}, {
 						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
 					}).then(() => {
+
+					logger.debug('This prospect will be removed', prospect);
 					
 					/*
 					 *
 					 * The corresponding prospect will also be deleted
 					 *
 					 */
-					 return db.db.collection('prospects').remove({ '_id': prospect._id })
+					 return db.db.collection('prospects').deleteOne({ '_id': prospect._id })
 					
 					}).then(() : cat.Answer<string> => {
 
