@@ -41,6 +41,8 @@ export class HomePage {
 
 		// Check that a cookie exists
 		return this.userProvider.checkCookie().catch(() => {
+
+			console.log('There is no cookie set. Opening the modal')
 	
 			// If it's not working, return a promise that will
 			// resolve when the modal will be closed

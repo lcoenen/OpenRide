@@ -188,12 +188,16 @@ public login(credentials: Credentials)  {
  */
  public checkCookie() : Promise<any>{
 
+	console.log('Checking for cookies')
+
 	// Retrieve the cookie
 
 	let key = Cookie.get(KEY_NAME);	
 
+	console.log('key: ', key);
+
 	// If there's no cookie, return a failed promise
-	if(key === undefined) 
+	if(key === null) 
 		return Promise.reject(0)	
 
 	// If there's a cookie, retrieve the user
