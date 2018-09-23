@@ -9,7 +9,7 @@ import { UserProvider } from '../user/user'
 
 import { Ride, hashRide, RideType, MyRides } from 'shared/models/ride'
 import { User } from 'shared/models/user'
-import { Link } from 'shared/models/link'
+import { Link, idLink } from 'shared/models/link'
 import { Prospect, ProspectType } from 'shared/models/prospect'
 import { RidesMock } from 'shared/mocks/ride';
 
@@ -31,12 +31,6 @@ export enum EditMode {
 
 }
 
-/*
-Generated class for the RidersProvider provider.
-
-	See https://angular.io/guide/dependency-injection for more info on providers
-and Angular DI.
-	*/
 	@Injectable()
 export class RideProvider {
 
@@ -312,13 +306,19 @@ export class RideProvider {
 		* This will be called when an user want to join a ride he's been invited to or requested
 		*
 		*/
-		join(ride: Link) {
+		join(ride: Ride) {
 
-			console.log('RideProvider.join() here - hey I recieved this ride. Is it good?')
-			console.log(ride);
+			console.log('ride: ', ride)
+
+			/*
+					The user to add will be me if I'm accepting an offer.
+					Otherwise it will be the rider of the REQUEST
+			*/
+			let targetUserId = ride.type == RideType.OFFER? this.userProvider.me._id : (<User>ride.riders[0])._id;
+			let targetRideId = ride.type == RideType.OFFER? ride['_id']: idLink(ride.prospect.ride);
 
 			return this.httpClient.patch(
-				`${ settings.apiEndpoint }${ ride['@id'] }`, {join: `/api/users/${ this.userProvider.me._id }` }).toPromise()
+				`${ settings.apiEndpoint }/api/rides/${ targetRideId }`, {join: targetUserId}).toPromise()
 				.then(() => {
 
 					return 'OK'	

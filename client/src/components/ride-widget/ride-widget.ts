@@ -25,8 +25,18 @@ export class RideWidgetComponent {
 	@Input() mine: boolean = false;
 	@Input() type: string = 'match';
 
-
+	/*
+	 *
+	 * This event is fired when the user click on "apply" or "invite"
+	 *
+	 */
 	@Output() prospect: EventEmitter<Ride> = new EventEmitter<Ride>();
+
+	/*
+	 *
+	 * This event is fired when the user want to enter the ride
+	 *
+	 */
 	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
 
 	// RideType is the enum itself
@@ -42,8 +52,6 @@ export class RideWidgetComponent {
 	
 		console.log(`ride:`)
 		console.log(this.ride)
-		if(this.ride.type == RideType.REQUEST) 
-			throw Error('Ride board is not supposed to be used for request')
 	
 	}
 

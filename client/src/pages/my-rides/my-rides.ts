@@ -58,10 +58,10 @@ export class MyRidesPage {
 	 */
 	join(ride) {
 
-		let targetRide = ride.prospect.type == ProspectType.APPLY ?
-			ride.prospect.with : ride.prospect.ride;
-		
-		this.rideProvider.join(targetRide).then((ride) => {
+		//let targetRide = ride.prospect.type == ProspectType.APPLY ?
+		//		ride.prospect.ride : ride.prospect.with;
+
+		this.rideProvider.join(ride).then((ride) => {
 
 		  this.navCtrl.push(RideBoardPage)  
 
