@@ -188,7 +188,7 @@ public login(credentials: Credentials)  {
  */
  public checkCookie() : Promise<any>{
 
-	console.log('Checking for cookies')
+	console.log('Checking for cookies.')
 
 	// Retrieve the cookie
 
