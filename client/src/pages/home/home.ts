@@ -39,10 +39,10 @@ export class HomePage {
 	 */
 	public identify( ) : Promise<any>  {
 
-		// Check that a cookie exists
+		// Check that a cookie exists and is recognised by the server
 		return this.userProvider.checkCookie().catch(() => {
 
-			console.log('There is no cookie set. Opening the modal')
+			console.log('There is no cookie set (or the cookie is not valid). Opening the modal')
 	
 			// If it's not working, return a promise that will
 			// resolve when the modal will be closed
