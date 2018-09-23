@@ -151,6 +151,8 @@ export class RideBoardPage {
 	 */
 	matches(ride: Ride){ 
 
+		console.log('Match page now')
+
 		this.rideProvider.currentRide = ride;
 		this.navCtrl.push(MatchesPage);
 
