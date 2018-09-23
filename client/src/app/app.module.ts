@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { EditRidePage } from '../pages/editride/editride';
+import { EditRidePage } from '../pages/edit-ride/edit-ride';
 import { AddressModalPage} from '../pages/address-modal/address-modal'
 import { MatchesPage } from '../pages/matches/matches'
 import { RideBoardPage } from '../pages/ride-board/ride-board'

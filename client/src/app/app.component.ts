@@ -4,7 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { EditRidePage } from '../pages/editride/editride';
+import { EditRidePage } from '../pages/edit-ride/edit-ride';
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile'
 

@@ -21,8 +21,8 @@ import { RideProvider, EditMode } from '../../providers/ride/ride';
 
 @IonicPage()
 @Component({
-	selector: 'page-editride',
-	templateUrl: 'editride.html',
+	selector: 'page-edit-ride',
+	templateUrl: 'edit-ride.html',
 })
 export class EditRidePage  {
 

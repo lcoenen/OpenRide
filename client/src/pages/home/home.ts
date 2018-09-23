@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 
-import { EditRidePage } from '../editride/editride'
+import { EditRidePage } from '../edit-ride/edit-ride'
 import { MyRidesPage } from '../my-rides/my-rides'
 import { IdentifyPage } from '../identify/identify';
 
