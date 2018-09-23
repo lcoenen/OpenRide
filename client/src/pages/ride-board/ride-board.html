@@ -31,7 +31,7 @@ Ionic pages and navigation.
 	<div [ngSwitch]="boardpage">
 		<div *ngSwitchCase="'summary'">
 
-			<ride-widget [ride]="currentRide"></ride-widget>
+			<ride-widget [mine]="mine(currentRide)" [type]="board" [ride]="currentRide"></ride-widget>
 
 			<ion-list no-border>
 					<ion-item>

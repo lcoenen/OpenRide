@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
-import { Ride } from 'shared/models/ride.ts'
+import { Ride, RideType } from 'shared/models/ride.ts'
+import { User } from 'shared/models/user.ts'
 import { Message, hashMessage } from 'shared/models/message.ts'
 
 import { RideProvider } from '../../providers/ride/ride';
@@ -9,6 +10,7 @@ import { MessageProvider } from '../../providers/message/message';
 import { UserProvider } from '../../providers/user/user';
 
 import { ProfilePage } from '../profile/profile';
+import { MatchesPage } from '../matches/matches';
 
 /**
  * Generated class for the RideBoardPage page.
@@ -122,6 +124,35 @@ export class RideBoardPage {
 			}
 
 		});
+
+	}
+
+
+	/*
+	 * 
+	 * This will tell if a ride is owned by the user
+	 *
+	 */
+	mine(ride: Ride) {
+
+		let owner: User = <User>(ride.type == RideType.OFFER?
+			ride.driver: ride.riders[0]);
+
+		console.log('owner is', owner)
+
+		return owner._id == this.userProvider.me._id;
+
+	}
+
+	/*
+	 *
+	 * This will open the matches page
+	 *
+	 */
+	matches(ride: Ride){ 
+
+		this.rideProvider.currentRide = ride;
+		this.navCtrl.push(MatchesPage);
 
 	}
 

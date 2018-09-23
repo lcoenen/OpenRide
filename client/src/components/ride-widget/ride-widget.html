@@ -26,16 +26,23 @@
 				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
 				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
 			</button>
-      <button (click)="enter.emit(ride)" ion-button icon-left clear small>
+      <button *ngIf="ride.type == RideType.OFFER && type == 'mine'" (click)="enter.emit(ride)" ion-button icon-left clear small>
         <ion-icon name="log-in"></ion-icon>
-        <div *ngIf="ride.type == RideType.OFFER && type == 'mine'">Enter</div>
-        <div *ngIf="type == 'prospect' && ride.type == RideType.OFFER">Join</div>
-        <div *ngIf="type == 'prospect' && ride.type == RideType.REQUEST">Accept</div>
+        Enter
+      </button>
+      <button *ngIf="type == 'prospect'" (click)="enter.emit(ride)" ion-button icon-left clear small>
+        <ion-icon name="log-in"></ion-icon>
+        <div *ngIf="ride.type == RideType.OFFER">Join</div>
+        <div *ngIf="ride.type == RideType.REQUEST">Accept</div>
       </button>
 			<button *ngIf="mine" (click)="matches.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="add-circle"></ion-icon>
         <div *ngIf="ride.type == RideType.OFFER">Find drivers</div>
         <div *ngIf="ride.type == RideType.REQUEST">Find riders</div>
+			</button>
+			<button *ngIf="mine" (click)="edit.emit(ride)" ion-button icon-left clear small>
+				<ion-icon name="build"></ion-icon>
+				Edit
 			</button>
 		</ion-col>
 		<ion-col center text-center>

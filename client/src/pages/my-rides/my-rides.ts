@@ -4,7 +4,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RideBoardPage } from '../ride-board/ride-board'; 
 import { MatchesPage } from '../matches/matches'; 
 
-import { Ride } from 'shared/models/ride';
+import { Ride, RideType } from 'shared/models/ride';
+import { User } from 'shared/models/user';
+
+import { UserProvider }  from '../../providers/user/user';
 
 import { RideProvider, MyRides, ProspectType } from '../../providers/ride/ride';
 
@@ -21,7 +24,8 @@ export class MyRidesPage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
-		public rideProvider: RideProvider	) {
+		public rideProvider: RideProvider,
+		public userProvider: UserProvider	) {
 
 		this.myRides = {
 			myRides: [],		
@@ -40,6 +44,7 @@ export class MyRidesPage {
 			this.myRides = myRides;
 
 		})
+
 	}
 
 	/*
@@ -64,9 +69,26 @@ export class MyRidesPage {
 		this.rideProvider.join(ride).then((ride) => {
 
 		  this.navCtrl.push(RideBoardPage)  
+			this.ionViewDidLoad()
 
 		})
 		
+	}
+
+	/*
+	 * 
+	 * This will tell if a ride is owned by the user
+	 *
+	 */
+	mine(ride: Ride) {
+
+		let owner: User = <User>(ride.type == RideType.OFFER?
+			ride.driver: ride.riders[0]);
+
+		console.log('owner is', owner)
+
+		return owner._id == this.userProvider.me._id;
+
 	}
 
 	/*
