@@ -23,8 +23,8 @@
 				Back
 			</button>	
 		</ion-buttons>
-		<ion-buttons *ngIf="showNext" end>
-			<button (click)="next()" ion-button icon-right color="royal">
+		<ion-buttons end>
+			<button *ngIf="showNext" (click)="next()" ion-button icon-right color="royal">
 				Next
 				<ion-icon name="arrow-forward"></ion-icon>
 			</button>	
