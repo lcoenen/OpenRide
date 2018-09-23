@@ -31,7 +31,9 @@
     "mongo": "^0.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.5",
     "@types/geojson": "^7946.0.4",
-    "@types/mongodb": "^3.1.4"
+    "@types/mongodb": "^3.1.4",
+    "@types/restify": "^7.2.4"
   }
 }
