@@ -321,6 +321,12 @@ export class RideProvider {
 				`${ settings.apiEndpoint }/api/rides/${ targetRideId }`, {join: targetUserId}).toPromise()
 				.then(() => {
 
+					return this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ targetRideId }`).toPromise()
+
+				})
+				.then((ride: Ride) => {
+					
+					this._currentRide = ride;
 					return 'OK'	
 
 				})
