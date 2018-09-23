@@ -192,7 +192,9 @@ export class RideProvider {
 		* After being computed, it leaves the ride as currentRide	
 		*
 		*/
-		offer_ride(ride: Ride) : Promise<any> {
+		sendRide(ride: Ride) : Promise<any> {
+
+			if(ride.type === undefined) throw Error('ride.type cannot be undefined');
 
 			ride._id = hashRide(ride) 
 

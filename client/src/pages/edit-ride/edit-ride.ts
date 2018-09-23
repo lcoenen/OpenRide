@@ -48,7 +48,7 @@ export class EditRidePage  {
 
 	valid() {
 
-		this.rideProvider.offer_ride(this.ride).then(() => {
+		this.rideProvider.sendRide(this.ride).then(() => {
 
 			this.navCtrl.push(MatchesPage);
 
