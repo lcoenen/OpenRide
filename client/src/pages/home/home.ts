@@ -39,20 +39,27 @@ export class HomePage {
 	 */
 	public identify( ) : Promise<any>  {
 
-		return new Promise((resolve, reject) => {
+		// Check that a cookie exists
+		return this.userProvider.checkCookie().catch(() => {
+	
+			// If it's not working, return a promise that will
+			// resolve when the modal will be closed
+			return new Promise((resolve, reject) => {
+				
+				if(this.userProvider.me === undefined) {
+
+					let identifyModal = this.modalCtrl.create(IdentifyPage);
+					identifyModal.onDidDismiss((user: User) => {
+
+						user ? resolve() : reject()
+
+					});
+					identifyModal.present();
+
+				} else { resolve() }	
 			
-			if(this.userProvider.me === undefined) {
+			})
 
-				let identifyModal = this.modalCtrl.create(IdentifyPage);
-				identifyModal.onDidDismiss((user: User) => {
-
-					user ? resolve() : reject()
-
-				});
-				identifyModal.present();
-
-			} else { resolve() }	
-		
 		})
 
 	}

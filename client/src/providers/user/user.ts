@@ -1,5 +1,7 @@
 import * as sha256 from 'sha256';
 
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -10,6 +12,8 @@ import { Observable } from 'rxjs/Observable'
 import { User, Credentials, SignupResponse, Signature } from 'shared/models/user';
 
 import { settings } from '../../config/config'
+
+const KEY_NAME = "openride-server-session";
 
 	/*
 	 * 
@@ -29,7 +33,7 @@ export class ApiKeyInterceptor implements HttpInterceptor {
 
 		// Clone the request to add the new header.
 		const authReq = ApiKeyInterceptor._key?
-		req.clone({ headers: req.headers.set("openride-server-session", ApiKeyInterceptor._key) }) :
+		req.clone({ headers: req.headers.set(KEY_NAME, ApiKeyInterceptor._key) }) :
 		req;
 
 		return next.handle(authReq)
@@ -109,14 +113,15 @@ public signup(user: User) {
 	user._id = sha256(JSON.stringify(user)).substring(0,9)
 
 	return this.http.put(`${ settings.apiEndpoint }/api/users/${ user._id }`,
-		{user: user}).toPromise().then((ans: SignupResponse) => {
+		{user: user}).toPromise().then((response: SignupResponse) => {
 
 			// Saving the recieved user and the key
 
-			ApiKeyInterceptor._key = ans.key;
-			this._me = ans.user;
+			Cookie.set(KEY_NAME, response.key);
+			ApiKeyInterceptor._key = response.key;
+			this._me = response.user;
 
-			return ans.user;
+			return response.user;
 
 		}).catch((error:any) => {
 
@@ -156,6 +161,8 @@ public login(credentials: Credentials)  {
 
 		this._me = response.user;
 		ApiKeyInterceptor._key = response.key;
+		Cookie.set(KEY_NAME, response.key);
+
 		return response.user;
 
 	}).catch((err) => {
@@ -172,6 +179,33 @@ public login(credentials: Credentials)  {
 
 	});
 
+}
+
+/*
+ *
+ * This will check if a cookie exists and retrieve the user if it's the case
+ *
+ */
+ public checkCookie() : Promise<any>{
+
+	// Retrieve the cookie
+
+	let key = Cookie.get(KEY_NAME);	
+
+	// If there's no cookie, return a failed promise
+	if(key === undefined) 
+		return Promise.reject(0)	
+
+	// If there's a cookie, retrieve the user
+	ApiKeyInterceptor._key = key;	
+
+	return this.http.get(`${ settings.apiEndpoint }/api/session/me`).toPromise().then((response: any) => {
+
+		this._me = response.user;
+		return this._me;
+
+	})
+		
 }
 
 /*

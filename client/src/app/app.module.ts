@@ -15,7 +15,6 @@ import { IdentifyPage } from '../pages/identify/identify'
 import { IdentifyLoginPage } from '../pages/identify-login/identify-login'
 import { IdentifySignupPage } from '../pages/identify-signup/identify-signup'
 
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
