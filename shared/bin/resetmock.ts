@@ -1,5 +1,7 @@
 #! /usr/bin/ts-node
 
+import * as redis from 'redis';
+
 import { Promise } from 'es6-promise'
 
 import { MongoClient, Db } from 'mongodb';
@@ -74,6 +76,25 @@ export function resetMock(){
 		  console.log(`Error while inserting the mocked collection: ${ err.message }`)  
 
 		})
+
+	}).then( () => {
+
+		return new Promise((accept, reject) => {	
+
+			console.log('Resetting the redis server')
+			let redis_client = redis.createClient();
+			redis_client.flushdb( (err: Error) => {
+				
+				if(err) reject(err);
+				else accept();	
+
+			})		
+		
+		})
+
+	}).catch( (error) => {
+
+		console.error('I could not flush the redis server', error);
 
 	})
 
