@@ -324,6 +324,7 @@ export class RideProvider {
 					return this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ targetRideId }`).toPromise()
 
 				})
+				.then((ride: Ride) => this.populateRide(ride))
 				.then((ride: Ride) => {
 					
 					this._currentRide = ride;

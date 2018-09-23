@@ -199,7 +199,7 @@ export class ridesController extends cat.Controller {
 					.toArray()
 					.then((prospects: Prospect[]) => {
 
-						// For each prospectsa 
+						// For each prospects 
 						// Promise.all is there to flatten the Promise<prospects>[] into Promise<prospects[]>
 
 						return Promise.all(prospects.map((prospect: Prospect) => {
@@ -233,6 +233,9 @@ export class ridesController extends cat.Controller {
 
 						// Check that the users ID checks out
 
+						logger.debug('Trying to check that a previous connection exists')
+						logger.debug(populatedProspects);
+
 						populatedProspects = populatedProspects.filter((prospect: any) => {
 
 							let rider: string;
@@ -251,7 +254,10 @@ export class ridesController extends cat.Controller {
 							// Exclude it if the request doesn't come from the person being invited / requested
 							
 							logger.debug(`TRACE: requestor ${ requestor }`)
-							logger.debug(`DEBUG: prospectTarget`)
+							logger.debug(`DEBUG: prospectTarget ${ prospectTarget }`)
+
+							logger.debug(`rider:`, rider)
+							logger.debug(`target:`, target)
 
 							return rider == target && requestor == prospectTarget;
 
@@ -259,13 +265,14 @@ export class ridesController extends cat.Controller {
 
 						if(populatedProspects.length == 0) 
 							throw {code: 401, 
-								response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
+								response: 'This user have no previous connection with this ride. First invite the ride or request to join the ride.'}
 
-						// Check that the requestor is the owner of the prospect ride
+						return populatedProspects[0]
+
 
 					})				
 
-			}).then( (): Promise<any> => {
+			}).then( (prospect: Prospect): Promise<any> => {
 
 				if(request.req.params.join) {
 
@@ -281,11 +288,21 @@ export class ridesController extends cat.Controller {
 						_id: request.req.params.id
 					}, {
 						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
+					}).then(() => {
+					
+					/*
+					 *
+					 * The corresponding prospect will also be deleted
+					 *
+					 */
+					 return db.db.collection('prospects').remove({ '_id': prospect._id })
+					
 					}).then(() : cat.Answer<string> => {
 
 						return {code: 204, response: 'The user have been added'} 
 
 					});
+
 
 				}
 				else {
