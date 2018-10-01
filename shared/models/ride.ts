@@ -19,6 +19,7 @@ export interface Ride {
   driver?: Link | User;
 	riders: Link[] | User[];
 	type: RideType;
+	requests?: Link[];
 };
 
 

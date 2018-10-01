@@ -209,7 +209,7 @@ export class ridesController extends cat.Controller {
 							// Find the rides
 
 							return db.db.collection('rides').findOne({
-								'_id': idLink(prospect.with)
+								'_id': idLink(<Link>prospect.with)
 							}).then((withRide: Ride) => {
 
 								populatedProspect.with = withRide;  
@@ -217,7 +217,7 @@ export class ridesController extends cat.Controller {
 							}).then(( ) => {
 
 								return db.db.collection('rides').findOne({
-									'_id': idLink(prospect.ride)	
+									'_id': idLink(<Link>prospect.ride)	
 								})
 
 							}).then((ride: Ride) => {
@@ -263,11 +263,14 @@ export class ridesController extends cat.Controller {
 
 						// Check that the requestor is the owner of the prospect ride
 
-					})				
+					})
 
 			}).then( (): Promise<any> => {
 
 				if(request.req.params.join) {
+
+					// This is a Ride because it have been populated
+					let requestRide: Ride = <Ride>(prospect.type == ProspectType.APPLY? prospect.with: prospect.ride);
 
 					/* 
 					 *
@@ -280,13 +283,38 @@ export class ridesController extends cat.Controller {
 					return <Promise<any>> db.db.collection('rides').updateOne({
 						_id: request.req.params.id
 					}, {
-						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
+						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}},
+					}).then(() => {
+
+					/*
+					 * 
+					 * The request will also be added to the 'requests' property
+					 *
+					 */
+
+						return <Promise<any>> db.db.collection('rides').updateOne({
+							_id: request.req.params.id
+						}, {
+							$addToSet: { requests: { '@id': `/api/rides/${requestRide._id}`}  }
+						})
+
+					}).then(() => {
+
+						logger.debug('This prospect will be removed', prospect);
+					
+					/*
+					 *
+					 * The corresponding prospect will also be deleted
+					 *
+					 */
+					 return db.db.collection('prospects').deleteOne({ '_id': prospect._id })
+					
 					}).then(() : cat.Answer<string> => {
 
 						return {code: 204, response: 'The user have been added'} 
 
-					});
-
+					})
+						
 				}
 				else {
 
@@ -425,8 +453,9 @@ export class ridesController extends cat.Controller {
 						$maxDistance: maxDistance * 1000
 					}},
 				'_id': {'$ne': foundRide._id },
-				'type': { '$ne': foundRide.type }	
-
+				'type': { '$ne': foundRide.type },
+				// Ride I'm not already in 
+				'requests' : {'$nin': [{ '@id': `/api/rides/${req.params.id}`}]}
 			}
 
 			/*

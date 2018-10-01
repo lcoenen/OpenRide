@@ -75,6 +75,24 @@ export function resetMock(){
 
 		})
 
+	}).then( () => {
+
+		return new Promise((accept, reject) => {	
+
+			let redis_client = redis.createClient();
+			redis_client.flushdb( (err: Error) => {
+				
+				if(err) reject(err);
+				else accept();	
+
+			})		
+		
+		})
+
+	}).catch( (error) => {
+
+		console.error('I could not flush the redis server', error);
+
 	})
 
 }

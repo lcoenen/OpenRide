@@ -1,4 +1,5 @@
 import { Link, isLink } from './link';
+import { Ride } from './ride';
 
 
 /*
@@ -39,7 +40,7 @@ export interface Prospect {
 	 * The ride :id will be linked with the ride property
 	 *
 	 */
-	ride: Link;
+	ride: Link | Ride;
 
 	/*
 	 *
@@ -52,7 +53,7 @@ export interface Prospect {
 	 * the driver is inviting the rider
 	 *
 	 */
-	with: Link;
+	with: Link | Ride;
 
 	/*
 	 *

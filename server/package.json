@@ -9,7 +9,7 @@
     "refresh": "npm run compile && npm start",
     "watch": "nodemon",
     "test": "npm run compile && mocha built/server/test",
-    "watch-test": "nodemon -w app -w test -V --exec 'npm run compile && (mocha built/server/test || true)'"
+    "watch-test": "nodemon -w app -w test -V --exec 'npm run test'"
   },
   "keywords": [
     "typescript",
