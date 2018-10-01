@@ -106,6 +106,18 @@ export class MyRidesPage {
 
 	/*
 	 *
+	 * This will be called when the user want to edit a ride
+	 *
+	 */
+	edit_ride(ride: Ride){ 
+
+		this.rideProvider.editRide(ride);
+		this.navCtrl.push(EditRidePage);
+
+	}
+
+	/*
+	 *
 	 * This will open the matches page
 	 *
 	 */
