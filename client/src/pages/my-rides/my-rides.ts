@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
 import { MatchesPage } from '../matches/matches'; 
+import { EditRidePage } from '../edit-ride/edit-ride';
 
 import { Ride, RideType } from 'shared/models/ride';
 import { User } from 'shared/models/user';
@@ -21,6 +22,8 @@ export class MyRidesPage {
 
 	myRides: MyRides;
 	loading: boolean;
+
+	public RideType: any = RideType;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -100,6 +103,19 @@ export class MyRidesPage {
 
 		this.rideProvider.currentRide = ride;
 		this.navCtrl.push(MatchesPage);
+
+	}
+
+	/*
+	 *
+	 * This will open the request page
+	 *
+	 */
+	create(type: RideType) {
+
+		this.rideProvider.createRide(type)
+		this.navCtrl.push(EditRidePage);
+
 
 	}
 

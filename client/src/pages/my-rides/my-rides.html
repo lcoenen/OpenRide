@@ -10,33 +10,31 @@
     <ion-title>My rides</ion-title>
   </ion-navbar>
 
-</ion-header>
-
-
-<ion-content padding>
-
-	<ion-list>
-		<ion-list-header>My rides</ion-list-header>
-		<ion-item *ngFor="let ride of myRides.myRides">		
+</ion-header> <ion-content padding> <ion-list *ngIf="myRides.myRides.length != 0"> <ion-list-header>My rides</ion-list-header> <ion-item *ngFor="let ride of myRides.myRides">		
 			<ride-widget [ride]="ride" (matches)="matches(ride)" (enter)="open_board(ride)" [mine]="mine(ride)" [type]="'mine'"></ride-widget>
 		</ion-item>
 	</ion-list>
 
-	<ion-list>
+	<ion-list *ngIf="myRides.myRequests.length != 0">
 		<ion-list-header>My requests</ion-list-header>
 		<ion-item *ngFor="let ride of myRides.myRequests">		
 			<ride-widget [ride]="ride" (matches)="matches(ride)" (enter)="open_board(ride)" [mine]="true" [type]="'request'"></ride-widget>
 		</ion-item>
 	</ion-list>
 		
-	<ion-list>
+	<ion-list *ngIf="myRides.myProspects.length != 0">
 		<ion-list-header>My prospects</ion-list-header>
 		<ion-item *ngFor="let ride of myRides.myProspects">		
 			<ride-widget [ride]="ride" (enter)="join(ride)" [type]="'prospect'"></ride-widget>
 		</ion-item>
 	</ion-list>
 
-	<!-- 
+	<div *ngIf="myRides.myRides.length + myRides.myRequests.length + myRides.myProspects == 0">	
+		<p>You have yet to publish a ride! You can <a (click)="create(RideType.REQUEST)">request</a> or <a (click)="create(RideType.OFFER)">offer</a> a ride to find ridemates. </p>
+		<img src="assets/imgs/nothing.png" alt="Nothing to see here" />
+	</div>
+
+	<!--
   <ion-card *ngFor="let rider of riders">
   <ion-item>
     <ion-avatar item-start>
