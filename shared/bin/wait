@@ -1,0 +1,3 @@
+#! /bin/bash
+
+while curl -i localhost:3000 2>&1 >/dev/null | grep Failed >/dev/null; do echo "Server not anwering yet. Waiting..."; sleep 5; done;

@@ -9,12 +9,12 @@
     "noImplicitReturns": true,
 		"lib": ["es5","es2015.promise","dom", "scripthost"],
     "paths": 
-      {"shared/*": ["../shared/*"]},
+      {"shared/*": ["../../shared/*"]},
     "noImplicitAny": true,
     "preserveConstEnums": true,
     "types": ["node", "restify", "chai", "chai-http", "chai-as-promised", "turf"],
-		"rootDirs": [ "../shared", "app" ],
-    "outDir": "built",
+    "outDir": "../built",
+		"rootDirs": ["test", "../shared"],
 		"experimentalDecorators": true
   },
   "exclude": [

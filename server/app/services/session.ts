@@ -5,16 +5,16 @@ import * as cat from 'catnapify';
 
 import { Promise } from 'es6-promise'
 
-import { Link } from '../../../shared/models/link';
-import { User, Signature, Credentials } from '../../../shared/models/user';
+import { Link } from 'shared/models/link';
+import { User, Signature, Credentials } from 'shared/models/user';
 
-import { UsersMock } from '../../../shared/mocks/user'
+import { UsersMock } from 'shared/mocks/user'
 
 import { db } from '../services/db';
 import { logger } from '../services/logger';
 import { settings } from '../config/config';
 
-import { hash } from '../../../shared/lib/hash';
+import { hash } from 'shared/lib/hash';
 
 export const salt = '5ce5be34c720d80d9d0075bccb47e7e56db9d36c';
 

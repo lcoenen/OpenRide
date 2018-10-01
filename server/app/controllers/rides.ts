@@ -11,9 +11,9 @@ import { session, sessionRequest } from '../services/session';
 
 
 
-import { Ride, RideType, isRide } from '../../../shared/models/ride';
-import { Link, idLink } from '../../../shared/models/link';
-import { Prospect, ProspectType } from '../../../shared/models/prospect';
+import { Ride, RideType, isRide } from 'shared/models/ride';
+import { Link, idLink } from 'shared/models/link';
+import { Prospect, ProspectType } from 'shared/models/prospect';
 
 const maxDistance: number = 30;
 
@@ -257,15 +257,17 @@ export class ridesController extends cat.Controller {
 
 						})
 
+						// Check that the requestor is the owner of the prospect ride
 						if(populatedProspects.length == 0) 
 							throw {code: 401, 
-								response: 'This user have no previous connection with this ride. First invite the rideor request to join the ride.'}
+								response: 'This user have no previous connection with this ride. First invite the ride or request to join the ride.'}
 
-						// Check that the requestor is the owner of the prospect ride
+						// There should only be one left
+						return populatedProspects[0]
 
 					})
 
-			}).then( (): Promise<any> => {
+			}).then( (prospect: Prospect): Promise<any> => {
 
 				if(request.req.params.join) {
 

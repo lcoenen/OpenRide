@@ -1,3 +1,5 @@
+require('app-module-path').addPath(__dirname + '/../../')
+
 import * as fs from 'fs';
 import * as restify from 'restify';
 
