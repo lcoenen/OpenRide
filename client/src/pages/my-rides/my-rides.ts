@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 
 import { MatchesPage } from '../matches/matches'; 
@@ -11,6 +12,7 @@ import { User } from 'shared/models/user';
 import { UserProvider }  from '../../providers/user/user';
 
 import { RideProvider, MyRides, ProspectType } from '../../providers/ride/ride';
+
 
 /**
  * Generated class for the MyRidesPage page.
@@ -27,6 +29,7 @@ export class MyRidesPage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
+		public loadingCtrl: LoadingController,
 		public rideProvider: RideProvider,
 		public userProvider: UserProvider	) {
 
@@ -38,13 +41,21 @@ export class MyRidesPage {
 
 	}
 
-	ionViewDidLoad() {
+	ionViewWillEnter() {
+
+		let loading = this.loadingCtrl.create({
+			content: 'Please wait...'
+		});
+
+		loading.present()
 
 		this.rideProvider.myRides().then((myRides: MyRides) => {
 
 			this.loading = true;
 			
 			this.myRides = myRides;
+
+			loading.dismiss()
 
 		})
 
@@ -72,7 +83,6 @@ export class MyRidesPage {
 		this.rideProvider.join(ride).then((ride) => {
 
 		  this.navCtrl.push(RideBoardPage)  
-			this.ionViewDidLoad()
 
 		})
 		

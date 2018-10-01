@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { User } from 'shared/models/user';
 import { Ride, RideType } from 'shared/models/ride';
@@ -32,22 +33,35 @@ export class MatchesPage {
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams,
+    public loadingCtrl: LoadingController,
 		public toastCtrl: ToastController,
     public rideProvider: RideProvider) {
 
+	}
+
+	refresh() {
 		/*
 		 *
 		 * Subscribe to a stream of ride from rideProviders
 		 *
 		 */
-		rideProvider.matches().then((rides: Ride[]) => {
-        this.rides = rides;  
-			})
+	  let loading = this.loadingCtrl.create({
+	    content: 'Please wait...'
+	  });
+
+		loading.present()
+
+		this.rideProvider.matches().then((rides: Ride[]) => {
+      this.rides = rides;  
+			loading.dismiss()
+		})
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OfferInvitePage');
+  ionViewWillEnter() {
+		
+		this.refresh()
+
   }
 
 	/* 

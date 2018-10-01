@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 
 import { Ride, RideType } from 'shared/models/ride.ts'
 import { User } from 'shared/models/user.ts'
@@ -35,6 +36,7 @@ export class RideBoardPage {
 		public navParams: NavParams,
 		public rideProvider: RideProvider,
 		public userProvider: UserProvider,
+		public loadingCtrl: LoadingController,
 		public toastCtrl: ToastController,
 		public messageProvider: MessageProvider) {
 
@@ -52,8 +54,16 @@ export class RideBoardPage {
 	 *
 	 */
 	refreshMessages() {
+
+		let loading = this.loadingCtrl.create({
+			content: 'Please wait...'
+		});
+
+		loading.present()
 	
 		this.messageProvider.getMessages(this.currentRide).then((messages: Message[]) => {
+
+			loading.dismiss();
 
 			this.messages = messages;   
 
@@ -66,7 +76,7 @@ export class RideBoardPage {
 	 * This will be called when the page is loaded
 	 *
 	 */
-  ionViewDidLoad() {
+  ionViewWillEnter() {
 
 		console.log(this.rideProvider.currentRide)
 
