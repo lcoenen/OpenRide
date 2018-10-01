@@ -224,9 +224,9 @@ export class RideProvider {
 			// Takes a ride and a prospect and return the link to the 
 			// adjacent ride (the ride that is not the target one)
 			let find_adjacent_ride = (prospect: Prospect, ride: Ride) : Link => 
-			prospect.with['@id'] == `/api/rides/${ ride._id }` ?
-			prospect.ride:
-			prospect.with
+			(<Link>prospect.with)['@id'] == `/api/rides/${ ride._id }` ?
+			<Link>prospect.ride:
+			<Link>prospect.with
 
 			// Resolve a ride form a prospect
 			// Return a Promise<Ride>
@@ -315,7 +315,7 @@ export class RideProvider {
 					Otherwise it will be the rider of the REQUEST
 			*/
 			let targetUserId = ride.type == RideType.OFFER? this.userProvider.me._id : (<User>ride.riders[0])._id;
-			let targetRideId = ride.type == RideType.OFFER? ride['_id']: idLink(ride.prospect.ride);
+			let targetRideId = ride.type == RideType.OFFER? ride['_id']: idLink(<Link>ride.prospect.ride);
 
 			return this.httpClient.patch(
 				`${ settings.apiEndpoint }/api/rides/${ targetRideId }`, {join: targetUserId}).toPromise()
