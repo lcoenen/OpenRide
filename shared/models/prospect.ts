@@ -1,4 +1,5 @@
 import { Link, isLink } from './link';
+import { Ride } from './ride';
 
 
 /*
@@ -34,12 +35,12 @@ export interface Prospect {
 	 *
 	 * If me, rider, want to request to join a ride, I will 
 	 * POST /api/rides/:id/prospects with an object {with: Link} (see
-	 * with property
+	 * with property)
 	 * 
 	 * The ride :id will be linked with the ride property
 	 *
 	 */
-	ride: Link;
+	ride: Link | Ride;
 
 	/*
 	 *
@@ -52,7 +53,7 @@ export interface Prospect {
 	 * the driver is inviting the rider
 	 *
 	 */
-	with: Link;
+	with: Link | Ride;
 
 	/*
 	 *
@@ -62,6 +63,14 @@ export interface Prospect {
 	 *
 	 */
 	type?: ProspectType;
+
+	/*
+	 *
+	 * This will be changed to true when the request / apply have been
+	 * accepted by the peer
+	 *
+	 */
+	 accepted: boolean;
 
 };
 

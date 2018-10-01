@@ -35,23 +35,18 @@ const connectedUsername: string = 'princess77';
 let PBKey: string = '';
 let LouiseKey: string = '';
 
-beforeEach(() => {
 
-	return resetMock();
+describe('my-rides', () => {
 
-})
+	beforeEach(() => {
 
-describe.only('my-rides', () => {
-
-	before(( ) => {
-
-		return (() => {
+		return resetMock().then( () => {
 
 			return chai.request(url)
 				.put('/api/session/me')
 				.send(userSignupCredentials)
 
-		})().then((res: any) => {
+		}).then((res: any) => {
 
 			PBKey = res.headers['openride-server-session']
 
@@ -69,7 +64,6 @@ describe.only('my-rides', () => {
 			LouiseKey = res.headers['openride-server-session']
 
 		})
-
 
 	})
 

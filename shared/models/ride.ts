@@ -32,6 +32,7 @@ export interface Ride {
 	riders: Link[] | User[];
 	prospect?: Prospect; 
 	type: RideType;
+	requests?: Link[];
 };
 
 /*

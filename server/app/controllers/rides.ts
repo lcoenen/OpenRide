@@ -9,11 +9,9 @@ import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
 import { session, sessionRequest } from '../services/session';
 
-
-
-import { Ride, RideType, isRide, MyRides } from '../../../shared/models/ride';
-import { Link, idLink } from '../../../shared/models/link';
-import { Prospect, ProspectType } from '../../../shared/models/prospect';
+import { Ride, RideType, isRide } from 'shared/models/ride';
+import { Link, idLink } from 'shared/models/link';
+import { Prospect, ProspectType } from 'shared/models/prospect';
 
 const maxDistance: number = 30;
 
@@ -209,7 +207,7 @@ export class ridesController extends cat.Controller {
 							// Find the rides
 
 							return db.db.collection('rides').findOne({
-								'_id': idLink(prospect.with)
+								'_id': idLink(<Link>prospect.with)
 							}).then((withRide: Ride) => {
 
 								populatedProspect.with = withRide;  
@@ -217,7 +215,7 @@ export class ridesController extends cat.Controller {
 							}).then(( ) => {
 
 								return db.db.collection('rides').findOne({
-									'_id': idLink(prospect.ride)	
+									'_id': idLink(<Link>prospect.ride)	
 								})
 
 							}).then((ride: Ride) => {
@@ -263,18 +261,22 @@ export class ridesController extends cat.Controller {
 
 						})
 
+						// Check that the requestor is the owner of the prospect ride
 						if(populatedProspects.length == 0) 
 							throw {code: 401, 
 								response: 'This user have no previous connection with this ride. First invite the ride or request to join the ride.'}
 
+						// There should only be one left
 						return populatedProspects[0]
 
-
-					})				
+					})
 
 			}).then( (prospect: Prospect): Promise<any> => {
 
 				if(request.req.params.join) {
+
+					// This is a Ride because it have been populated
+					let requestRide: Ride = <Ride>(prospect.type == ProspectType.APPLY? prospect.with: prospect.ride);
 
 					/* 
 					 *
@@ -287,25 +289,40 @@ export class ridesController extends cat.Controller {
 					return <Promise<any>> db.db.collection('rides').updateOne({
 						_id: request.req.params.id
 					}, {
-						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}}
+						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}},
 					}).then(() => {
 
-					logger.debug('This prospect will be removed', prospect);
+					/*
+					 * 
+					 * The request will also be added to the 'requests' property
+					 *
+					 */
+
+						return <Promise<any>> db.db.collection('rides').updateOne({
+							_id: request.req.params.id
+						}, {
+							$addToSet: { requests: { '@id': `/api/rides/${requestRide._id}`}  }
+						})
+
+					}).then(() => {
+
+						logger.debug('This prospect will be accepted', prospect);
 					
 					/*
 					 *
-					 * The corresponding prospect will also be deleted
+					 * The corresponding prospect will be accepted 
 					 *
 					 */
-					 return db.db.collection('prospects').deleteOne({ '_id': prospect._id })
+					 return db.db.collection('prospects').updateOne(
+						 { '_id': prospect._id },
+						 {'$set': { 'accepted': true }})
 					
 					}).then(() : cat.Answer<string> => {
 
 						return {code: 204, response: 'The user have been added'} 
 
-					});
-
-
+					})
+						
 				}
 				else {
 
@@ -444,8 +461,9 @@ export class ridesController extends cat.Controller {
 						$maxDistance: maxDistance * 1000
 					}},
 				'_id': {'$ne': foundRide._id },
-				'type': { '$ne': foundRide.type }	
-
+				'type': { '$ne': foundRide.type },
+				// Ride I'm not already in 
+				'requests' : {'$nin': [{ '@id': `/api/rides/${req.params.id}`}]}
 			}
 
 			/*
@@ -461,11 +479,59 @@ export class ridesController extends cat.Controller {
 				.find(criterias)
 				.toArray();
 
-		}).then((rides: Ride[]) => {
+			}).then((rides: Ride[]) => {
+
+				/*
+				 * 
+				 * Filter the ride pair for which no prospects exists yet
+				 *
+				 */	 
+
+				 let ridesLinks: Link[] = rides.map( (ride: Ride) =>
+				 	({ '@id' : `/api/rides/${ride._id}` }));
+
+				// Find all the prospects that could match
+			
+				let request = {
+			 		'$or': [
+						{
+							'with': { '@id': `/api/rides/${targetRide._id}`},
+							'ride': { '$in': ridesLinks }
+						},
+						{
+							'with': { '$in': ridesLinks },
+							'ride': {'@id': `/api/rides/${targetRide._id}`}
+						}]}
+
+					return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
+					
+					// Extract the adjacent ride (the one that is not the target)
+			
+						return prospects.map( (prospect: Prospect) =>
+							(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ?
+							<Link>prospect.ride: <Link>prospect.with)
+
+					}).then( (adjacents: Link[]) =>  
+
+					// Remove rides that already have been prospected
+
+						rides.filter( (ride: Ride) => 
+
+							adjacents.filter( (adj: Link) => 
+
+								adj['@id'] == `/api/rides/${ride._id}`	
+
+							).length == 0
+
+						)
+
+					)
+			
+			}).then((rides: Ride[]) => {
 
 			/*
 			 *
-			 * Filter the rides foming from the matching destination
+			 * Filter the rides coming from the matching destination
 			 *
 			 */
 			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
@@ -513,7 +579,6 @@ export class ridesController extends cat.Controller {
 			return filterRides;
 
 		})
-
 	}
 
 	/*
@@ -539,7 +604,8 @@ export class ridesController extends cat.Controller {
 			.find({'$or': [
 				{with: {'@id': `/api/rides/${ req.params.id }`}},
 				{ride: {'@id': `/api/rides/${ req.params.id }`}}
-			]})
+				],
+				accepted: false})
 			.toArray()
 
 	}
@@ -600,7 +666,8 @@ export class ridesController extends cat.Controller {
 					ride: <Link>{'@id': `/api/rides/${ req.params.ride }`},
 					with: req.params.with, // 'with' is already a Link
 					type: ((withRide.type == RideType.REQUEST) ? 
-						ProspectType.APPLY: ProspectType.INVITE)
+						ProspectType.APPLY: ProspectType.INVITE),
+						accepted: false
 				};
 
 				logger.debug('toInsert', toInsert);
@@ -635,7 +702,8 @@ export class ridesController extends cat.Controller {
 			'$or': [
 				{'driver': { '@id': `/api/users/${ req.user._id }`}},
 				{'riders': { '@id': `/api/users/${ req.user._id }`}}
-			]
+			],
+
 		}
 
 		logger.info(`INFO: Trying to find `, request)

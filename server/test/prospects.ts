@@ -44,17 +44,6 @@ let PBKey: string = '';
 let LouiseKey: string = '';
 let RickKey: string = '';
 
-/*
- *
- * Reset the mock in database
- *
- */
-beforeEach(() => {
-
-	return resetMock();
-
-})
-
 describe('prospects', () => {
 
 	/*
@@ -62,7 +51,7 @@ describe('prospects', () => {
 	 * Create three session keys for the tests
 	 *
 	 */
-	before(( ) => {
+	beforeEach(( ) => {
 
 		let connect = (credentials: Credentials) => {
 
@@ -76,8 +65,7 @@ describe('prospects', () => {
 				})
 
 		}
-
-		return Promise.all([
+		return resetMock().then( () => Promise.all([
 			connect(userSignupCredentials).then((key: Signature) => {
 
 				PBKey = key;
@@ -100,13 +88,9 @@ describe('prospects', () => {
 
 			})
 
-		])
+		]))
 
 	})
-
-
-
-
 
 	it('should allow to send an invite', ( ) => {
 
@@ -181,8 +165,8 @@ describe('prospects', () => {
 
 			}	
 
-			expect(prospects[0].ride['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
-			expect(prospects[0].with['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
+			expect((<Link>prospects[0].ride)['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
+			expect((<Link>prospects[0].with)['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
 			expect(prospects[0].type).to.be.equal(ProspectType.INVITE)
 
 			return prospects;
@@ -335,8 +319,8 @@ describe('prospects', () => {
 					expect(isProspect(prospect)).to.be.equal(true)
 				}	
 
-				expect(prospects[0].ride['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
-				expect(prospects[0].with['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
+				expect((<Link>prospects[0].ride)['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
+				expect((<Link>prospects[0].with)['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
 				expect(prospects[0].type).to.be.equal(ProspectType.APPLY)
 
 			})
@@ -625,8 +609,8 @@ describe('prospects', () => {
 				expect(isProspect(prospect)).to.be.equal(true)
 			}	
 
-			expect(prospects[0].ride['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
-			expect(prospects[0].with['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
+			expect((<Link>prospects[0].ride)['@id']).to.be.equal(`/api/rides/${ postRiderExample._id }`)
+			expect((<Link>prospects[0].with)['@id']).to.be.equal(`/api/rides/${ postDriverExample._id }`)
 			expect(prospects[0].type).to.be.equal(ProspectType.INVITE)
 
 		}).then(( ) => {
@@ -651,6 +635,7 @@ describe('prospects', () => {
 				.get(`/api/rides/${ postDriverExample._id }`)
 
 		}).then((res: any) => {
+
 			/*
 			 *
 			 * Checking that the user is in the ride 
@@ -667,7 +652,25 @@ describe('prospects', () => {
 
 			expect(riders_ids_matching.length).to.be.equal(1)
 
-		})
+		}).then(() => {
+
+			/*
+			 *
+		 	 * Check that the new user is not in the matches anymore
+			 * since he is already in the ride 
+			 *
+			 */	 
+			 return chai.request(url)
+			 .get(`/api/rides/${postDriverExample._id}/matches`)
+			 .set('openride-server-session', LouiseKey)
+
+		 }).then((res: any) => { 
+
+			 let matches: Link[] = res.body;
+			 matches = matches.filter( (ride: Link) => ride['@id'] == `/api/rides/${postRiderExample._id}` )
+			 expect(matches.length).to.be.equal(0)
+
+		 })
 
 	})
 
