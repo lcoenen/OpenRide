@@ -25,23 +25,18 @@ const url: string = 'localhost:3000';
 
 let key: string = '';
 
-beforeEach(() => {
 
-	return resetMock();
-
-})
 
 describe('rides',  () => {
 
 	before(( ) => {
 
-		return (() => {
-
+		return resetMock().then( () => {
 			return chai.request(url)
 				.put('/api/session/me')
 				.send(userSignupCredentials)
 
-		})().then((res: any) => {
+		}).then((res: any) => {
 
 			key = res.headers['openride-server-session']
 

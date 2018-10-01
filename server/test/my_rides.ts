@@ -35,36 +35,37 @@ const connectedUsername: string = 'princess77';
 let PBKey: string = '';
 let LouiseKey: string = '';
 
-beforeEach(() => {
-
-	return resetMock().then( () => {
-
-		return chai.request(url)
-			.put('/api/session/me')
-			.send(userSignupCredentials)
-
-	}).then((res: any) => {
-
-		PBKey = res.headers['openride-server-session']
-
-	}).then(() => {
-
-		return chai.request(url)
-			.put('/api/session/me')
-			.send({
-				login: Louise.name,
-				password: Louise.password
-			})
-
-	}).then((res: any) => {
-
-		LouiseKey = res.headers['openride-server-session']
-
-	})
-
-})
 
 describe.only('my-rides', () => {
+
+	beforeEach(() => {
+
+		return resetMock().then( () => {
+
+			return chai.request(url)
+				.put('/api/session/me')
+				.send(userSignupCredentials)
+
+		}).then((res: any) => {
+
+			PBKey = res.headers['openride-server-session']
+
+		}).then(() => {
+
+			return chai.request(url)
+				.put('/api/session/me')
+				.send({
+					login: Louise.name,
+					password: Louise.password
+				})
+
+		}).then((res: any) => {
+
+			LouiseKey = res.headers['openride-server-session']
+
+		})
+
+	})
 
 	it.only('should show the ride I\'m driving', ( ) => {
 

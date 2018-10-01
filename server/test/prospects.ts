@@ -44,17 +44,6 @@ let PBKey: string = '';
 let LouiseKey: string = '';
 let RickKey: string = '';
 
-/*
- *
- * Reset the mock in database
- *
- */
-beforeEach(() => {
-
-	return resetMock();
-
-})
-
 describe('prospects', () => {
 
 	/*
@@ -76,8 +65,7 @@ describe('prospects', () => {
 				})
 
 		}
-
-		return Promise.all([
+		return resetMock().then( () => Promise.all([
 			connect(userSignupCredentials).then((key: Signature) => {
 
 				PBKey = key;
@@ -100,7 +88,7 @@ describe('prospects', () => {
 
 			})
 
-		])
+		]))
 
 	})
 
