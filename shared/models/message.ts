@@ -13,9 +13,6 @@ export interface Message {
 
 export function isMessage(x: any) : x is Message {
 
-	console.log('trying to validate')
-	console.log(x)
-
 	let is_message: boolean = [
 		x.ride, 
 		x.author,

@@ -21,7 +21,7 @@ start: compile
 
 watch: 
 	@echo "Watching the server"
-	$(NODEMON) --watch app/ -e ts --exec "make start"
+	$(NODEMON) --watch app/ -e ts --exec "make start || true"
 
 compile_tests: 
 	@echo "Compiling the tests"

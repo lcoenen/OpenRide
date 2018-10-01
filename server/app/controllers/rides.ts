@@ -306,14 +306,16 @@ export class ridesController extends cat.Controller {
 
 					}).then(() => {
 
-						logger.debug('This prospect will be removed', prospect);
+						logger.debug('This prospect will be accepted', prospect);
 					
 					/*
 					 *
-					 * The corresponding prospect will also be deleted
+					 * The corresponding prospect will be accepted 
 					 *
 					 */
-					 return db.db.collection('prospects').deleteOne({ '_id': prospect._id })
+					 return db.db.collection('prospects').updateOne(
+					 { '_id': prospect._id },
+					 {'$set': { 'accepted': true }})
 					
 					}).then(() : cat.Answer<string> => {
 
@@ -477,11 +479,59 @@ export class ridesController extends cat.Controller {
 				.find(criterias)
 				.toArray();
 
-		}).then((rides: Ride[]) => {
+			}).then((rides: Ride[]) => {
+
+				/*
+				 * 
+				 * Filter the ride pair for which no prospects exists yet
+				 *
+				 */	 
+
+				 let ridesLinks: Link[] = rides.map( (ride: Ride) =>
+				 	({ '@id' : `/api/rides/${ride._id}` }));
+
+				// Find all the prospects that could match
+			
+				let request = {
+			 		'$or': [
+						{
+							'with': { '@id': `/api/rides/${targetRide._id}`},
+							'ride': { '$in': ridesLinks }
+						},
+						{
+							'with': { '$in': ridesLinks },
+							'ride': {'@id': `/api/rides/${targetRide._id}`}
+						}]}
+
+					return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
+					
+					// Extract the adjacent ride (the one that is not the target)
+			
+						return prospects.map( (prospect: Prospect) =>
+							(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ?
+							<Link>prospect.ride: <Link>prospect.with)
+
+					}).then( (adjacents: Link[]) =>  
+
+					// Remove rides that already have been prospected
+
+						rides.filter( (ride: Ride) => 
+
+							adjacents.filter( (adj: Link) => 
+
+								adj['@id'] == `/api/rides/${ride._id}`	
+
+							).length == 0
+
+						)
+
+					)
+			
+			}).then((rides: Ride[]) => {
 
 			/*
 			 *
-			 * Filter the rides foming from the matching destination
+			 * Filter the rides coming from the matching destination
 			 *
 			 */
 			let filterRides : Link[] = rides.filter( (ride: Ride) : boolean => {
@@ -529,7 +579,6 @@ export class ridesController extends cat.Controller {
 			return filterRides;
 
 		})
-
 	}
 
 	/*
@@ -555,7 +604,8 @@ export class ridesController extends cat.Controller {
 			.find({'$or': [
 				{with: {'@id': `/api/rides/${ req.params.id }`}},
 				{ride: {'@id': `/api/rides/${ req.params.id }`}}
-			]})
+				],
+				accepted: false})
 			.toArray()
 
 	}
@@ -616,7 +666,8 @@ export class ridesController extends cat.Controller {
 					ride: <Link>{'@id': `/api/rides/${ req.params.ride }`},
 					with: req.params.with, // 'with' is already a Link
 					type: ((withRide.type == RideType.REQUEST) ? 
-						ProspectType.APPLY: ProspectType.INVITE)
+						ProspectType.APPLY: ProspectType.INVITE),
+						accepted: false
 				};
 
 				logger.debug('toInsert', toInsert);
@@ -651,7 +702,8 @@ export class ridesController extends cat.Controller {
 			'$or': [
 				{'driver': { '@id': `/api/users/${ req.user._id }`}},
 				{'riders': { '@id': `/api/users/${ req.user._id }`}}
-			]
+			],
+
 		}
 
 		logger.info(`INFO: Trying to find `, request)

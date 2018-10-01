@@ -51,7 +51,7 @@ describe('prospects', () => {
 	 * Create three session keys for the tests
 	 *
 	 */
-	before(( ) => {
+	beforeEach(( ) => {
 
 		let connect = (credentials: Credentials) => {
 
@@ -91,10 +91,6 @@ describe('prospects', () => {
 		]))
 
 	})
-
-
-
-
 
 	it('should allow to send an invite', ( ) => {
 
@@ -665,13 +661,13 @@ describe('prospects', () => {
 			 *
 			 */	 
 			 return chai.request(url)
-			 .get(`/api/rides/${postDriverExample}/matches`)
+			 .get(`/api/rides/${postDriverExample._id}/matches`)
 			 .set('openride-server-session', LouiseKey)
 
 		 }).then((res: any) => { 
 
-			 let matches: Ride[] = res.body;
-			 matches = matches.filter( (ride: Ride) => ride._id == postRiderExample._id )
+			 let matches: Link[] = res.body;
+			 matches = matches.filter( (ride: Link) => ride['@id'] == `/api/rides/${postRiderExample._id}` )
 			 expect(matches.length).to.be.equal(0)
 
 		 })

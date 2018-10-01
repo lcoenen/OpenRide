@@ -35,7 +35,7 @@ export interface Prospect {
 	 *
 	 * If me, rider, want to request to join a ride, I will 
 	 * POST /api/rides/:id/prospects with an object {with: Link} (see
-	 * with property
+	 * with property)
 	 * 
 	 * The ride :id will be linked with the ride property
 	 *
@@ -63,6 +63,14 @@ export interface Prospect {
 	 *
 	 */
 	type?: ProspectType;
+
+	/*
+	 *
+	 * This will be changed to true when the request / apply have been
+	 * accepted by the peer
+	 *
+	 */
+	 accepted: boolean;
 
 };
 
