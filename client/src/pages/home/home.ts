@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController } from 'ionic-angular';
 
-import { RequestRidePage } from '../requestride/requestride'
-import { OfferRidePage } from '../offerride/offerride'
+import { EditRidePage } from '../edit-ride/edit-ride'
 import { MyRidesPage } from '../my-rides/my-rides'
 import { IdentifyPage } from '../identify/identify';
 
 import { UserProvider } from '../../providers/user/user'
+import { RideProvider } from '../../providers/ride/ride'
 
 import { User } from 'shared/models/user'
+import { Ride, RideType } from 'shared/models/ride'
 
 @Component({
 	selector: 'page-home',
@@ -16,10 +17,14 @@ import { User } from 'shared/models/user'
 })
 export class HomePage {
 
+	public RideType: any;
 
 	constructor(public navCtrl: NavController,
 		public modalCtrl: ModalController,
-		public userProvider: UserProvider) {
+		public userProvider: UserProvider,
+		public rideProvider: RideProvider) {
+
+		this.RideType = RideType;
 		
 	}
 
@@ -34,34 +39,47 @@ export class HomePage {
 	 */
 	public identify( ) : Promise<any>  {
 
-		return new Promise((resolve, reject) => {
+		// Check that a cookie exists and is recognised by the server
+		return this.userProvider.checkCookie().catch(() => {
+
+			console.log('There is no cookie set (or the cookie is not valid). Opening the modal')
+	
+			// If it's not working, return a promise that will
+			// resolve when the modal will be closed
+			return new Promise((resolve, reject) => {
+				
+				if(this.userProvider.me === undefined) {
+
+					let identifyModal = this.modalCtrl.create(IdentifyPage);
+					identifyModal.onDidDismiss((user: User) => {
+
+						user ? resolve() : reject()
+
+					});
+					identifyModal.present();
+
+				} else { resolve() }	
 			
-			if(this.userProvider.me === undefined) {
+			})
 
-				let identifyModal = this.modalCtrl.create(IdentifyPage);
-				identifyModal.onDidDismiss((user: User) => {
-
-					user ? resolve() : reject()
-
-				});
-				identifyModal.present();
-
-			} else { resolve() }	
-		
 		})
 
 	}
 
 	/*
 	 *
-	 *	This will be called when the user request a ride
+	 *	This will be called when the user request or create a ride
 	 *
 	 */
-	request_a_ride() {
+	create_ride(type: RideType) {
 
-		this.identify().then(( ) => {
+		this.identify().then( () => {
+		
+			return this.rideProvider.createRide(type);
+		
+		}).then(( ) => {
 
-			this.navCtrl.push(RequestRidePage);
+			this.navCtrl.push(EditRidePage);
 
 		}).catch(() => {}) // Do nothing if the user could not be signed up
 
@@ -77,21 +95,6 @@ export class HomePage {
 		this.identify().then(( ) => {
 
 			this.navCtrl.push(MyRidesPage);
-
-		}).catch(() => {}) // Do nothing if the user could not be signed up
-
-	}
-
-	/*
-	 *	This will be called if the user click on the card 'Offer a ride'
-	 *
-	 *
-	 */
-	offer_a_ride() {
-	
-		this.identify().then(( ) => {
-
-			this.navCtrl.push(OfferRidePage);
 
 		}).catch(() => {}) // Do nothing if the user could not be signed up
 

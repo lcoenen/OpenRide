@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-		"link": "ln -s ../server/node_modules node_modules",
-		"compile": "tsc",
-		"runreset": "node built/shared/bin/resetmock.js",
+    "link": "ln -s ../server/node_modules node_modules",
+    "compile": "tsc",
+    "runreset": "node built/shared/bin/resetmock.js",
     "reset": "npm run compile && npm run runreset",
-		"watch": "nodemon -w mocks/* -m models/* -m bin -V --exec 'npm run reset'"
+    "watch": "nodemon -w mocks/* -m models/* -m bin -V --exec 'npm run reset'"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,19 @@
   "bugs": {
     "url": "https://github.com/lcoenen/OpenRide/issues"
   },
-  "homepage": "https://github.com/lcoenen/OpenRide#readme"
+  "homepage": "https://github.com/lcoenen/OpenRide#readme",
+  "dependencies": {
+    "@types/redis": "^2.8.6",
+    "es6-promise": "^4.2.4",
+    "geojson": "^0.5.0",
+    "moment": "^2.22.2",
+    "mongo": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.5",
+    "@types/geojson": "^7946.0.4",
+    "@types/mongodb": "^3.1.4",
+    "@types/restify": "^7.2.4",
+    "redis": "^2.8.0"
+  }
 }

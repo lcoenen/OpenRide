@@ -34,7 +34,7 @@ let UsersMock: User[] = [
 	{
 		name: 'Louise',
 		_id: 'Louise',
-		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
+		password: 'd716d4fdede0b78c0d0d1e5ad09227dff93be468dac0e93909b804c6ed200e46',
 		age: 12,
 		email: 'loulou@caraibmail.com',
 		place_of_origin: 'Ocean side',

@@ -35,7 +35,6 @@ const connectedUsername: string = 'princess77';
 let PBKey: string = '';
 let LouiseKey: string = '';
 
-
 describe.only('my-rides', () => {
 
 	beforeEach(() => {
@@ -68,9 +67,6 @@ describe.only('my-rides', () => {
 	})
 
 	it.only('should show the ride I\'m driving', ( ) => {
-
-		console.log('trying to PUT ride', postDriverExample._id)
-		console.log('with key', LouiseKey);
 
 		return chai.request(url)
 			.put(`/api/rides/${postDriverExample._id}`)

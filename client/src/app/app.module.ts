@@ -4,19 +4,16 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { RequestRidePage } from '../pages/requestride/requestride';
-import { OfferRidePage } from '../pages/offerride/offerride';
+import { EditRidePage } from '../pages/edit-ride/edit-ride';
 import { AddressModalPage} from '../pages/address-modal/address-modal'
-import { OfferInvitePage } from '../pages/offer-invite/offer-invite'
+import { MatchesPage } from '../pages/matches/matches'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
-import { RequestFindRidePage } from '../pages/request-find-ride/request-find-ride'
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile';
 import { IdentifyPage } from '../pages/identify/identify'
 
 import { IdentifyLoginPage } from '../pages/identify-login/identify-login'
 import { IdentifySignupPage } from '../pages/identify-signup/identify-signup'
-
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -26,29 +23,39 @@ import { RideProvider } from '../providers/ride/ride';
 import { UserProvider, ApiKeyInterceptor } from '../providers/user/user';
 import { NominatimProvider } from '../providers/nominatim/nominatim';
 
+import { PayementSelectorComponent } from '../components/payement-selector/payement-selector' 
+import { PlaceSelectorComponent } from '../components/place-selector/place-selector'
+import { TimeSelectorComponent } from '../components/time-selector/time-selector'
 import { RideWidgetComponent } from '../components/ride-widget/ride-widget' 
+import { WizardComponent } from '../components/wizard/wizard' 
+import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
 
+import { Slides } from 'ionic-angular';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AutoCompleteModule } from 'ionic2-auto-complete';
+import { MessageProvider } from '../providers/message/message';
 
 @NgModule({
 	declarations: [
 		MyApp,
 		HomePage,
-		RequestRidePage,
-		OfferRidePage,
+		EditRidePage,
 		AddressModalPage, 
-		OfferInvitePage,
+		MatchesPage,
 		RideBoardPage,
-		RequestFindRidePage,
 		MyRidesPage,
 		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage,
-		RideWidgetComponent
+		RideWidgetComponent,
+		PlaceSelectorComponent,
+		TimeSelectorComponent,
+		PayementSelectorComponent,
+		WizardComponent,
+		WizardPageComponent
 	],
 	imports: [
 		BrowserModule,
@@ -61,18 +68,21 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 	entryComponents: [
 		MyApp,
 		HomePage,
-		RequestRidePage,
-		OfferRidePage,
+		EditRidePage,
 		AddressModalPage,
-		OfferInvitePage,
+		MatchesPage,
 		RideBoardPage,
-		RequestFindRidePage,
 		MyRidesPage,
 		ProfilePage,
 		IdentifyPage,
 		IdentifyLoginPage,
 		IdentifySignupPage,
-		RideWidgetComponent
+		RideWidgetComponent,
+		PlaceSelectorComponent,
+		TimeSelectorComponent,
+		PayementSelectorComponent,
+		WizardComponent,
+		WizardPageComponent
 	],
 	providers: [
 		StatusBar,
@@ -86,7 +96,8 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
 			provide: HTTP_INTERCEPTORS, 
 			useClass: ApiKeyInterceptor, 
 			multi: true 
-		} 
+		},
+		MessageProvider
 	]
 })
 export class AppModule {}

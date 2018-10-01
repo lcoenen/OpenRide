@@ -1,5 +1,6 @@
 import { User } from './user';
 import { Link } from './link';
+import { Prospect } from './prospect';
 
 import { hash } from '../lib/hash';
 
@@ -10,18 +11,78 @@ export enum RideType {
 	OFFER
 }
 
+/*
+ *
+ * This represent a Ride. 
+ * 
+ * A ride can be either a request or an offer
+ * If it's a request, riders will be an array with exactly one User and
+ * no driver. If it's an offer, the driver will be the owner of the ride.
+ *
+ * The type property (see RideType) can be either REQUEST or OFFER
+ *
+ */
 export interface Ride {
   _id?: string;
-  origin: Feature<Point>;
-  destination: Feature<Point>;
-  riding_time: Date | string;
+  origin?: Feature<Point>;
+  destination?: Feature<Point>;
+  riding_time?: Date | string;
   payement?: number;
   driver?: Link | User;
 	riders: Link[] | User[];
+	prospect?: Prospect; 
 	type: RideType;
 	requests?: Link[];
 };
 
+/*
+ *
+ * This will represent the different payement philosophy
+ *
+ */
+export enum PayementPhilosophy {
+
+	FREE,
+	PART,
+ 	REFUNDED, 
+	PAID
+
+}
+
+/*
+ *
+ * These represents the rides type shown in the MyRides page
+ *
+ */
+export interface MyRides{
+
+
+	/*
+	 *
+	 * This will represent all the rides I'm in. This will only be 
+	 * OFFERs. I can be the driver or a rider.
+	 *
+	 */
+  myRides: Ride[];
+
+	/*
+	 *
+	 * This will be my requests.
+	 *
+	 */
+	myRequests: Ride[];
+
+	/*
+	 *
+	 * This will be all my prospects (the rides I applied, the ones I've been invited to,
+	 * the ones I invited and the ones I've been applied from
+	 *
+	 * See shared/models/prospect.ts
+	 *
+	 */
+	myProspects: Ride[]
+
+}
 
 /*
  *

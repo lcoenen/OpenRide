@@ -9,8 +9,6 @@ import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
 import { session, sessionRequest } from '../services/session';
 
-
-
 import { Ride, RideType, isRide } from 'shared/models/ride';
 import { Link, idLink } from 'shared/models/link';
 import { Prospect, ProspectType } from 'shared/models/prospect';
@@ -199,7 +197,7 @@ export class ridesController extends cat.Controller {
 					.toArray()
 					.then((prospects: Prospect[]) => {
 
-						// For each prospectsa 
+						// For each prospects 
 						// Promise.all is there to flatten the Promise<prospects>[] into Promise<prospects[]>
 
 						return Promise.all(prospects.map((prospect: Prospect) => {
@@ -233,6 +231,9 @@ export class ridesController extends cat.Controller {
 
 						// Check that the users ID checks out
 
+						logger.debug('Trying to check that a previous connection exists')
+						logger.debug(populatedProspects);
+
 						populatedProspects = populatedProspects.filter((prospect: any) => {
 
 							let rider: string;
@@ -251,7 +252,10 @@ export class ridesController extends cat.Controller {
 							// Exclude it if the request doesn't come from the person being invited / requested
 							
 							logger.debug(`TRACE: requestor ${ requestor }`)
-							logger.debug(`DEBUG: prospectTarget`)
+							logger.debug(`DEBUG: prospectTarget ${ prospectTarget }`)
+
+							logger.debug(`rider:`, rider)
+							logger.debug(`target:`, target)
 
 							return rider == target && requestor == prospectTarget;
 
@@ -626,6 +630,42 @@ export class ridesController extends cat.Controller {
 					})
 
 			})
+
+
+	}
+
+	/*
+	 * 
+	 * Return the myRides object for the my-rides view
+	 *
+	 */
+	@cat.catnapify('get', '/api/session/me/rides')
+	@logged
+	@session.needAuthentification
+	public my_rides(req: sessionRequest) {
+	
+
+		logger.info(`INFO: req.user`, req.user)
+
+		let request = {
+			'$or': [
+				{'driver': { '@id': `/api/users/${ req.user._id }`}},
+				{'riders': { '@id': `/api/users/${ req.user._id }`}}
+			]
+		}
+
+		logger.info(`INFO: Trying to find `, request)
+		logger.info(request)
+		
+		return db.db.collection('rides').find(request).toArray()
+		.then((rides: Ride[]) => {
+
+		 	logger.info(`INFO: returned`) 
+			logger.info(rides)
+
+			return rides;
+
+		})
 
 	}
 

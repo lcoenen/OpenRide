@@ -1,5 +1,7 @@
 #! /usr/bin/ts-node
 
+import * as redis from 'redis';
+
 import { Promise } from 'es6-promise'
 
 import { MongoClient, Db } from 'mongodb';
@@ -20,7 +22,7 @@ import { ProspectsMock } from '../mocks/prospects';
  */
 export function resetMock(){ 
 
-return MongoClient.connect(settings.mongoUrl, {useNewUrlParser: true}).then((client: MongoClient) => {
+	return MongoClient.connect(settings.mongoUrl, {useNewUrlParser: true}).then((client: MongoClient) => {
 
 		let db: Db = client.db(settings.dbName);
 

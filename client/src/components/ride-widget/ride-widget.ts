@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { Ride } from 'shared/models/ride';
+import { Ride, RideType } from 'shared/models/ride';
 
 /*
  *
@@ -22,10 +22,50 @@ export class RideWidgetComponent {
 
 	@Input() ride: Ride;
 
+	@Input() mine: boolean = false;
+	@Input() type: string = 'match';
+
+	/*
+	 *
+	 * This event is fired when the user click on "apply" or "invite"
+	 *
+	 */
+	@Output() prospect: EventEmitter<Ride> = new EventEmitter<Ride>();
+
+	/*
+	 *
+	 * This event is fired when the user want to enter the ride
+	 *
+	 */
+	@Output() enter: EventEmitter<Ride> = new EventEmitter<Ride>();
+
+	// RideType is the enum itself
+	RideType: any;
+
   constructor() {
 
-		
+		this.RideType = RideType;	
 
   }
+
+	ngOnChanges() {
+	
+		console.log(`ride:`)
+		console.log(this.ride)
+	
+	}
+
+	/*
+	 *
+	 * This is the user of the ride (the driver if it's an OFFER 
+	 * and the riders[0] (the requester) if it's a request
+	 *
+	 */
+	get user() {
+
+		return this.ride.type == RideType.OFFER?
+			this.ride.driver: this.ride.riders[0];
+	
+	}
 
 }

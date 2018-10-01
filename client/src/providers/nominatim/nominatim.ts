@@ -61,3 +61,9 @@ export function NominatimToGeoJSON(nominatimAnswer: any) : Feature<Point> {
  }
 
 }
+
+export function GeoJSONCenter(point: Feature<Point>) { 
+
+	return point.geometry.coordinates;
+
+}

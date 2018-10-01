@@ -1,31 +1,42 @@
-
-<ion-card> 
-	<ion-item>
+<ion-card> <ion-item>
 		<ion-avatar item-start>
-			<img src="assets/imgs/avatar_{{ride.riders[0].name}}.png">
+			<img src="assets/imgs/avatar_{{user.name}}.png">
 		</ion-avatar>
-		<h2>{{rider.name}}</h2>
-		<p>{{rider.age}} years old, from {{rider.place_of_origin}}</p>
+		<h2>{{user.name}}</h2>
+		<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
 	</ion-item>
 
 	<ion-card-content>
 
-		<p>From {{ride.origin.properties.address}} to {{ride.destination.properties.address}}</p>
-		<p>{{ride.riding_time}}</p>
+		is <strong *ngIf="ride.type == RideType.OFFER">offering</strong>
+			<strong *ngIf="ride.type == RideType.REQUEST">requesting</strong> a ride 
+			<ion-icon *ngIf="ride.type == RideType.REQUEST" name="thumbs-up"></ion-icon>
+			<ion-icon *ngIf="ride.type == RideType.OFFER" name="car"></ion-icon>
+			from {{ride.origin.properties.address}} to {{ride.destination.properties.address}}
+		in {{ride.riding_time}}
+		<span *ngIf="ride.payement">Price: {{ride.payement}}€</span>
 
 	</ion-card-content>
 
 	<ion-row>
 		<ion-col>
-			<button ion-button icon-left clear small>
+			<!-- This will be used for request as well - it have to be renamed -->
+			<button *ngIf="type == 'invite'" (click)="prospect.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
-				<div>Invite</div>
+				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
+				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
 			</button>
+      <button (click)="enter.emit(ride)" ion-button icon-left clear small>
+        <ion-icon name="log-in"></ion-icon>
+        <div *ngIf="type == 'mine' && ride.type == RideType.OFFER">Enter</div>
+        <div *ngIf="type == 'prospect' && ride.type == RideType.OFFER">Join</div>
+        <div *ngIf="type == 'prospect' && ride.type == RideType.REQUEST">Accept</div>
+      </button>
 		</ion-col>
 		<ion-col center text-center>
 			<ion-note>
 				Reputation: 
-				<ion-badge item-end>{{rider.reputation}}</ion-badge>
+				<ion-badge item-end>{{user.reputation}}</ion-badge>
 			</ion-note>
 		</ion-col>
 	</ion-row>
