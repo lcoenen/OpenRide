@@ -11,14 +11,14 @@
   </ion-navbar>
 
 </ion-header> <ion-content padding> <ion-list *ngIf="myRides.myRides.length != 0"> <ion-list-header>My rides</ion-list-header> <ion-item *ngFor="let ride of myRides.myRides">		
-			<ride-widget [ride]="ride" (matches)="matches(ride)" (enter)="open_board(ride)" [mine]="mine(ride)" [type]="'mine'"></ride-widget>
+			<ride-widget [ride]="ride" (matches)="matches(ride)" (edit)="edit_ride(ride)" (enter)="open_board(ride)" [mine]="mine(ride)" [type]="'mine'"></ride-widget>
 		</ion-item>
 	</ion-list>
 
 	<ion-list *ngIf="myRides.myRequests.length != 0">
 		<ion-list-header>My requests</ion-list-header>
 		<ion-item *ngFor="let ride of myRides.myRequests">		
-			<ride-widget [ride]="ride" (matches)="matches(ride)" (enter)="open_board(ride)" [mine]="true" [type]="'request'"></ride-widget>
+			<ride-widget [ride]="ride" (matches)="matches(ride)" (edit)="edit_ride(ride)" (enter)="open_board(ride)" [mine]="true" [type]="'request'"></ride-widget>
 		</ion-item>
 	</ion-list>
 		

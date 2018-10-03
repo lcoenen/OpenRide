@@ -47,10 +47,16 @@ export class PlaceSelectorComponent {
 	
 		}
 
-	ionViewDidLoad() {
+	ngAfterViewInit() {
 
 		// Place the map on the center
+
 		this.center = GeoJSONCenter(this.place);
+
+		console.log('I gotta extract the name from', this.place)
+
+		console.log('The name is ', this.place.properties.address)
+		this.address = this.place.properties.address;
 
 	}
 

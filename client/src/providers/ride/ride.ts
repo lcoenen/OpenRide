@@ -334,18 +334,18 @@ export class RideProvider {
 
 		}
 
-
 	/*
-		*
-		* This will be called when the driver want to accept a request to join 
-		*
-		accept(ride: Ride) {
+	 *
+	 *	The user want to edit a ride
+	 *
+	 */
+	editRide(ride: Ride){
 
-			// Find the adjacent ride
-			// Join the adjacent ride
+		this.mode = EditMode.EDIT;
+		this.currentRide = ride;
 
-		}
-		*/
+	}
+
 
 	/*
 	 *

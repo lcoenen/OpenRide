@@ -35,10 +35,6 @@ export class WizardComponent {
 
 	ngAfterViewInit() {
 
-		console.log('Wizard component after view init()')
-
-		//this.slides.lockSwipeToNext(true);
-
 		// Show the first page
 
 		this.wizardPages.first.shown = true;
@@ -118,20 +114,13 @@ export class WizardComponent {
 	 */
 	get showLast() {
 
-		console.log('should it be shown last')
-
 		if(this.slides._slides === undefined) return true;
 
 		let show = this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  {
 			
-				console.log('defined', defined)
-				console.log('page linked', page.linked)	
-				console.log('page', page)
 				return defined && page.linked !== undefined
 
 			}), true)
-
-		console.log('show', show);
 
 		return show;
 
