@@ -36,4 +36,5 @@ watch-test:
 	nodemon -w test -w app --exec "make test" -e ts
 
 clean: 
+	../shared/bin/resetmock.ts
 	rm built -fr
