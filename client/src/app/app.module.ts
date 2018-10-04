@@ -30,8 +30,6 @@ import { RideWidgetComponent } from '../components/ride-widget/ride-widget'
 import { WizardComponent } from '../components/wizard/wizard' 
 import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
 
-import { Slides } from 'ionic-angular';
-
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AutoCompleteModule } from 'ionic2-auto-complete';

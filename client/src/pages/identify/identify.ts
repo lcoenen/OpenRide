@@ -7,8 +7,6 @@ import { IdentifySignupPage } from '../identify-signup/identify-signup';
 
 import { User } from 'shared/models/user';
 
-import { Observable } from 'rxjs/Rx';
-
 /**
  * Generated class for the IdentifyPage page.
  *

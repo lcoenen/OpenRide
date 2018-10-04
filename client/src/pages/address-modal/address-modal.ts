@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, ViewController } from 'ionic-angular';
 
 import { NominatimProvider } from '../../providers/nominatim/nominatim';
 import { AutoCompleteComponent } from 'ionic2-auto-complete';

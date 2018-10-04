@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, NavParams } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 
-import { User } from 'shared/models/user';
 import { Ride, RideType } from 'shared/models/ride';
 
 import { RideBoardPage } from '../ride-board/ride-board'; 

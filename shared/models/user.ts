@@ -1,6 +1,3 @@
-
-import { Link } from './link';
-
 /*
  *
  *	This is an user. The interface will be used all along

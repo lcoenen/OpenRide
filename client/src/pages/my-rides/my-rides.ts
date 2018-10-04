@@ -11,7 +11,7 @@ import { User } from 'shared/models/user';
 
 import { UserProvider }  from '../../providers/user/user';
 
-import { RideProvider, MyRides, ProspectType } from '../../providers/ride/ride';
+import { RideProvider, MyRides } from '../../providers/ride/ride';
 
 
 /**

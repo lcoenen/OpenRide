@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable'
-;
 import { settings } from '../../config/config'
 
 import { UserProvider } from '../user/user'

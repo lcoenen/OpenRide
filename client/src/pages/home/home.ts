@@ -9,7 +9,7 @@ import { UserProvider } from '../../providers/user/user'
 import { RideProvider } from '../../providers/ride/ride'
 
 import { User } from 'shared/models/user'
-import { Ride, RideType } from 'shared/models/ride'
+import { RideType } from 'shared/models/ride'
 
 @Component({
 	selector: 'page-home',

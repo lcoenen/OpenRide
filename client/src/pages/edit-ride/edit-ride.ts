@@ -8,12 +8,9 @@
 
 import { Ride, RideType } from 'shared/models/ride';
 
-import { ViewChild } from '@angular/core';
-import { Slides } from 'ionic-angular';
 import { ModalController, NavParams, IonicPage, NavController } from 'ionic-angular';
 
 import { Component } from '@angular/core';
-// import { Input, OnChanges, SimpleChange } from '@angular/core';
 
 import { MatchesPage } from '../matches/matches'; 
 
