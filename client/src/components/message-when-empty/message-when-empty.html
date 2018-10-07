@@ -1,0 +1,14 @@
+	<ion-grid *ngIf="rides === undefined || rides.length == 0" style="height: 100%">
+		<ion-row justify-content-center align-items-center style="height: 100%">
+			<ng-content></ng-content>
+			<p><img src="assets/imgs/nothing.png" alt="Nothing here" /></p>
+			<p><button (click)="continue.emit()" 
+				*ngIf="showContinue"
+				ion-button 
+				icon-right 
+				color="royal">
+				Continue
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button></p>
+		</ion-row>
+	</ion-grid>
