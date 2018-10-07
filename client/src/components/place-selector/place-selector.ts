@@ -51,12 +51,16 @@ export class PlaceSelectorComponent {
 
 		// Place the map on the center
 
-		this.center = GeoJSONCenter(this.place);
+		if(this.place !== undefined) {
 
-		console.log('I gotta extract the name from', this.place)
+			this.center = GeoJSONCenter(this.place);
 
-		console.log('The name is ', this.place.properties.address)
-		this.address = this.place.properties.address;
+			console.log('I gotta extract the name from', this.place)
+
+			console.log('The name is ', this.place.properties.address)
+			this.address = this.place.properties.address;
+
+		}
 
 	}
 
