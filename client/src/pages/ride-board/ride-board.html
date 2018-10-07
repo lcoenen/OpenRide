@@ -33,40 +33,6 @@ Ionic pages and navigation.
 
 			<ride-widget [mine]="mine(currentRide)" [type]="board" (matches)="matches(currentRide)" [ride]="currentRide"></ride-widget>
 
-			<ion-list no-border>
-					<ion-item>
-					<ion-icon name='arrow-dropleft-circle' item-start></ion-icon>
-					Departure
-					<ion-note item-end>
-						{{currentRide.origin.properties.address}}	
-					</ion-note>
-				</ion-item>
-
-				<ion-item>
-					<ion-icon name='arrow-dropright-circle' item-start></ion-icon>
-					Destination	 
-					<ion-note item-end>
-						{{currentRide.destination.properties.address}}	
-					</ion-note>
-				</ion-item>
-
-				<ion-item>
-					<ion-icon name='time' item-start></ion-icon>
-					Riding time
-					<ion-note item-end>
-						{{currentRide.riding_time}}		 
-					</ion-note>
-				</ion-item>
-
-				<ion-item>
-					<ion-icon name='cash' item-start></ion-icon>
-					Payement
-					<ion-note item-end>
-						{{currentRide.payement}}€		 
-					</ion-note>
-				</ion-item>
-
-			</ion-list>
 		</div>
 
 		<div *ngSwitchCase="'riders'">
