@@ -4,17 +4,38 @@
 		</ion-avatar>
 		<h2>{{user.name}}</h2>
 		<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
+		<p>
+			is <strong *ngIf="ride.type == RideType.OFFER">offering</strong>
+			<strong *ngIf="ride.type == RideType.REQUEST">requesting</strong> a ride 
+			<ion-icon *ngIf="ride.type == RideType.REQUEST" name="thumbs-up"></ion-icon>
+			<ion-icon *ngIf="ride.type == RideType.OFFER" name="car"></ion-icon>
+		</p>
 	</ion-item>
 
 	<ion-card-content>
 
-		is <strong *ngIf="ride.type == RideType.OFFER">offering</strong>
-			<strong *ngIf="ride.type == RideType.REQUEST">requesting</strong> a ride 
-			<ion-icon *ngIf="ride.type == RideType.REQUEST" name="thumbs-up"></ion-icon>
-			<ion-icon *ngIf="ride.type == RideType.OFFER" name="car"></ion-icon>
-			from {{ride.origin.properties.address}} to {{ride.destination.properties.address}}
-		in {{ride.riding_time}}
-		<span *ngIf="ride.payement">Price: {{ride.payement}}€</span>
+		<ion-grid class="ride-widget-grid" >
+			<ion-row align-items-center justify-content-center>
+				<ion-col col-1><img src="assets/imgs/origin.png" alt="Origin" /></ion-col>
+				<ion-col col-6>
+					<p>{{ride.origin.properties.address}}</p>
+				</ion-col>
+				<ion-col col-1><img src="assets/imgs/riding_time.png" alt="Riding time" /></ion-col>
+				<ion-col col-4>
+					<p>in {{ride.riding_time}}</p>
+				</ion-col>
+			</ion-row>
+			<ion-row>
+				<ion-col col-1><img src="assets/imgs/destination.png" alt="Destination" /></ion-col>
+				<ion-col col-6>
+					<p> {{ride.destination.properties.address}}</p>
+				</ion-col>
+				<ion-col *ngIf="ride.payement" col-1><img src="assets/imgs/money.png" alt="Payement" /></ion-col>
+				<ion-col col-4>
+					<p><strong *ngIf="ride.payement">{{ride.payement}}€</strong></p>
+				</ion-col>
+			</ion-row>
+		</ion-grid>
 
 	</ion-card-content>
 
