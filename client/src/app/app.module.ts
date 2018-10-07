@@ -35,6 +35,8 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { MessageProvider } from '../providers/message/message';
 
+import { MomentModule } from 'ngx-moment';
+
 @NgModule({
 	declarations: [
 		MyApp,
@@ -60,7 +62,8 @@ import { MessageProvider } from '../providers/message/message';
 		IonicModule.forRoot(MyApp),
 		HttpClientModule,
 		LeafletModule,
-		AutoCompleteModule
+		AutoCompleteModule,
+		MomentModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
