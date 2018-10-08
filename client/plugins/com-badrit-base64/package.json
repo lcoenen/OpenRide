@@ -1,0 +1,52 @@
+{
+  "_from": "com-badrit-base64",
+  "_id": "com-badrit-base64@0.2.0",
+  "_inBundle": false,
+  "_integrity": "sha1-u9hgM6oeGs/37kRqbIDIvUL03Tc=",
+  "_location": "/com-badrit-base64",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "com-badrit-base64",
+    "name": "com-badrit-base64",
+    "escapedName": "com-badrit-base64",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/com-badrit-base64/-/com-badrit-base64-0.2.0.tgz",
+  "_shasum": "bbd86033aa1e1acff7ee446a6c80c8bd42f4dd37",
+  "_spec": "com-badrit-base64",
+  "_where": "/home/jt/Documents/code/current/OpenRide/client",
+  "bugs": {
+    "url": "https://github.com/hazemhagrass/phonegap-base64/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "com-badrit-base64",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova Base64 Plugin",
+  "homepage": "https://github.com/hazemhagrass/phonegap-base64#readme",
+  "keywords": [
+    "cordova",
+    "base64",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "name": "com-badrit-base64",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hazemhagrass/phonegap-base64.git"
+  },
+  "version": "0.2.0"
+}

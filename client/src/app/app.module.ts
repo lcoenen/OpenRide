@@ -35,6 +35,9 @@ import { MessageProvider } from '../providers/message/message';
 
 import { MomentModule } from 'ngx-moment';
 
+import { ImagePicker } from '@ionic-native/image-picker';
+import { Base64 } from '@ionic-native/base64';
+
 @NgModule({
 	declarations: [
 		MyApp,
@@ -94,7 +97,9 @@ import { MomentModule } from 'ngx-moment';
 			useClass: ApiKeyInterceptor, 
 			multi: true 
 		},
-		MessageProvider
+		MessageProvider,
+		ImagePicker,
+		Base64
 	]
 })
 export class AppModule {}
