@@ -111,6 +111,8 @@ export class MyRidesPage {
 	 */
 	edit_ride(ride: Ride){ 
 
+		console.log('Editing ride')
+
 		this.rideProvider.editRide(ride);
 		this.navCtrl.push(EditRidePage);
 

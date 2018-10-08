@@ -12,6 +12,7 @@ import { UserProvider } from '../../providers/user/user';
 
 import { ProfilePage } from '../profile/profile';
 import { MatchesPage } from '../matches/matches';
+import { EditRidePage } from '../edit-ride/edit-ride';
 
 /**
  * Generated class for the RideBoardPage page.
@@ -163,6 +164,18 @@ export class RideBoardPage {
 
 		this.rideProvider.currentRide = ride;
 		this.navCtrl.push(MatchesPage);
+
+	}
+
+	/*
+	 *
+	 * This will be called when the user want to edit a ride
+	 *
+	 */
+	edit_ride() {
+
+		this.rideProvider.editRide(this.rideProvider.currentRide);
+		this.navCtrl.push(EditRidePage);
 
 	}
 

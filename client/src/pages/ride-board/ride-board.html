@@ -31,7 +31,7 @@ Ionic pages and navigation.
 	<div [ngSwitch]="boardpage">
 		<div *ngSwitchCase="'summary'">
 
-			<ride-widget [mine]="mine(currentRide)" [type]="board" (matches)="matches(currentRide)" [ride]="currentRide"></ride-widget>
+			<ride-widget [mine]="mine(currentRide)" [type]="board" (matches)="matches(currentRide)" [ride]="currentRide" (edit)="edit_ride(ride)"></ride-widget>
 
 		</div>
 
@@ -107,11 +107,11 @@ Ionic pages and navigation.
 		</div>
 	</div>
 
-<ion-fab *ngIf="boardpage == 'summary'" left bottom>
+<ion-fab *ngIf="boardpage == 'summary' && mine(currentRide)" left bottom>
     <button ion-fab color="danger"><ion-icon name="close"></ion-icon></button>
 </ion-fab>
-<ion-fab *ngIf="boardpage == 'summary'" right bottom>
-    <button ion-fab color="secondary"><ion-icon name="create"></ion-icon></button>
+<ion-fab *ngIf="boardpage == 'summary' && mine(currentRide)" right bottom>
+    <button ion-fab color="secondary" (click)="edit_ride()"><ion-icon name="create"></ion-icon></button>
 </ion-fab>
 </ion-content>
 
