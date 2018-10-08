@@ -61,6 +61,19 @@ export class RideProvider {
 	}
 
 	/*
+	 *
+	 * 	This will grab the prospects of a specific ride
+	 *
+	 */
+	prospects(ride: Ride): Promise<Prospect[]> {
+
+		return this.httpClient.get<Prospect[]>(
+			`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`
+		).toPromise()
+
+	}
+	
+	/*
 		*
 		* This is used to populate the ride (link the rides and drivers)
 		*

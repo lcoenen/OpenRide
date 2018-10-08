@@ -24,6 +24,7 @@ export class RideWidgetComponent {
 
 	@Input() mine: boolean = false;
 	@Input() type: string = 'match';
+	@Input() prospected: boolean = false;
 
 	/*
 	 *

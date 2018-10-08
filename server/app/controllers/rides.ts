@@ -501,7 +501,9 @@ export class ridesController extends cat.Controller {
 						{
 							'with': { '$in': ridesLinks },
 							'ride': {'@id': `/api/rides/${targetRide._id}`}
-						}]}
+						}],
+					'accepted': true
+					}
 
 					return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
 					

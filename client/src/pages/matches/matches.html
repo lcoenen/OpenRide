@@ -7,7 +7,8 @@ Ionic pages and navigation.
 <ion-header>
 
 	<ion-navbar>
-		<ion-title>Invite people to your ride!</ion-title>
+		<ion-title *ngIf="type == RideType.OFFER">Invite people to your ride!</ion-title>
+		<ion-title *ngIf="type == RideType.REQUEST">Find a ride!</ion-title>
 	</ion-navbar>
 
 </ion-header>
@@ -16,7 +17,7 @@ Ionic pages and navigation.
 <ion-content padding>
 	<ion-list>
 		<ion-item *ngFor="let ride of rides">
-			<ride-widget [ride]="ride" [type]="'invite'" (prospect)="invite($event)"></ride-widget>
+			<ride-widget [ride]="ride" [type]="requireAction(ride)? 'invite': 'prospect'" [prospected]="prospected(ride)" (prospect)="invite($event)" (enter)="invite($event)"></ride-widget>
 		</ion-item>
 	</ion-list>
 	<message-when-empty *ngIf="rides !== undefined && rides.length == 0" [showContinue]="true">
