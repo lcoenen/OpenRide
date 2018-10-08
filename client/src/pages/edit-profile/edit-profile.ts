@@ -27,12 +27,12 @@ export class EditProfilePage {
 	 *
 	 */
 	public user: User = {
-		name: '', 
-		password: '',
-		age: 29,
-		place_of_origin: '',
+		name: undefined,
+		age: undefined,
+		place_of_origin: undefined,
 		reputation: 0,
-		email: ''
+		email: undefined,
+		password: undefined,
 	}
 
 	/*

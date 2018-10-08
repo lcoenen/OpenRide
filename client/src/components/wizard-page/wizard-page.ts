@@ -21,7 +21,10 @@ export class WizardPageComponent implements OnChanges {
 
 	ngAfterViewInit(){
 
-		this.shown = this.linked !== undefined;
+		if(this.linked instanceof Array)
+			this.shown = this.linked.reduce((last: boolean, current: any) => last && current !== undefined)
+		else
+			this.shown = this.linked !== undefined;
 		this.changed.emit();
 
 	}

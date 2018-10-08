@@ -4,75 +4,72 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-content padding>
 
-	<wizard (valid)="signup()">
-	<wizard-page [linked]="user">
+<wizard (valid)="signup()">
+<wizard-page [linked]="[user.name, user.password, confirmPassword, user.age, user.email, user.place_of_origin]">
 
-		<ion-list>
+	<ion-list>
 
-      <ion-item>
-        <ion-label stacked>Avatar</ion-label>
-        <ion-avatar item-end>
-          <img src="assets/imgs/avatar_cooldude1.png" (click)="getPhoto()">
-        </ion-avatar>
-      </ion-item>
+		<ion-item>
+			<ion-label stacked>Avatar</ion-label>
+			<ion-avatar item-end>
+				<img src="assets/imgs/avatar_cooldude1.png" (click)="getPhoto()">
+			</ion-avatar>
+		</ion-item>
 
-			<ion-item>
-				<ion-label stacked>Username</ion-label>
-				<ion-input [(ngModel)]="user.name" type="text" value=""></ion-input>
-			</ion-item>
+		<ion-item>
+			<ion-label stacked>Username</ion-label>
+			<ion-input [(ngModel)]="user.name" type="text" value=""></ion-input>
+		</ion-item>
 
-			<ion-item>
-				<ion-label stacked>Password</ion-label>
-				<ion-input [(ngModel)]="user.password" type="password"></ion-input>
-			</ion-item>
+		<ion-item>
+			<ion-label stacked>Password</ion-label>
+			<ion-input [(ngModel)]="user.password" type="password"></ion-input>
+		</ion-item>
 
-			<ion-item>
-				<ion-label stacked>Confirm the password</ion-label>
-				<ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
-			</ion-item>
+		<ion-item>
+			<ion-label stacked>Confirm the password</ion-label>
+			<ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
+		</ion-item>
 
-			<ion-item>
-				<ion-label stacked>Age</ion-label>
-				<ion-input [(ngModel)]="user.age" type="number"></ion-input>
-			</ion-item>
-			
-			<ion-item>
-				<ion-label stacked>Email</ion-label>
-				<ion-input [(ngModel)]="user.email" type="email"></ion-input>
-			</ion-item>
+		<ion-item>
+			<ion-label stacked>Age</ion-label>
+			<ion-input [(ngModel)]="user.age" type="number"></ion-input>
+		</ion-item>
+		
+		<ion-item>
+			<ion-label stacked>Email</ion-label>
+			<ion-input [(ngModel)]="user.email" type="email"></ion-input>
+		</ion-item>
 
-			<ion-item>
-				<ion-label stacked>Place of origin</ion-label>
-				<ion-input [(ngModel)]="user.place_of_origin" type="text"></ion-input>
-			</ion-item>
-		</ion-list>
-	</wizard-page>
-	<wizard-page [linked]="user.presentation">
-		<ion-list>
-			<ion-item>
-				<ion-label stacked>Tell more about yourself</ion-label>
-				<ion-textarea [(ngModel)]="user.presentation"></ion-textarea>
-			</ion-item>
-			<ion-item>
-				<ion-label stacked>Describe your vehicle</ion-label>
-				<ion-textarea [(ngModel)]="user.vehicle"></ion-textarea>
-			</ion-item>
-			<ion-item>
-				<ion-label stacked>How much room do you have in this vehicle?</ion-label>
-				<ion-textarea [(ngModel)]="user.room"></ion-textarea>
-			</ion-item>
-			<ion-item>
-				<ion-label stacked>How much do you pay per kilometer?</ion-label>
-				<ion-textarea [(ngModel)]="user.charge_per_km"></ion-textarea>
-				<ion-note>Please be honest</ion-note>
-			</ion-item>
-		</ion-list>
-	</wizard-page>
+		<ion-item>
+			<ion-label stacked>Place of origin</ion-label>
+			<ion-input [(ngModel)]="user.place_of_origin" type="text"></ion-input>
+		</ion-item>
+	</ion-list>
+</wizard-page>
+<wizard-page [linked]="user.presentation">
+	<ion-list>
+		<ion-item>
+			<ion-label stacked>Tell more about yourself</ion-label>
+			<ion-textarea [(ngModel)]="user.presentation"></ion-textarea>
+		</ion-item>
+		<ion-item>
+			<ion-label stacked>Describe your vehicle</ion-label>
+			<ion-textarea [(ngModel)]="user.vehicle"></ion-textarea>
+		</ion-item>
+		<ion-item>
+			<ion-label stacked>How much room do you have in this vehicle?</ion-label>
+			<ion-textarea [(ngModel)]="user.room"></ion-textarea>
+		</ion-item>
+		<ion-item>
+			<ion-label stacked>How much do you pay per kilometer?</ion-label>
+			<ion-textarea [(ngModel)]="user.charge_per_km"></ion-textarea>
+			<ion-note>Please be honest</ion-note>
+		</ion-item>
+	</ion-list>
+</wizard-page>
 
-	<button ion-button color="primary" (click)="signup()" block>Sign up</button>
-	<p *ngIf="showLogin">Already have an account? <a (click)="tologin()">Login</a></p>
+<button ion-button color="primary" (click)="signup()" block>Sign up</button>
+<p *ngIf="showLogin">Already have an account? <a (click)="tologin()">Login</a></p>
 </wizard>
-	
-</ion-content>
