@@ -3,7 +3,7 @@ import { NavController, ModalController } from 'ionic-angular';
 
 import { EditRidePage } from '../edit-ride/edit-ride'
 import { MyRidesPage } from '../my-rides/my-rides'
-import { IdentifyPage } from '../identify/identify';
+import { SignInPage } from '../sign-in/sign-in';
 
 import { UserProvider } from '../../providers/user/user'
 import { RideProvider } from '../../providers/ride/ride'
@@ -50,7 +50,7 @@ export class HomePage {
 				
 				if(this.userProvider.me === undefined) {
 
-					let identifyModal = this.modalCtrl.create(IdentifyPage);
+					let identifyModal = this.modalCtrl.create(SignInPage);
 					identifyModal.onDidDismiss((user: User) => {
 
 						user ? resolve() : reject()

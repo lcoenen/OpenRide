@@ -10,10 +10,8 @@ import { MatchesPage } from '../pages/matches/matches'
 import { RideBoardPage } from '../pages/ride-board/ride-board'
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile';
-import { IdentifyPage } from '../pages/identify/identify'
-
-import { IdentifyLoginPage } from '../pages/identify-login/identify-login'
-import { IdentifySignupPage } from '../pages/identify-signup/identify-signup'
+import { SignInPage } from '../pages/sign-in/sign-in'
+import { EditProfilePage } from '../pages/edit-profile/edit-profile'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -47,9 +45,8 @@ import { MomentModule } from 'ngx-moment';
 		RideBoardPage,
 		MyRidesPage,
 		ProfilePage,
-		IdentifyPage,
-		IdentifyLoginPage,
-		IdentifySignupPage,
+		SignInPage,
+		EditProfilePage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,
@@ -75,9 +72,8 @@ import { MomentModule } from 'ngx-moment';
 		RideBoardPage,
 		MyRidesPage,
 		ProfilePage,
-		IdentifyPage,
-		IdentifyLoginPage,
-		IdentifySignupPage,
+		SignInPage,
+		EditProfilePage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,

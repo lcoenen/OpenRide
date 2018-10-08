@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,
-	ToastController, Events } from 'ionic-angular';
+	ToastController, Events, ViewController } from 'ionic-angular';
 
-import { UserProvider } from '../../providers/user/user'
+import { EditProfilePage } from '../edit-profile/edit-profile';
+
+import { UserProvider } from '../../providers/user/user';
 
 import { User, Credentials } from 'shared/models/user';
 
 
 /**
- * Generated class for the IdentifyLoginPage page.
+ * Generated class for the SignInPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -16,10 +18,10 @@ import { User, Credentials } from 'shared/models/user';
 
 @IonicPage()
 @Component({
-  selector: 'page-identify-login',
-  templateUrl: 'identify-login.html',
+  selector: 'page-sign-in',
+  templateUrl: 'sign-in.html',
 })
-export class IdentifyLoginPage {
+export class SignInPage {
 
 	/*
 	 *
@@ -31,6 +33,7 @@ export class IdentifyLoginPage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
+		public viewCtrl: ViewController,
 		public toastCtrl: ToastController,
 		public events: Events,
 		public userProvider: UserProvider) {
@@ -39,7 +42,7 @@ export class IdentifyLoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad IdentifyLoginPage');
+    console.log('ionViewDidLoad SignInPage');
 	}
 	
 	/*
@@ -55,11 +58,11 @@ export class IdentifyLoginPage {
 	 * 	signal the overlying modal to close.
 	 *
 	 */
-	login() {
+	signin() {
 
 		this.userProvider.login(this.credentials).then((user: User) => {
 
-			this.events.publish('identify:identified', user)
+			this.viewCtrl.dismiss(user)
 
 		}).catch((error:any) => {
 
@@ -104,7 +107,7 @@ export class IdentifyLoginPage {
 	 */
 	tosignup() {
 	
-	  this.navCtrl.parent.select(1);
+	  this.navCtrl.push(EditProfilePage);
 	
 	}
 

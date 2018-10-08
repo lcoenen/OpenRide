@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IonicPage, NavController, NavParams,
 	ToastController, Events } from 'ionic-angular';
 
@@ -6,19 +6,19 @@ import { User } from 'shared/models/user';
 
 import { UserProvider } from '../../providers/user/user'
 
-/**
- * Generated class for the IdentifySignupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
-	selector: 'page-identify-signup',
-	templateUrl: 'identify-signup.html',
+	selector: 'edit-profile-signup',
+	templateUrl: 'edit-profile.html',
 })
-export class IdentifySignupPage {
+export class EditProfilePage {
+
+	/*
+	 * 
+	 * This define if the login link will be shown or not
+	 *
+	 */
+	@Input() showLogin: boolean = true;
 
 	/*
 	 *
@@ -55,10 +55,6 @@ export class IdentifySignupPage {
 		public toastCtrl: ToastController,
 		public events: Events,
 		public userProvider: UserProvider) {
-	}
-
-	ionViewDidLoad() {
-		console.log('ionViewDidLoad IdentifySignupPage');
 	}
 
 	/*
