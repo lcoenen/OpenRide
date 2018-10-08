@@ -20,7 +20,7 @@ Ionic pages and navigation.
 			<ride-widget [ride]="ride" [type]="requireAction(ride)? 'invite': 'prospect'" [prospected]="prospected(ride)" (prospect)="invite($event)" (enter)="invite($event)"></ride-widget>
 		</ion-item>
 	</ion-list>
-	<message-when-empty *ngIf="rides !== undefined && rides.length == 0" [showContinue]="true">
+	<message-when-empty *ngIf="rides !== undefined && rides.length == 0" (continue)="continue()" [showContinue]="true">
 		<p><ion-note>Nobody's requesting for a ride near you at the moment.</ion-note></p>
 	</message-when-empty>
 </ion-content>
