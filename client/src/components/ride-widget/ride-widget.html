@@ -22,7 +22,8 @@
 				</ion-col>
 				<ion-col col-1><img src="assets/imgs/riding_time.png" alt="Riding time" /></ion-col>
 				<ion-col col-4>
-					<p>{{ride.riding_time | amCalendar}}</p>
+					<p *ngIf="ride.riding_time != 'asap'">{{ride.riding_time | amCalendar}}</p>
+					<p *ngIf="ride.riding_time == 'asap'">ASAP<p>
 				</ion-col>
 			</ion-row>
 			<ion-row>
