@@ -59,6 +59,29 @@ export class UserProvider {
 		console.log('Hello UsersProvider Provider');
 	}
 
+	public currentUser: User;
+
+/*
+ *
+ *	This will get an user
+ *
+ */
+	getUser(path?: string) {
+
+		if(path === undefined) {
+			this.currentUser = this.me;
+			return Promise.resolve(this.me);
+		}
+		else
+			return this.http.get(`${ settings.apiEndpoint }${ path }`).toPromise().then( (user: User) => {
+
+				this.currentUser = user;
+				return user;
+
+			})
+
+	}
+
 
 /*
  *

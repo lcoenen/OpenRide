@@ -7,8 +7,24 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+      <button menuClose ion-item (click)="home()">
+			 <ion-icon name="home"></ion-icon>	Home
+      </button>
+      <button menuClose ion-item (click)="myRides()">
+				<ion-icon name="bookmark"></ion-icon>
+				My Rides
+      </button>
+      <button menuClose ion-item (click)="offer()">
+				<ion-icon name="car"></ion-icon>
+				Offer a ride
+      </button>
+      <button menuClose ion-item (click)="request()">
+				<ion-icon name="thumbs-up"></ion-icon>
+				Request a ride
+      </button>
+      <button menuClose ion-item (click)="profile()">
+				<ion-icon name="body"></ion-icon>
+			 	My profile	
       </button>
     </ion-list>
   </ion-content>

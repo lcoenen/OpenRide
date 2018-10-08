@@ -7,7 +7,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>My rides</ion-title>
+		<button ion-button menuToggle>
+				<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title><ion-icon name="bookmark"></ion-icon> My rides</ion-title>
   </ion-navbar>
 
 </ion-header> <ion-content padding> <ion-list *ngIf="myRides.myRides.length != 0"> <ion-list-header>My rides</ion-list-header> <ion-item *ngFor="let ride of myRides.myRides">		

@@ -8,6 +8,7 @@ import { EditRidePage } from '../pages/edit-ride/edit-ride';
 import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile'
 
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -21,17 +22,6 @@ export class MyApp {
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'My rides', component: MyRidesPage },
-      { title: 'Request a ride', component: EditRidePage },
-      { title: 'Offer a ride', component: EditRidePage },
-      { title: 'Profile', component: ProfilePage} /*, 
-      { title: 'Preferences', component: PreferencesPage }
-			*/
-    ];
-
   }
 
   initializeApp() {
@@ -43,9 +33,23 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+  home() {
+    this.nav.setRoot(HomePage);
+  }
+
+  myRides() {
+    this.nav.setRoot(MyRidesPage);
+  }
+
+  offer() {
+    this.nav.setRoot(EditRidePage);
+  }
+
+  request() {
+    this.nav.setRoot(EditRidePage);
+  }
+
+  profile() {
+    this.nav.setRoot(ProfilePage);
   }
 }

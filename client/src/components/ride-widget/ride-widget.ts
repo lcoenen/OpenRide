@@ -63,13 +63,6 @@ export class RideWidgetComponent {
 
   }
 
-	ngOnChanges() {
-	
-		console.log(`ride:`)
-		console.log(this.ride)
-	
-	}
-
 	/*
 	 *
 	 * This is the user of the ride (the driver if it's an OFFER 

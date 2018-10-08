@@ -7,8 +7,11 @@
 <ion-header>
 
 	<ion-navbar>
-		<ion-title *ngIf="ride.type == RideType.OFFER">Offer a ride</ion-title>
-		<ion-title *ngIf="ride.type == RideType.REQUEST">Request a ride</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+		<ion-title *ngIf="ride.type == RideType.OFFER"><ion-icon name="car"></ion-icon> Offer a ride</ion-title>
+		<ion-title *ngIf="ride.type == RideType.REQUEST"><ion-icon name="thumbs-up"></ion-icon> Request a ride</ion-title>
 	</ion-navbar>
 
 </ion-header>
