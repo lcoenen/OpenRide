@@ -11,19 +11,19 @@
 
   <ion-card (click)="my_rides()">
     <img src="assets/imgs/my_rides.png"/>
-    <div class="card-title">My rides</div>
+		<div class="card-title"><ion-icon name="bookmark"></ion-icon> My rides</div>
     <div class="card-subtitle">3 rides planned</div>
   </ion-card>
 
   <ion-card (click)="create_ride(RideType.OFFER)">
     <img src="assets/imgs/offer_a_ride.png"/>
-    <div class="card-title">Offer a ride</div>
+		<div class="card-title"><ion-icon name="car"></ion-icon> Offer a ride</div>
     <div class="card-subtitle">23 riders looking for a ride</div>
   </ion-card>
 
   <ion-card (click)="create_ride(RideType.REQUEST)">
     <img src="assets/imgs/request_a_ride.png"/>
-    <div class="card-title">Request a ride</div>
+		<div class="card-title"><ion-icon name="thumbs-up"></ion-icon> Request a ride</div>
     <div class="card-subtitle">45 drivers looking for riders</div>
   </ion-card>
 
