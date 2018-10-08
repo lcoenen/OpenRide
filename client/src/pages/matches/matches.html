@@ -7,7 +7,7 @@ Ionic pages and navigation.
 <ion-header>
 
 	<ion-navbar>
-		<ion-title>Invite people to your ride!</ion-title>
+		<ion-title>Find corresponding ride!</ion-title>
 	</ion-navbar>
 
 </ion-header>
@@ -20,7 +20,7 @@ Ionic pages and navigation.
 		</ion-item>
 	</ion-list>
 	<message-when-empty *ngIf="rides !== undefined && rides.length == 0" [showContinue]="true">
-		<p><ion-note>Nobody's requesting for a ride near you at the moment.</ion-note></p>
+		<p><ion-note>We could not find any ride going there at that time.</ion-note></p>
 	</message-when-empty>
 </ion-content>
 

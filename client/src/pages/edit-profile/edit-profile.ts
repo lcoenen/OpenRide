@@ -35,7 +35,6 @@ export class EditProfilePage {
 		password: undefined,
 		presentation: undefined,
 		vehicle: undefined,
-		room: undefined,
 		charge_per_km: undefined
 	}
 
