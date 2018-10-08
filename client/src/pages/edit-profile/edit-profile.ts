@@ -18,7 +18,7 @@ export class EditProfilePage {
 	 * This define if the login link will be shown or not
 	 *
 	 */
-	@Input() showLogin: boolean = true;
+	@Input() showSignIn: boolean = true;
 
 	/*
 	 *
@@ -125,9 +125,9 @@ export class EditProfilePage {
 	 *	This will change the page to the login page
 	 *
 	 */
-	tologin() {
+	toSignIn() {
 	
-	  this.navCtrl.parent.select(0);
+	  this.navCtrl.pop()
 	
 	}
 

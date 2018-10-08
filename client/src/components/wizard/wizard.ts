@@ -118,7 +118,7 @@ export class WizardComponent {
 
 		let show = this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  {
 			
-				return defined && page.linked !== undefined
+				return defined && page.is_defined()
 
 			}), true)
 

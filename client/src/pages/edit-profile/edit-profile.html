@@ -13,7 +13,7 @@
 		<ion-item>
 			<ion-label stacked>Avatar</ion-label>
 			<ion-avatar item-end>
-				<img src="assets/imgs/avatar_cooldude1.png" (click)="getPhoto()">
+				<img src="assets/imgs/avatar_cooldude1.png" (click)="avatar()">
 			</ion-avatar>
 		</ion-item>
 
@@ -46,6 +46,7 @@
 			<ion-label stacked>Place of origin</ion-label>
 			<ion-input [(ngModel)]="user.place_of_origin" type="text"></ion-input>
 		</ion-item>
+		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
 	</ion-list>
 </wizard-page>
 <wizard-page [linked]="[user.presentation, user.vehicle, user.room, user.charge_per_km]">
@@ -59,16 +60,12 @@
 			<ion-textarea [(ngModel)]="user.vehicle"></ion-textarea>
 		</ion-item>
 		<ion-item>
-			<ion-label stacked>How much room do you have in this vehicle?</ion-label>
-			<ion-input [(ngModel)]="user.room"></ion-input>
-		</ion-item>
-		<ion-item>
 			<ion-label stacked>How much do you pay per kilometer? (Please be honest)</ion-label>
-			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>€/km
+			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>
 		</ion-item>
+		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
 	</ion-list>
 </wizard-page>
 
-<button ion-button color="primary" (click)="signup()" block>Sign up</button>
-<p *ngIf="showLogin">Already have an account? <a (click)="tologin()">Login</a></p>
+<button ion-button color="primary" (click)="signup()">Sign up</button>
 </wizard>
