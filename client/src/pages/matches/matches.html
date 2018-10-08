@@ -19,14 +19,9 @@ Ionic pages and navigation.
 			<ride-widget [ride]="ride" [type]="'invite'" (prospect)="invite($event)"></ride-widget>
 		</ion-item>
 	</ion-list>
-	<div *ngIf="rides === undefined || rides.length == 0">
-		<p>Nobody's requesting for a ride near you at the moment.</p>
-		<img src="assets/imgs/nothing.png" alt="Nothing here" />
-		<button (click)="continue()" ion-button icon-right color="royal">
-			Continue
-			<ion-icon name="arrow-forward"></ion-icon>
-		</button>	
-	</div>
+	<message-when-empty *ngIf="rides !== undefined && rides.length == 0" [showContinue]="true">
+		<p><ion-note>Nobody's requesting for a ride near you at the moment.</ion-note></p>
+	</message-when-empty>
 </ion-content>
 
 <ion-footer>

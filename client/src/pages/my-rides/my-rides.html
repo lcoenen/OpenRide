@@ -29,44 +29,8 @@
 		</ion-item>
 	</ion-list>
 
-	<div *ngIf="myRides.myRides.length + myRides.myRequests.length + myRides.myProspects == 0">	
-		<p>You have yet to publish a ride! You can <a (click)="create(RideType.REQUEST)">request</a> or <a (click)="create(RideType.OFFER)">offer</a> a ride to find ridemates. </p>
-		<img src="assets/imgs/nothing.png" alt="Nothing to see here" />
-	</div>
+	<message-when-empty *ngIf="myRides.myRides.length + myRides.myRequests.length + myRides.myProspects == 0">	
+		<p><ion-note>You have yet to publish a ride! You can <a (click)="create(RideType.REQUEST)">request</a> or <a (click)="create(RideType.OFFER)">offer</a> a ride to find ridemates. </ion-note></p>
+	</message-when-empty>
 
-	<!--
-  <ion-card *ngFor="let rider of riders">
-  <ion-item>
-    <ion-avatar item-start>
-      <img src="assets/imgs/avatar_{{rider.id}}.png">
-    </ion-avatar>
-    <h2>{{rider.name}}</h2>
-    <p>{{rider.age}} years old, from {{rider.place_of_origin}}</p>
-  </ion-item>
-
-  <ion-card-content>
-
-  <p>From {{rider.origin}} to {{rider.destination}}</p>
-  <p>{{rider.riding_time}}</p>
-  
-  </ion-card-content>
-
-  <ion-row>
-    <ion-col>
-      <button (click)="open_board(rider)" ion-button icon-left clear small>
-        <ion-icon name="log-in"></ion-icon>
-        <div>Enter</div>
-      </button>
-    </ion-col>
-    <ion-col center text-center>
-      <ion-note>
-        Reputation: 
-	<ion-badge item-end>{{rider.reputation}}</ion-badge>
-      </ion-note>
-    </ion-col>
-  </ion-row>
-
-
-</ion-card>
--->
 </ion-content>

@@ -12,8 +12,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class MessageWhenEmptyComponent {
 
-	@Input('showContinue') showContinue: boolean = false;
-	@Output() continue: EventEmitter<any> = new EventEmitter<any>();
+	@Input() public showContinue: boolean = false;
+	@Output() public continue: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {
   }
