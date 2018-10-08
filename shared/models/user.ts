@@ -18,6 +18,7 @@ export interface User {
 	email: string;
 	presentation: string;
 	vehicle: string;
+	room: number;
 	charge_per_km: number;
 }
 

@@ -91,8 +91,8 @@ export class MatchesPage {
 				duration: 3000
 			})
 			toast.present();
-			
-			this.refresh()	
+
+			this.rides = this.rides.filter((ride: Ride) => ride._id != invitedRide._id)
 
 		})
 	

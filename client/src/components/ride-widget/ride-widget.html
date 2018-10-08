@@ -42,14 +42,10 @@
 	<ion-row>
 		<ion-col>
 			<!-- This will be used for request as well - it have to be renamed -->
-			<button *ngIf="type == 'invite' && !prospected" (click)="prospect.emit(ride)" ion-button icon-left clear small>
+			<button *ngIf="type == 'invite'" (click)="prospect.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="thumbs-up"></ion-icon>
 				<div *ngIf="ride.type == RideType.OFFER">Apply</div>
 				<div *ngIf="ride.type == RideType.REQUEST">Invite</div>
-			</button>
-			<button *ngIf="type == 'invite' && prospected" style="color: grey" ion-button icon-left clear small>
-				<div *ngIf="ride.type == RideType.OFFER">Applied</div>
-				<div *ngIf="ride.type == RideType.REQUEST">Invited</div>
 			</button>
       <button *ngIf="ride.type == RideType.OFFER && type == 'mine'" (click)="enter.emit(ride)" ion-button icon-left clear small>
         <ion-icon name="log-in"></ion-icon>

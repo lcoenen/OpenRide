@@ -68,20 +68,6 @@ export class ridesController extends cat.Controller {
 			.db
 			.collection('rides')
 			.findOne({_id: request.req.params.id})
-			.then((ride: Ride) => {
-
-
-			 return db.db.collection('prospects').find({
-			 	'$or': [
-					{
-						'with': { '@id': `/api/rides/${ride._id}`},
-					},
-					{
-						'ride': {'@id': `/api/rides/${ride._id}`}
-					}
-				]}).toArray().then( (prospects: Prospect[]) => {
-
-			})
 			.then((ans:Ride) : cat.Answer<Ride> => {
 				if(!ans) throw { code: 404, response: 'ERROR: No such ride' } ;
 				return { code: 200, response: ans } ;
@@ -112,7 +98,7 @@ export class ridesController extends cat.Controller {
 
 				return {code: 200, response: rides}
 
-			}) 
+			}) /* It should work without this, but out of security, I return a proper Answer object */
 
 	}
 
@@ -495,35 +481,53 @@ export class ridesController extends cat.Controller {
 
 			}).then((rides: Ride[]) => {
 
-			/*
-			 *
-			 * Check if the rides have been prospected or not
-			 *
-			 */
-			 let ridesLinks: Link[] = rides.map( (ride: Ride) =>
+				/*
+				 * 
+				 * Filter the ride pair for which no prospects exists yet
+				 *
+				 */	 
+
+				 let ridesLinks: Link[] = rides.map( (ride: Ride) =>
 				 	({ '@id' : `/api/rides/${ride._id}` }));
 
+				// Find all the prospects that could match
+			
+				let request = {
+			 		'$or': [
+						{
+							'with': { '@id': `/api/rides/${targetRide._id}`},
+							'ride': { '$in': ridesLinks }
+						},
+						{
+							'with': { '$in': ridesLinks },
+							'ride': {'@id': `/api/rides/${targetRide._id}`}
+						}]}
 
-					logger.debug('Prospect found:', prospects)
+					return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
+					
+					// Extract the adjacent ride (the one that is not the target)
+			
+						return prospects.map( (prospect: Prospect) =>
+							(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ?
+							<Link>prospect.ride: <Link>prospect.with)
 
-					return rides.map( (ride: Ride) => {
+					}).then( (adjacents: Link[]) =>  
 
-						// For each ride, find the corresponding prospect
-						let filteredProspects: Prospect[] = prospects.filter( (prospect: Prospect) => 
-							(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ||
-							(<Link>prospect.ride)['@id'] == `/api/rides/${targetRide._id}`)
+					// Remove rides that already have been prospected
 
-						if(filteredProspects.length > 1) throw 'Error: there is not supposed to be more then one prospect per ride pair';
+						rides.filter( (ride: Ride) => 
 
-						ride.prospect = filteredProspects[0];
+							adjacents.filter( (adj: Link) => 
 
-						return ride;
+								adj['@id'] == `/api/rides/${ride._id}`	
 
-					})
+							).length == 0
 
-				})
+						)
 
-		}).then((rides: Ride[]) => {
+					)
+			
+			}).then((rides: Ride[]) => {
 
 			/*
 			 *
@@ -563,7 +567,7 @@ export class ridesController extends cat.Controller {
 					timeDifference / msPerWeek 
 			}).map((ride: Ride): Link => {
 
-				return { '@id' : `/api/rides/${ ride._id }`, ride}; 
+				return { '@id' : `/api/rides/${ ride._id }`}; 
 
 			});
 
