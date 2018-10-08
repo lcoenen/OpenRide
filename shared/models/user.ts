@@ -20,7 +20,6 @@ export interface User {
 	vehicle: string;
 	room: number;
 	charge_per_km: number;
-	avatar: string; // Base64 representation of avatar
 }
 
 export function isUser(x: any) : x is User {

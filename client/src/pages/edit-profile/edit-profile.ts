@@ -4,10 +4,6 @@ import { IonicPage, NavController, NavParams,
 
 import { User } from 'shared/models/user';
 
-import { ImagePicker } from '@ionic-native/image-picker';
-import { Base64 } from '@ionic-native/base64';
-
-
 import { UserProvider } from '../../providers/user/user'
 
 @IonicPage()
@@ -62,8 +58,6 @@ export class EditProfilePage {
 		public navParams: NavParams,
 		public toastCtrl: ToastController,
 		public events: Events,
-		public imagePicker: ImagePicker,
-		public base64: Base64,
 		public userProvider: UserProvider) {
 	}
 
@@ -135,21 +129,6 @@ export class EditProfilePage {
 	
 	  this.navCtrl.parent.select(0);
 	
-	}
-
-		/*
-		 *
-	 	 * This will get an avatar image
-	 	 *
-	 	 */
- 	avatar(){
-
-		this.imagePicker.getPictures({maximumImagesCount: 1}).then((result) => {
-
-			console.log(result)
-
-		})
-
 	}
 
 }
