@@ -8,7 +8,11 @@ let UsersMock: User[] = [
 		age: 32,
 		email: 'marc@gmail.com',
 		place_of_origin: 'Dirty Village',
-		reputation: 12 
+		presentation: 'I am a person',
+		reputation: 12,
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
+
 	},
 
 	{
@@ -18,7 +22,10 @@ let UsersMock: User[] = [
 		age: 54 ,
 		email: 'stephsteph@gmail.com',
 		place_of_origin: 'Hellroad',
-		reputation: 32 
+		reputation: 32,
+		presentation: 'I am a person',
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
 	},
 
 	{
@@ -28,7 +35,10 @@ let UsersMock: User[] = [
 		age: 34,
 		email: 'marcdu83@gmail.com',
 		place_of_origin: 'Liege',
-		reputation: 54
+		reputation: 5,
+		presentation: 'I am a person',
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
 	},
 
 	{
@@ -38,7 +48,10 @@ let UsersMock: User[] = [
 		age: 12,
 		email: 'loulou@caraibmail.com',
 		place_of_origin: 'Ocean side',
-		reputation: 47
+		reputation: 4,
+		presentation: 'I am a person',
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
 	},
 	{
 		name: 'PB',
@@ -47,7 +60,10 @@ let UsersMock: User[] = [
 		age: 17,
 		email: 'princess@candykingdom.com',
 		place_of_origin: 'Bubblegum castle',
-		reputation: 92
+		reputation: 9,
+		presentation: 'I am a person',
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
 	},
 	{
 		name: 'Moe',
@@ -56,7 +72,10 @@ let UsersMock: User[] = [
 		password: 'e51e002cf339122c1576deafff386d09dc0bda4a0',
 		email: 'moe@simpsons.com',
 		place_of_origin: 'Springfield',
-		reputation: 23 
+		reputation: 23,
+		presentation: 'I am a person',
+		vehicle: 'I ride an UFO',
+		charge_per_km: 10
 	}
 ]
 
@@ -67,7 +86,10 @@ const userSignupExample: User = {
 	password: 'e51e002cf339122c1576deafff386d09dc0bda40',
 	age: 17,
 	place_of_origin: 'The Park',
-	reputation: 32
+	reputation: 3,
+	presentation: 'I am a person',
+	vehicle: 'I ride an UFO',
+	charge_per_km: 10
 };
 
 const userSignupCredentials	= {
