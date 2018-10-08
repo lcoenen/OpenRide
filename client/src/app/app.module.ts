@@ -25,6 +25,7 @@ import { PayementSelectorComponent } from '../components/payement-selector/payem
 import { PlaceSelectorComponent } from '../components/place-selector/place-selector'
 import { TimeSelectorComponent } from '../components/time-selector/time-selector'
 import { RideWidgetComponent } from '../components/ride-widget/ride-widget' 
+import { MessageWhenEmptyComponent } from '../components/message-when-empty/message-when-empty';
 import { WizardComponent } from '../components/wizard/wizard' 
 import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
 
@@ -52,7 +53,8 @@ import { MomentModule } from 'ngx-moment';
 		TimeSelectorComponent,
 		PayementSelectorComponent,
 		WizardComponent,
-		WizardPageComponent
+		WizardPageComponent,
+		MessageWhenEmptyComponent
 	],
 	imports: [
 		BrowserModule,
@@ -79,7 +81,8 @@ import { MomentModule } from 'ngx-moment';
 		TimeSelectorComponent,
 		PayementSelectorComponent,
 		WizardComponent,
-		WizardPageComponent
+		WizardPageComponent,
+		MessageWhenEmptyComponent
 	],
 	providers: [
 		StatusBar,
