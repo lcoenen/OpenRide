@@ -48,7 +48,7 @@ export class WizardComponent {
 
 				// Show the next page if the linked value is defined
 					(index < this.wizardPages.length - 1)? 
-					(this.wizardPages.toArray()[index + 1].shown = page.linked !== undefined, 
+					(this.wizardPages.toArray()[index + 1].shown = page.is_defined(), 
 					this.slides.update()) : undefined
 					
 				}

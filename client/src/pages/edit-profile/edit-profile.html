@@ -48,7 +48,7 @@
 		</ion-item>
 	</ion-list>
 </wizard-page>
-<wizard-page [linked]="user.presentation">
+<wizard-page [linked]="[user.presentation, user.vehicle, user.room, user.charge_per_km]">
 	<ion-list>
 		<ion-item>
 			<ion-label stacked>Tell more about yourself</ion-label>
@@ -60,12 +60,11 @@
 		</ion-item>
 		<ion-item>
 			<ion-label stacked>How much room do you have in this vehicle?</ion-label>
-			<ion-textarea [(ngModel)]="user.room"></ion-textarea>
+			<ion-input [(ngModel)]="user.room"></ion-input>
 		</ion-item>
 		<ion-item>
-			<ion-label stacked>How much do you pay per kilometer?</ion-label>
-			<ion-textarea [(ngModel)]="user.charge_per_km"></ion-textarea>
-			<ion-note>Please be honest</ion-note>
+			<ion-label stacked>How much do you pay per kilometer? (Please be honest)</ion-label>
+			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>€/km
 		</ion-item>
 	</ion-list>
 </wizard-page>

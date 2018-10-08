@@ -16,6 +16,10 @@ export interface User {
   place_of_origin: string;
   reputation: number;
 	email: string;
+	presentation: string;
+	vehicle: string;
+	room: number;
+	charge_per_km: number;
 }
 
 export function isUser(x: any) : x is User {

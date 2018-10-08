@@ -33,6 +33,10 @@ export class EditProfilePage {
 		reputation: 0,
 		email: undefined,
 		password: undefined,
+		presentation: undefined,
+		vehicle: undefined,
+		room: undefined,
+		charge_per_km: undefined
 	}
 
 	/*
@@ -48,7 +52,7 @@ export class EditProfilePage {
 	 *	This is the password confirmation
 	 *
 	 */
-	public confirmPassword: string = '';
+	public confirmPassword: string;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
