@@ -224,7 +224,7 @@ export class usersController extends cat.Controller {
 	@logged
 	@cat.need('user')
 	@cat.need((params: any) => isUser(params.user))
-	@cat.give(['user', 'key', 'message'])
+	@cat.give(['user','status'])
 	@session.needAuthentification
 	public edit(request: sessionRequest) {
 

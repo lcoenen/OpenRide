@@ -13,6 +13,8 @@ import { UserProvider, EditMode } from '../../providers/user/user'
 })
 export class EditProfilePage {
 
+	public EditMode: any = EditMode;
+
 	/*
 	 * 
 	 * This state if the user is currently being created or edited
