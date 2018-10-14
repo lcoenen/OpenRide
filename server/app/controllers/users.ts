@@ -84,11 +84,10 @@ export class usersController extends cat.Controller {
 	 * The unique indexes have to be put on name
 	 *
 	 */
-	@cat.catnapify('put', '/api/users/:id')
+	@cat.catnapify('post', '/api/users')
 	@logged
 	@cat.need('user')
 	@cat.need((params: any) => isUser(params.user))
-	@cat.need('id')
 	@cat.give(['user', 'key', 'message'])
 	@cat.error((err: any) => {
 
@@ -216,6 +215,27 @@ export class usersController extends cat.Controller {
 
 	}
 
+	/*
+	 *
+	 * 	This route will edit an user
+	 *
+	 */
+	@cat.catnapify('put', '/api/users/:id')
+	@logged
+	@cat.need('user')
+	@cat.need((params: any) => isUser(params.user))
+	@cat.give(['user', 'key', 'message'])
+	@session.needAuthentification
+	public edit(request: sessionRequest) {
+
+		return db.db.collection('users').updateOne({ _id: request.user._id }, { '$set': request.user }).then((answer) => {
+
+			return { status: 'ok', user: request.user };
+
+		})
+
+	}
+	
 	/*
 	 *
 	 * This route return the connected user
