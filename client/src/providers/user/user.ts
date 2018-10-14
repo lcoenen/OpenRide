@@ -303,8 +303,10 @@ public newUser() {
  */
 public editUser(user: User) {
 
-return this.http.put(`${ settings.apiEndpoint }/api/users/${ user._id}`,
-		{user: user}).toPromise().catch((err: any) => {
+	this.currentUser = user;
+
+	return this.http.put(`${ settings.apiEndpoint }/api/users/${ user._id }`,
+		{updatedUser: user}).toPromise().catch((err: any) => {
 
 			console.error(err);
 

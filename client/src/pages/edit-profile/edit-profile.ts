@@ -1,10 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { IonicPage, NavController, NavParams,
-	ToastController, Events } from 'ionic-angular';
+	ToastController, Events, ViewController } from 'ionic-angular';
 
 import { User } from 'shared/models/user';
 
 import { UserProvider, EditMode } from '../../providers/user/user'
+
+import { SignInPage } from '../sign-in/sign-in'
 
 @IonicPage()
 @Component({
@@ -54,8 +56,8 @@ export class EditProfilePage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
-		public toastCtrl: ToastController,
 		public events: Events,
+		public toastCtrl: ToastController,
 		public userProvider: UserProvider) {
 
 		this.user = this.userProvider.currentUser;
@@ -98,13 +100,12 @@ export class EditProfilePage {
 			// Sending the user to the service
 			this.userProvider.signup(this.user).then((user: User) => {
 
+				this.events.publish('user:signedIn', user)
 				this.navCtrl.pop()
 			  console.log('User have been signed up')  
 
 			}).catch((error) => {
 
-				console.error('User cannot be signed up')
-				console.error(error)
 
 				if(error == 'DUPLICATE') { 
 
@@ -149,8 +150,10 @@ export class EditProfilePage {
 		}
 
 		if(this.user.password == 'password')
-			this.user.password == undefined;
+			this.user.password = undefined;
 		
+		console.log
+
 		this.userProvider.editUser(this.user).then((user: User) => {
 
 			this.navCtrl.pop();
@@ -166,8 +169,10 @@ export class EditProfilePage {
 	 *
 	 */
 	toSignIn() {
+
+		this.navCtrl.pop()
 	
-	  this.navCtrl.pop()
+		this.navCtrl.push(SignInPage)
 	
 	}
 

@@ -102,7 +102,7 @@ export class usersController extends cat.Controller {
 	public signup(request: cat.Request) {
 
 		let user: User = request.params.user;
-		user._id = request.params.id;
+		user._id = request.params.user._id;
 
 		return db
 			.db
@@ -222,15 +222,21 @@ export class usersController extends cat.Controller {
 	 */
 	@cat.catnapify('put', '/api/users/:id')
 	@logged
-	@cat.need('user')
-	@cat.need((params: any) => isUser(params.user))
+	@cat.need('updatedUser')
+	@cat.need((params: any) => isUser(params.updatedUser))
 	@cat.give(['user','status'])
 	@session.needAuthentification
 	public edit(request: sessionRequest) {
 
-		return db.db.collection('users').updateOne({ _id: request.user._id }, { '$set': request.user }).then((answer) => {
+		logger.debug('request.user', request.user)
+		logger.debug('request.params.updatedUser', request.params.updatedUser)
 
-			return { status: 'ok', user: request.user };
+		logger.debug('criteria', { _id: request.params.updatedUser._id })
+
+		return db.db.collection('users').updateOne({ _id: request.params.updatedUser._id }, { '$set': request.params.updatedUser }).then((answer: any) => {
+
+		
+			return { status: 'ok', user: request.params.updatedUser };
 
 		})
 
@@ -244,8 +250,7 @@ export class usersController extends cat.Controller {
 	@cat.catnapify('get', '/api/session/me')
 	@logged
 	@cat.give(isUser)
-	@session.needAuthentification
-	public connected_user(request: sessionRequest) {
+	@session.needAuthentification public connected_user(request: sessionRequest) {
 
 		return {code: 200, response: sanitize(request.user)};
 

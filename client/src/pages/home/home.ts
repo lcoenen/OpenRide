@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, Events, ModalController } from 'ionic-angular';
 
 import { EditRidePage } from '../edit-ride/edit-ride'
 import { MyRidesPage } from '../my-rides/my-rides'
@@ -22,6 +22,7 @@ export class HomePage {
 	constructor(public navCtrl: NavController,
 		public modalCtrl: ModalController,
 		public userProvider: UserProvider,
+		public events: Events,
 		public rideProvider: RideProvider) {
 
 		this.RideType = RideType;
@@ -50,13 +51,12 @@ export class HomePage {
 				
 				if(this.userProvider.me === undefined) {
 
-					let identifyModal = this.modalCtrl.create(SignInPage);
-					identifyModal.onDidDismiss((user: User) => {
+					this.navCtrl.push(SignInPage);
+					this.events.subscribe('user:signedIn', (user: User) => {
 
 						user ? resolve() : reject()
 
 					});
-					identifyModal.present();
 
 				} else { resolve() }	
 			

@@ -24,23 +24,22 @@
 			<img src="assets/imgs/avatar_{{user.name}}.png">
     </ion-avatar>
 		<h2>{{user.name}}</h2>
-		<p>{{user.age}}, from {{user.place_of_origin}}</p>
+		<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
   </ion-item>
 
-  <ion-card-content>
-		<p>{{user.presentation}}</p>
-		<strong>My vehicle</strong>
-		<p>{{user.vehicle}}</p>
-		<strong>I pay {{user.charge_per_km}}€ per 100km</strong>
-  </ion-card-content>
+	<ion-item>
+		<ion-card-content>
+			<p>{{user.presentation}}</p>
+		</ion-card-content>
+	</ion-item>
 
-
-  <ion-row>
-  <ion-col>
-  Reputation: 
-  <ion-badge item-end>22</ion-badge>
-  </ion-col>
-  </ion-row>
+	<ion-item>
+		<ion-card-content>
+			<ion-title>My vehicle</ion-title>
+			<p>{{user.vehicle}}</p>
+			<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note>
+		</ion-card-content>
+	</ion-item>
 </ion-card>
 
   <ion-fab right bottom>

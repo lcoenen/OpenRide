@@ -60,7 +60,7 @@
 			<ion-textarea [(ngModel)]="user.vehicle"></ion-textarea>
 		</ion-item>
 		<ion-item>
-			<ion-label stacked>How much do you pay per kilometer? (Please be honest)</ion-label>
+			<ion-label stacked>How much do you pay (in &euro;) per 100 kilometer? (Please be honest)</ion-label>
 			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>
 		</ion-item>
 		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>

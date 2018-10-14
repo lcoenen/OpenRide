@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,
-	ToastController, Events, ViewController } from 'ionic-angular';
+	ToastController, ViewController, Events, ModalController } from 'ionic-angular';
 
 import { EditProfilePage } from '../edit-profile/edit-profile';
 
@@ -33,15 +33,14 @@ export class SignInPage {
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
-		public viewCtrl: ViewController,
-		public toastCtrl: ToastController,
 		public events: Events,
+		public toastCtrl: ToastController,
 		public userProvider: UserProvider) {
 
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SignInPage');
+
 	}
 	
 	/*
@@ -57,7 +56,8 @@ export class SignInPage {
 
 		this.userProvider.login(this.credentials).then((user: User) => {
 
-			this.viewCtrl.dismiss(user)
+			this.events.publish('user:signedIn', user)
+			this.navCtrl.pop()
 
 		}).catch((error:any) => {
 
@@ -101,11 +101,12 @@ export class SignInPage {
 	 *
 	 */
 	tosignup() {
+
 	
-		this.viewCtrl.dismiss()
 		this.userProvider.newUser()
-	  this.navCtrl.push(EditProfilePage);
-	
+		this.navCtrl.pop()
+		this.navCtrl.push(EditProfilePage);
+
 	}
 
 
