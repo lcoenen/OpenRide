@@ -43,11 +43,18 @@ export class RideBoardPage {
 
     this.boardpage = 'riders';
 
+
 		this.currentRide = this.rideProvider.currentRide;
 
 		this.messages = []
 
   }
+
+	ionViewWillEnter() {
+
+		this.currentRide = this.rideProvider.currentRide;
+
+	}
 
 	/*
 	 * 

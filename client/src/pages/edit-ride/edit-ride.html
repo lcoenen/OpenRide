@@ -38,6 +38,10 @@
 		<payement-selector [(payement)]="ride.payement"></payement-selector>
 	</wizard-page>
 
+	<button *ngIf="mode == EditMode.EDIT" (click)="discard()" ion-button color="secondary">
+		Discard
+	</button>
+
 	<button  (click)="valid()" ion-button icon-right color="royal">
 		<span *ngIf="type == RideType.OFFER">Offer</span>
 		<span *ngIf="type == RideType.REQUEST">Request</span>
