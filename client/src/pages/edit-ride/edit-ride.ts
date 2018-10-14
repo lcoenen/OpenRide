@@ -25,6 +25,13 @@ export class EditRidePage  {
 
 	public ride: Ride;
 
+	/*
+	 *
+	 * This will be the original ride (in case it's discaded
+	 *
+	 */
+	public originalRide: Ride;
+
 	public mode: EditMode;
 	public RideType: any; 
 
@@ -41,13 +48,23 @@ export class EditRidePage  {
 	}
 
 	ionViewDidLoad() {
+
+		this.originalRide = {... this.ride}
+
 	}
 
+
+	/*
+	 *
+	 * This will valid the ride
+	 *
+	 */
 	valid() {
 
 		this.rideProvider.sendRide(this.ride).then(() => {
 
-			this.navCtrl.push(MatchesPage);
+			if(this.mode == EditMode.CREATE) this.navCtrl.push(MatchesPage);
+			else this.navCtrl.pop()
 
 		}).catch((err) => {
 
@@ -55,6 +72,18 @@ export class EditRidePage  {
 			console.error(err)
 
 		})
+
+	}
+
+	/*
+	 *
+	 *	This will discard the changes
+	 *
+	 */
+	discard() {
+
+		this.ride = this.originalRide;
+		this.navCtrl.pop()
 
 	}
 
