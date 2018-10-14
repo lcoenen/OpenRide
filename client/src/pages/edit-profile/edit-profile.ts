@@ -24,12 +24,6 @@ export class EditProfilePage {
 	 */
 	public mode: EditMode;
 
-	/*
-	 * 
-	 * This define if the login link will be shown or not
-	 *
-	 */
-	@Input() showSignIn: boolean = true;
 
 	/*
 	 *
@@ -65,6 +59,11 @@ export class EditProfilePage {
 
 		if(this.mode == EditMode.EDIT)
 			this.user.password = this.confirmPassword  = 'password';
+
+	}
+
+	ionViewWillEnter() {
+
 
 	}
 
@@ -152,8 +151,6 @@ export class EditProfilePage {
 		if(this.user.password == 'password')
 			this.user.password = undefined;
 		
-		console.log
-
 		this.userProvider.editUser(this.user).then((user: User) => {
 
 			this.navCtrl.pop();
@@ -174,6 +171,18 @@ export class EditProfilePage {
 	
 		this.navCtrl.push(SignInPage)
 	
+	}
+
+	/*
+	 *
+	 *	This will discard the changes
+	 *
+	 */
+	discard() {
+
+		this.userProvider.discard ();
+		this.navCtrl.pop()
+
 	}
 
 }

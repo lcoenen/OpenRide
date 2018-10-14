@@ -21,8 +21,6 @@ export class WizardPageComponent implements OnChanges {
 
 	is_defined(): boolean {
 
-		console.log('Is this defined?', this)	
-
 		if(this.linked instanceof Array)
 			return this.linked.reduce(((last: boolean, current: any) => last && (current !== undefined)), true)
 		else

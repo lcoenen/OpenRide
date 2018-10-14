@@ -46,7 +46,7 @@
 			<ion-label stacked>Place of origin</ion-label>
 			<ion-input [(ngModel)]="user.place_of_origin" type="text"></ion-input>
 		</ion-item>
-		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
+		<p><ion-note *ngIf="mode == EditMode.CREATE">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
 	</ion-list>
 </wizard-page>
 <wizard-page [linked]="[user.presentation, user.vehicle, user.charge_per_km]">
@@ -63,10 +63,11 @@
 			<ion-label stacked>How much do you pay (in &euro;) per 100 kilometer? (Please be honest)</ion-label>
 			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>
 		</ion-item>
-		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
+		<p><ion-note *ngIf="mode == EditMode.CREATE">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
 	</ion-list>
 </wizard-page>
 
 
+<button *ngIf="mode == EditMode.EDIT" ion-button color="secondary" (click)="discard()">Discard</button>
 <button *ngIf="mode == EditMode.CREATE" ion-button color="primary" (click)="signup()">Sign up</button> 
 <button *ngIf="mode == EditMode.EDIT" ion-button color="primary" (click)="edit()">Edit</button>

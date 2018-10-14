@@ -34,8 +34,14 @@ export class ProfilePage {
 	edit(user: User) {
 
 		this.userProvider.startUserEdition(user)
-		this.navCtrl.push(EditProfilePage)
+		this.navCtrl.push(EditProfilePage) 
 
+	}
+
+	ionViewWillEnter(){
+
+		console.log('This.user', this.user)
+		this.user = this.userProvider.currentUser;
 
 	}
 

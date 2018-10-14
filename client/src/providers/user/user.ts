@@ -62,6 +62,7 @@ export class UserProvider {
 	}
 
 	public currentUser: User;
+	public originalUser: User;
 
 /*
  *
@@ -271,6 +272,8 @@ public logout( ) {
  */
 public startUserEdition(user?: User) {
 
+	if(user !== undefined) this.originalUser = { ... user }
+
 	this.mode = (user === undefined)? EditMode.CREATE : EditMode.EDIT;
 
 	if(user === undefined) 
@@ -293,6 +296,7 @@ public startUserEdition(user?: User) {
 public newUser() {
 
 	this.startUserEdition(undefined)
+	this.mode = EditMode.CREATE; 
 
 }
 
@@ -312,6 +316,17 @@ public editUser(user: User) {
 
 		});
 			
+}
+
+/*
+ *
+ *	This will discard the changes
+ *
+ */
+public discard() {
+
+	this.currentUser = this.originalUser;
+
 }
 
 }
