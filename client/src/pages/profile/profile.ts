@@ -33,7 +33,7 @@ export class ProfilePage {
 
 	edit(user: User) {
 
-		this.userProvider.editUser(user)
+		this.userProvider.startUserEdition(user)
 		this.navCtrl.push(EditProfilePage)
 
 

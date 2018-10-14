@@ -83,8 +83,7 @@ export class EditProfilePage {
 
 		}
 
-		if(this.user.password != this.confirmPassword)  {
-
+		if(this.user.password != this.confirmPassword)  { 
 			const toast = this.toastCtrl.create({
 				message: 'Passwords aren\'t matching',
 				duration: 3000
@@ -128,6 +127,34 @@ export class EditProfilePage {
 			})
 		
 		}
+
+	}
+
+	/*
+	 *
+	 *	This will happen when the user is trying to effectively edit his profile
+	 *
+	 */
+	edit() {
+
+		if(this.user.password != this.confirmPassword)  { 
+			const toast = this.toastCtrl.create({
+				message: 'Passwords aren\'t matching',
+				duration: 3000
+			});
+			toast.present();
+
+		}
+
+		if(this.user.password == 'password')
+			this.user.password == undefined;
+		
+		this.userProvider.editUser(this.user).then((user: User) => {
+
+			this.navCtrl.pop();
+			console.log('The user have been edited')
+
+		})
 
 	}
 

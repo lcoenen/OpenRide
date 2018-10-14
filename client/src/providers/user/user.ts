@@ -144,7 +144,7 @@ public signup(user: User) {
 	// Generate an _id from the hash of the user object
 	user._id = sha256(JSON.stringify(user)).substring(0,9)
 
-	return this.http.put(`${ settings.apiEndpoint }/api/users/${ user._id }`,
+	return this.http.post(`${ settings.apiEndpoint }/api/users}`,
 		{user: user}).toPromise().then((response: SignupResponse) => {
 
 			// Saving the recieved user and the key
@@ -269,7 +269,7 @@ public logout( ) {
  * 	This will prepare an user edition
  *
  */
-public editUser(user?: User) {
+public startUserEdition(user?: User) {
 
 	this.mode = user === undefined? EditMode.CREATE : EditMode.EDIT;
 
@@ -292,8 +292,24 @@ public editUser(user?: User) {
 
 public newUser() {
 
-	this.editUser()
+	this.startUserEdition(undefined)
 
+}
+
+/*
+ *
+ *	This will attempt to edit an user
+ *
+ */
+public editUser(user: User) {
+
+	return this.http.put(`${ settings.apiEndpoint }/api/users/}`,
+		{user: user}).toPromise().catch((err: any) => {
+
+			console.error(err);
+
+		});
+			
 }
 
 }
