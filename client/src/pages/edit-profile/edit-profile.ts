@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams,
 
 import { User } from 'shared/models/user';
 
-import { UserProvider } from '../../providers/user/user'
+import { UserProvider, EditMode } from '../../providers/user/user'
 
 @IonicPage()
 @Component({
@@ -12,6 +12,13 @@ import { UserProvider } from '../../providers/user/user'
 	templateUrl: 'edit-profile.html',
 })
 export class EditProfilePage {
+
+	/*
+	 * 
+	 * This state if the user is currently being created or edited
+	 *
+	 */
+	public mode: EditMode;
 
 	/*
 	 * 
@@ -26,17 +33,7 @@ export class EditProfilePage {
 	 *	the inputs and be sent to UserProvider
 	 *
 	 */
-	public user: User = {
-		name: undefined,
-		age: undefined,
-		place_of_origin: undefined,
-		reputation: 0,
-		email: undefined,
-		password: undefined,
-		presentation: undefined,
-		vehicle: undefined,
-		charge_per_km: undefined
-	}
+	public user: User;
 
 	/*
 	 *
@@ -58,6 +55,13 @@ export class EditProfilePage {
 		public toastCtrl: ToastController,
 		public events: Events,
 		public userProvider: UserProvider) {
+
+		this.user = this.userProvider.currentUser;
+		this.mode = this.userProvider.mode;
+
+		if(this.mode == EditMode.EDIT)
+			this.user.password = this.confirmPassword  = 'password';
+
 	}
 
 	/*
@@ -69,6 +73,15 @@ export class EditProfilePage {
 	public signup( ) {
 
 		// Check the password confirmation
+		if(this.user.password == 'password' && this.mode == EditMode.CREATE)  {
+
+			const toast = this.toastCtrl.create({
+				message: '"password" is not a real password. Please chose another one.',
+				duration: 3000
+			});
+			toast.present();
+
+		}
 
 		if(this.user.password != this.confirmPassword)  {
 
@@ -84,8 +97,7 @@ export class EditProfilePage {
 			// Sending the user to the service
 			this.userProvider.signup(this.user).then((user: User) => {
 
-
-				this.events.publish('identify:identified', user)
+				this.navCtrl.pop()
 			  console.log('User have been signed up')  
 
 			}).catch((error) => {

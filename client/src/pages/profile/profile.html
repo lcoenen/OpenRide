@@ -21,14 +21,17 @@
 <ion-card>
   <ion-item>
     <ion-avatar item-start>
-      <img src="assets/imgs/avatar_Moe.png">
+			<img src="assets/imgs/avatar_{{user.name}}.png">
     </ion-avatar>
-    <h2>Moe Sizlack</h2>
-    <p>From Springfield, USA</p>
+		<h2>{{user.name}}</h2>
+		<p>{{user.age}}, from {{user.place_of_origin}}</p>
   </ion-item>
 
   <ion-card-content>
-    <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
+		<p>{{user.presentation}}</p>
+		<strong>My vehicle</strong>
+		<p>{{user.vehicle}}</p>
+		<strong>I pay {{user.charge_per_km}}€ per 100km</strong>
   </ion-card-content>
 
 
@@ -41,6 +44,6 @@
 </ion-card>
 
   <ion-fab right bottom>
-    <button ion-fab color="secondary"><ion-icon name="more"></ion-icon></button>
+    <button ion-fab (click)="edit(user)" color="secondary"><ion-icon name="more"></ion-icon></button>
 </ion-fab>
 </ion-content>

@@ -13,7 +13,7 @@
 		<ion-item>
 			<ion-label stacked>Avatar</ion-label>
 			<ion-avatar item-end>
-				<img src="assets/imgs/avatar_cooldude1.png" (click)="avatar()">
+				<img src="assets/imgs/avatar_{{user.name}}.png" (click)="avatar()">
 			</ion-avatar>
 		</ion-item>
 
@@ -49,7 +49,7 @@
 		<p><ion-note *ngIf="showSignIn">Already have an account? <a (click)="toSignIn()">Sign in</a>.</ion-note></p>
 	</ion-list>
 </wizard-page>
-<wizard-page [linked]="[user.presentation, user.vehicle, user.room, user.charge_per_km]">
+<wizard-page [linked]="[user.presentation, user.vehicle, user.charge_per_km]">
 	<ion-list>
 		<ion-item>
 			<ion-label stacked>Tell more about yourself</ion-label>

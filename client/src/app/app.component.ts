@@ -110,6 +110,7 @@ export class MyApp {
 
   profile() {
 		this.identify().then( () => 
+		this.userProvider.getUser()).then( () =>
     this.nav.setRoot(ProfilePage))
   }
 }

@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { UserProvider } from '../../providers/user/user'
 
+import { EditProfilePage } from '../edit-profile/edit-profile'
+
 import { User } from 'shared/models/user';
 
 /**
@@ -24,14 +26,17 @@ export class ProfilePage {
 	constructor(public navCtrl: NavController, 
 	public navParams: NavParams,
 	public userProvider: UserProvider) {
-  }
 
-  ionViewDidEnter() {
-
-		this.userProvider.getUser().then((user: User) => {
-			this.user = user;
-		})
+		this.user = this.userProvider.currentUser;
 
   }
+
+	edit(user: User) {
+
+		this.userProvider.editUser(user)
+		this.navCtrl.push(EditProfilePage)
+
+
+	}
 
 }

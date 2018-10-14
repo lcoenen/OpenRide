@@ -38,7 +38,6 @@ export class WizardComponent {
 		// Show the first page
 
 		this.wizardPages.first.shown = true;
-		this.slides.update()
 
 		// Everytime something change on a page
 
@@ -56,6 +55,8 @@ export class WizardComponent {
 			)
 
 		)
+
+		this.slides.update()
 
 	}
 
@@ -118,6 +119,7 @@ export class WizardComponent {
 
 		let show = this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  {
 			
+				console.log(page.is_defined())
 				return defined && page.is_defined()
 
 			}), true)

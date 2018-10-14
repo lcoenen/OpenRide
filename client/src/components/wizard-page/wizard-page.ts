@@ -21,6 +21,8 @@ export class WizardPageComponent implements OnChanges {
 
 	is_defined(): boolean {
 
+		console.log('Is this defined?', this)	
+
 		if(this.linked instanceof Array)
 			return this.linked.reduce(((last: boolean, current: any) => last && (current !== undefined)), true)
 		else
@@ -32,11 +34,15 @@ export class WizardPageComponent implements OnChanges {
 
 		this.shown = this.is_defined()
 
+		console.log('It it shown', this.shown)
+
 		this.changed.emit();
 
 	}
 
 	ngOnChanges(){
+
+		console.log('It it shown', this.shown)
 
 		this.changed.emit()
 

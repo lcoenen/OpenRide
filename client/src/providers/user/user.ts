@@ -13,6 +13,8 @@ import { User, Credentials, SignupResponse, Signature } from 'shared/models/user
 
 import { settings } from '../../config/config'
 
+import { EditMode } from '../ride/ride';
+
 const KEY_NAME = "openride-server-session";
 
 	/*
@@ -60,6 +62,13 @@ export class UserProvider {
 	}
 
 	public currentUser: User;
+
+/*
+ *
+ * 	This define if the user is created or edited
+ *
+ */
+	public mode: EditMode;
 
 /*
  *
@@ -255,4 +264,38 @@ public logout( ) {
 
 }
 
+/*
+ *
+ * 	This will prepare an user edition
+ *
+ */
+public editUser(user?: User) {
+
+	this.mode = user === undefined? EditMode.CREATE : EditMode.EDIT;
+
+	if(user === undefined) 
+		user = {
+			name: undefined,
+			age: undefined,
+			place_of_origin: undefined,
+			reputation: 0,
+			email: undefined,
+			password: undefined,
+			presentation: undefined,
+			vehicle: undefined,
+			charge_per_km: undefined
+		}
+
+	this.currentUser = user;
+
 }
+
+public newUser() {
+
+	this.editUser()
+
+}
+
+}
+
+export { EditMode };

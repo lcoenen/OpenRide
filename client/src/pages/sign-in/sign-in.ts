@@ -38,7 +38,6 @@ export class SignInPage {
 		public events: Events,
 		public userProvider: UserProvider) {
 
-
   }
 
   ionViewDidLoad() {
@@ -49,10 +48,6 @@ export class SignInPage {
 	 *
 	 *	This will attempt to login the user and display the appropriate
 	 *	toast if it doesn't work
-	 *
-	 * 	NOTE: 
-	 * 	Using login as a synonym of username is a mistake from 
-	 * 	french language. Sorry for that.
 	 *
 	 * 	@event This method will emit an 'identify:identified' event to 
 	 * 	signal the overlying modal to close.
@@ -107,6 +102,8 @@ export class SignInPage {
 	 */
 	tosignup() {
 	
+		this.viewCtrl.dismiss()
+		this.userProvider.newUser()
 	  this.navCtrl.push(EditProfilePage);
 	
 	}
