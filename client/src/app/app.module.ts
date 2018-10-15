@@ -12,6 +12,7 @@ import { MyRidesPage } from '../pages/my-rides/my-rides'
 import { ProfilePage } from '../pages/profile/profile';
 import { SignInPage } from '../pages/sign-in/sign-in'
 import { EditProfilePage } from '../pages/edit-profile/edit-profile'
+import { ConfirmConfirmationPage } from '../pages/confirm-confirmation/confirm-confirmation'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -48,6 +49,7 @@ import { MomentModule } from 'ngx-moment';
 		ProfilePage,
 		SignInPage,
 		EditProfilePage,
+		ConfirmConfirmationPage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,
@@ -75,6 +77,7 @@ import { MomentModule } from 'ngx-moment';
 		MyRidesPage,
 		ProfilePage,
 		SignInPage,
+		ConfirmConfirmationPage,
 		EditProfilePage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,

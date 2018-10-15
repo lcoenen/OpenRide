@@ -149,24 +149,69 @@ export class ridesController extends cat.Controller {
 	public put(request: sessionRequest) {
 
 	// First check that the ride is owned by the requestor
-		return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
-			
+
+	//	return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
+		return db
+			.db
+			.collection('rides')
+			.findOne({ _id: request.params.id }).then( (ans: any) => {
+
+			if(ans === undefined) throw { code: 404, response: 'No such ride' };
+
+			let ride: Ride = <Ride>ans;
 			let ride_creator: Link = <Link>(ride.type == RideType.OFFER? ride.driver: ride.riders[0])
 
-			if(ride === undefined) throw { code: 404, response: 'No such ride' };
 			if(idLink(ride_creator) != request.user._id) throw { code: 401, response: 'You cannot update this ride. It\'s not yours!'}
+
+			//	If it's a confirmation
+			if(request.params.ride.confirmed) {
+
+				// Remove users from other rides in rides that share a request 
+				return Promise.all(ride.requests.map( (requestLink: Link) => {
+
+						return db.db.collection('rides').findOne({ '_id': idLink(requestLink)})
+						.then( (request: Ride) =>
+							db.db.collection('rides').updateMany( 
+								{ requests: requestLink, _id: { '$ne': ride._id }}, 
+								{ '$pull': { 'riders' : request.riders[0] }}))
+								
+						}
+							
+					)).then( () => {
+					
+						// Remove every requests	
+						let requests_ids = (<Link[]>ride.requests).map( (request: Link) => idLink(request)) 
+						return db.db.collection('rides').remove({_id: { '$in': requests_ids }}).then((ans) => 
+
+								// Remove every prospects for this ride
+								db.db.collection('prospects').remove(
+									{ '$or': [
+										{ with: { '@id': `/api/rides/${ride._id}` }},
+										{ ride: { '@id': `/api/rides/${ride._id}` }}
+									]}).then((ans) => {})
+
+							).then( () => {})
+					
+					} )	
+
+			}	
+			else return Promise.resolve()
 
 		}).then( () => {
 
-			let updatable_properties = ['origin', 'destination', 'riding_time', 'payement']
+			let updatable_properties = ['origin', 'destination', 'riding_time', 'confirmed', 'payement']
 			let toUpdate:any = {}
-			for(let prop of updatable_properties) toUpdate[prop] = request.params.ride[prop] 
-
-			return db.db.collection('rides').updateOne({_id: request.params.id}, {'$set': toUpdate } ).then((ans) => {
+			for(let prop of updatable_properties) 
+				(request.params.ride[prop] !== undefined) ? toUpdate[prop] = request.params.ride[prop] : null;
+			
+			let promise = db.db.collection('rides').updateOne({_id: request.params.id}, {'$set': toUpdate } ).then((ans) => {
 
 				return { code: 200, response: 'updated' };
 
 			})
+			
+
+			return promise;
 
 		})
 
@@ -504,7 +549,9 @@ export class ridesController extends cat.Controller {
 				'_id': {'$ne': foundRide._id },
 				'type': { '$ne': foundRide.type },
 				// Ride I'm not already in 
-				'requests' : {'$nin': [{ '@id': `/api/rides/${req.params.id}`}]}
+				'requests' : {'$nin': [{ '@id': `/api/rides/${req.params.id}`}]},
+				// Non-confirmed ride
+				'confirmed': {'$in': [false, undefined] }
 			}
 
 			/*

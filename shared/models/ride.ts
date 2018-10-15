@@ -33,6 +33,7 @@ export interface Ride {
 	prospect?: Prospect; 
 	type: RideType;
 	requests?: Link[];
+	confirmed?: boolean;
 };
 
 /*

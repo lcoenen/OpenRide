@@ -202,6 +202,7 @@ export class RideProvider {
 			if(ride.type === undefined) throw Error('ride.type cannot be undefined');
 
 			ride._id = hashRide(ride) 
+			ride.confirmed = false;
 
 			return new Promise((resolve, reject) => {
 
@@ -400,6 +401,19 @@ export class RideProvider {
 			riders: []
 
 		}
+
+	}
+
+	/*
+	 *
+	 * This will confirm the ride
+	 *
+	 */
+	confirm(ride: Ride){
+
+		this.httpClient.put(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, 
+		{ ride: {confirmed: true } }).toPromise().catch((err) =>
+			console.error('Could not confirm the ride', err))
 
 	}
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
-import { LoadingController } from 'ionic-angular';
+import { LoadingController, ModalController } from 'ionic-angular';
 
 import { Ride, RideType } from 'shared/models/ride.ts'
 import { User } from 'shared/models/user.ts'
@@ -13,6 +13,7 @@ import { UserProvider } from '../../providers/user/user';
 import { ProfilePage } from '../profile/profile';
 import { MatchesPage } from '../matches/matches';
 import { EditRidePage } from '../edit-ride/edit-ride';
+import { ConfirmConfirmationPage } from '../confirm-confirmation/confirm-confirmation';
 
 /**
  * Generated class for the RideBoardPage page.
@@ -41,6 +42,7 @@ export class RideBoardPage {
 		public userProvider: UserProvider,
 		public loadingCtrl: LoadingController,
 		public toastCtrl: ToastController,
+		public modalCtrl: ModalController,
 		public messageProvider: MessageProvider) {
 
     this.boardpage = 'riders';
@@ -189,6 +191,25 @@ export class RideBoardPage {
 
 		this.rideProvider.startRideEdition(this.rideProvider.currentRide);
 		this.navCtrl.push(EditRidePage);
+
+	}
+
+	/*
+	 *
+	 *	This will show the confirm-confirmation modal.
+	 *
+	 *	It means that the originator of the ride want to confirm it
+	 *
+	 */
+	confirm(ride: Ride) {
+
+		let confirm_modal = this.modalCtrl.create(ConfirmConfirmationPage);
+		confirm_modal.onDidDismiss((confirm: boolean) => {
+
+			this.rideProvider.confirm(ride)	
+
+		})
+		confirm_modal.present()
 
 	}
 
