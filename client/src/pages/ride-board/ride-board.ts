@@ -6,7 +6,7 @@ import { Ride, RideType } from 'shared/models/ride.ts'
 import { User } from 'shared/models/user.ts'
 import { Message, hashMessage } from 'shared/models/message.ts'
 
-import { RideProvider } from '../../providers/ride/ride';
+import { RideProvider, EditMode } from '../../providers/ride/ride';
 import { MessageProvider } from '../../providers/message/message';
 import { UserProvider } from '../../providers/user/user';
 
@@ -28,6 +28,8 @@ import { EditRidePage } from '../edit-ride/edit-ride';
 })
 export class RideBoardPage {
 
+	EditMode: any = EditMode;
+
 	messageBuffer: string;
 	messages: Message[];
   boardpage: string;
@@ -43,18 +45,12 @@ export class RideBoardPage {
 
     this.boardpage = 'riders';
 
-
 		this.currentRide = this.rideProvider.currentRide;
 
 		this.messages = []
 
   }
 
-	ionViewWillEnter() {
-
-		this.currentRide = this.rideProvider.currentRide;
-
-	}
 
 	/*
 	 * 
@@ -88,6 +84,7 @@ export class RideBoardPage {
 
 		console.log(this.rideProvider.currentRide)
 
+		this.currentRide = this.rideProvider.currentRide;
 		this.refreshMessages()
 
   }

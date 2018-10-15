@@ -9,7 +9,7 @@ import { Link } from 'shared/models/link';
 import { RideBoardPage } from '../ride-board/ride-board'; 
 import { MyRidesPage } from '../my-rides/my-rides';
 
-import { RideProvider } from '../../providers/ride/ride';
+import { RideProvider, EditMode } from '../../providers/ride/ride';
 
 /**
  * Generated class for the OfferInvitePage page.
@@ -106,10 +106,16 @@ export class MatchesPage {
 	 */
   continue() {
 
-		if(this.rideProvider.currentRide.type == RideType.OFFER) 
-			this.navCtrl.push(RideBoardPage);
-		else
-			this.navCtrl.push(MyRidesPage);
+		if(this.rideProvider.mode == EditMode.EDIT)
+			this.navCtrl.pop()
+		else {
+
+			if(this.rideProvider.currentRide.type == RideType.OFFER) 
+				this.navCtrl.push(RideBoardPage);
+			else
+				this.navCtrl.push(MyRidesPage);
+
+		}
   
   }
 

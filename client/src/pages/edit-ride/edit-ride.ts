@@ -33,7 +33,8 @@ export class EditRidePage  {
 	public originalRide: Ride;
 
 	public mode: EditMode;
-	public RideType: any; 
+	public RideType: any = RideType; 
+	public EditMode: any = EditMode;
 
 	constructor(
 		public navCtrl: NavController, 
@@ -43,7 +44,6 @@ export class EditRidePage  {
 
 		this.mode = this.rideProvider.mode;
 		this.ride = this.rideProvider.currentRide;
-		this.RideType = RideType;
 
 	}
 

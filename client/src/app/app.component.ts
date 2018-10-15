@@ -51,7 +51,7 @@ export class MyApp {
 
   myRides() {
 		identify(this.userProvider, this.nav, this.events).then( () => 
-    this.nav.setRoot(MyRidesPage))
+    this.nav.push(MyRidesPage))
   }
 
   offer() {
@@ -60,7 +60,7 @@ export class MyApp {
 			return this.rideProvider.createRide(RideType.OFFER);
 		
 		}).then( () => 
-    this.nav.setRoot(EditRidePage))
+    this.nav.push(EditRidePage))
   }
 
   request() {
@@ -69,12 +69,12 @@ export class MyApp {
 			return this.rideProvider.createRide(RideType.REQUEST)
 		
 		}).then( () => 
-    this.nav.setRoot(EditRidePage))
+    this.nav.push(EditRidePage))
   }
 
   profile() {
 		identify(this.userProvider, this.nav, this.events).then( () => 
 		this.userProvider.getUser()).then( () =>
-    this.nav.setRoot(ProfilePage))
+    this.nav.push(ProfilePage))
   }
 }

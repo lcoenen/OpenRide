@@ -180,7 +180,7 @@ export class EditProfilePage {
 	 */
 	discard() {
 
-		this.userProvider.discard ();
+		this.userProvider.discard();
 		this.navCtrl.pop()
 
 	}
