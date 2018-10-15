@@ -230,7 +230,7 @@ export class usersController extends cat.Controller {
 
 		return db.db.collection('users').updateOne({ _id: request.user._id }, { '$set': request.user }).then((answer) => {
 
-			return { status: 'ok', user: request.user };
+			return { status: 'ok', user: request.params.updatedUser };
 
 		})
 
