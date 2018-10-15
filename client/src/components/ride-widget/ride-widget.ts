@@ -1,6 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+import { NavController } from 'ionic-angular';
+
 import { Ride, RideType } from 'shared/models/ride';
+import { User } from 'shared/models/user';
+
+import { UserProvider } from '../../providers/user/user'
+import { ProfilePage } from '../../pages/profile/profile';
 
 /*
  *
@@ -57,7 +63,9 @@ export class RideWidgetComponent {
 	// RideType is the enum itself
 	RideType: any;
 
-  constructor() {
+	constructor(
+	public navCtrl: NavController,
+	public userProvider: UserProvider) {
 
 		this.RideType = RideType;	
 
@@ -74,6 +82,18 @@ export class RideWidgetComponent {
 		return this.ride.type == RideType.OFFER?
 			this.ride.driver: this.ride.riders[0];
 	
+	}
+
+	/*
+	 * 
+	 * This will open the profile page
+	 *
+	 */
+	profile(user: User) {
+
+		this.userProvider.getUser(user).then( () => 
+			this.navCtrl.push(ProfilePage))	
+
 	}
 
 }
