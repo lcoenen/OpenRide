@@ -76,14 +76,14 @@ export class UserProvider {
  *	This will get an user
  *
  */
-	getUser(path?: string) {
+	getUser(user?: User) {
 
-		if(path === undefined) {
+		if(user === undefined) {
 			this.currentUser = this.me;
 			return Promise.resolve(this.me);
 		}
 		else
-			return this.http.get(`${ settings.apiEndpoint }${ path }`).toPromise().then( (user: User) => {
+			return this.http.get(`${ settings.apiEndpoint }/api/users/${ user._id }`).toPromise().then( (user: User) => {
 
 				this.currentUser = user;
 				return user;
@@ -296,7 +296,6 @@ public startUserEdition(user?: User) {
 public newUser() {
 
 	this.startUserEdition(undefined)
-	this.mode = EditMode.CREATE; 
 
 }
 

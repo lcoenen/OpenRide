@@ -43,23 +43,32 @@ Ionic pages and navigation.
 					Driver
 				</ion-list-header>
 
-				<ion-item>
+				<ion-item-sliding> 
+					<ion-item>
 
-					<ion-avatar item-start>
-						<img src="assets/imgs/avatar_{{this.currentRide.driver.name}}.png">
-					</ion-avatar>
-					<h2>{{this.currentRide.driver.name}}</h2>
-				</ion-item>
+						<ion-avatar item-start>
+							<img src="assets/imgs/avatar_{{currentRide.driver.name}}.png">
+						</ion-avatar>
+						<h2>{{currentRide.driver.name}}</h2>
+					</ion-item>
+
+					<ion-item-options side="left">
+						<button (click)="profile(currentRide.driver)" ion-button color="primary">
+							<ion-icon name="body"></ion-icon>
+							Profile
+						</button>
+					</ion-item-options>
+				</ion-item-sliding> 
 
 				<ion-list-header>
 					Riders
-					<ion-badge *ngIf="this.currentRide.riders.length != 0" item-end>
-						{{this.currentRide.riders.length}}</ion-badge>
+					<ion-badge *ngIf="currentRide.riders.length != 0" item-end>
+						{{currentRide.riders.length}}</ion-badge>
 				</ion-list-header>
 
-				<ion-item *ngIf="this.currentRide.riders.length == 0"><ion-note>No riders yet!</ion-note></ion-item>
+				<ion-item *ngIf="currentRide.riders.length == 0"><ion-note>No riders yet!</ion-note></ion-item>
 
-				<ion-item-sliding *ngFor="let rider of this.currentRide.riders">
+				<ion-item-sliding *ngFor="let rider of currentRide.riders">
 					<ion-item>
 						<ion-avatar item-start>
 							<img src="assets/imgs/avatar_{{rider.name}}.png">
@@ -71,7 +80,7 @@ Ionic pages and navigation.
 							<ion-icon name="body"></ion-icon>
 							Profile
 						</button>
-						<button ion-button color="secondary">
+						<button *ngIf="mine(currentRide) || me(rider)" ion-button color="secondary">
 							<ion-icon name="close"></ion-icon>
 							Remove
 						</button>
@@ -80,7 +89,7 @@ Ionic pages and navigation.
 			</ion-list>
 
 
-			<button ion-button full (click)="matches(currentRide)">
+			<button ion-button full *ngIf="mine(currentRide)" (click)="matches(currentRide)">
 				<ion-icon name='add' item-start></ion-icon>
 				Invite
 			</button>

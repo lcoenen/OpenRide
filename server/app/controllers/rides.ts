@@ -186,7 +186,10 @@ export class ridesController extends cat.Controller {
 
 				// Find the prospects that could match
 
+				// Requestor is the originator of the request
 				let requestor = request.user._id;
+
+				// target is the user supposed to join or depart the ride
 				let target = params.join ? params.join : params.depart;
 
 				return db.db.collection('prospects')
@@ -236,6 +239,7 @@ export class ridesController extends cat.Controller {
 
 						populatedProspects = populatedProspects.filter((prospect: any) => {
 
+							// rider is the link to the rider in the prospect 
 							let rider: string;
 
 							if(prospect.type == ProspectType.APPLY) 
@@ -243,6 +247,8 @@ export class ridesController extends cat.Controller {
 							else 
 								rider = idLink(prospect.ride.riders[0])
 
+							// prospectTarget is the person whose action is required by the prospect
+							// (if it's an invite, it's the rider. If it's an application, it's the driver)
 							let prospectTarget: string = idLink((
 								(prospect.ride['type'] == RideType.OFFER)? 
 								prospect.ride.driver: 

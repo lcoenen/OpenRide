@@ -82,22 +82,31 @@ export class RideBoardPage {
 	 */
   ionViewWillEnter() {
 
-		console.log(this.rideProvider.currentRide)
-
 		this.currentRide = this.rideProvider.currentRide;
 		this.refreshMessages()
 
   }
 
+	/*
+	 *
+	 * This will return true if the rider is me
+	 *
+	 */
+	me(rider: User){ 
+
+		return this.userProvider.me._id == rider._id;
+
+	}
 
 	/*
 	 *
 	 * This shows the profile of an user
 	 *
 	 */
-  profile() {
-
-    this.navCtrl.push(ProfilePage);
+  profile(user: User) {
+		
+		this.userProvider.getUser(user).then( () => 
+	    this.navCtrl.push(ProfilePage))
 
   }
 
