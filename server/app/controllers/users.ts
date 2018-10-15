@@ -233,8 +233,7 @@ export class usersController extends cat.Controller {
 
 		logger.debug('criteria', { _id: request.params.updatedUser._id })
 
-		return db.db.collection('users').updateOne({ _id: request.params.updatedUser._id }, { '$set': request.params.updatedUser }).then((answer: any) => {
-
+		return db.db.collection('users').updateOne({ _id: request.user._id }, { '$set': request.params.updatedUser }).then((answer: any) => {
 		
 			return { status: 'ok', user: request.params.updatedUser };
 
