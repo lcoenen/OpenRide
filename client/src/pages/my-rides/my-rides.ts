@@ -113,7 +113,7 @@ export class MyRidesPage {
 
 		console.log('Editing ride')
 
-		this.rideProvider.editRide(ride);
+		this.rideProvider.startRideEdition(ride);
 		this.navCtrl.push(EditRidePage);
 
 	}

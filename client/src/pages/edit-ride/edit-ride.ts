@@ -61,17 +61,23 @@ export class EditRidePage  {
 	 */
 	valid() {
 
-		this.rideProvider.sendRide(this.ride).then(() => {
+		if(this.mode == EditMode.CREATE)
+			return this.rideProvider.sendRide(this.ride).then(() => 
+				this.navCtrl.push(MatchesPage)
+			).catch((err) => {
 
-			if(this.mode == EditMode.CREATE) this.navCtrl.push(MatchesPage);
-			else this.navCtrl.pop()
+				console.error(`ERROR: cannot put ride`)  
+				console.error(err)
 
-		}).catch((err) => {
+			})
+		else 
+			return this.rideProvider.editRide(this.ride).then(() => 
+			this.navCtrl.pop() ).catch( (err) => {
+				
+				console.error('ERROR: cannot edit ride')
+				console.error(err)
 
-		  console.error(`ERROR: cannot put ride`)  
-			console.error(err)
-
-		})
+			})		
 
 	}
 

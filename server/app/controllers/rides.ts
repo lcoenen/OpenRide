@@ -106,18 +106,18 @@ export class ridesController extends cat.Controller {
 	 *
 	 * This route allow to publish a new ride.
 	 *
-	 * In order to do that, the user have to PUT a new ride at the desired URL.
+	 * In order to do that, the user have to POST a new ride
 	 * The request have to contains all the field needed for a ride (see shared/models/ride)
 	 *
 	 */
-	@cat.catnapify('put', '/api/rides/:id')
+	@cat.catnapify('post', '/api/rides')
 	@logged
 	@cat.need(isRide)
 	@session.needAuthentification
-	public put(request: sessionRequest) {
+	public create(request: sessionRequest) {
 
 		let toinsert: Ride = {
-			_id: request.params.id, /* id is from the URL */
+			_id: request.params._id, 
 			origin: request.params.origin,
 			destination: request.params.destination,
 			riding_time: request.params.riding_time,
@@ -132,6 +132,41 @@ export class ridesController extends cat.Controller {
 		return db.db.collection('rides').insertOne(toinsert).then((ans) => {
 
 			return { code: 201, response: 'created' };
+
+		})
+
+	}
+
+	/*
+	 *
+	 * This route allow to edit a ride.
+	 *
+	 */
+	@cat.catnapify('put', '/api/rides/:id')
+	@logged
+	@cat.need('ride')
+	@session.needAuthentification
+	public put(request: sessionRequest) {
+
+	// First check that the ride is owned by the requestor
+		return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
+			
+			let ride_creator: Link = <Link>(ride.type == RideType.OFFER? ride.driver: ride.riders[0])
+
+			if(ride === undefined) throw { code: 404, response: 'No such ride' };
+			if(idLink(ride_creator) != request.user._id) throw { code: 401, response: 'You cannot update this ride. It\'s not yours!'}
+
+		}).then( () => {
+
+			let updatable_properties = ['origin', 'destination', 'riding_time', 'payement']
+			let toUpdate:any = {}
+			for(let prop of updatable_properties) toUpdate[prop] = request.params.ride[prop] 
+
+			return db.db.collection('rides').updateOne({_id: request.params.id}, {'$set': toUpdate } ).then((ans) => {
+
+				return { code: 200, response: 'updated' };
+
+			})
 
 		})
 

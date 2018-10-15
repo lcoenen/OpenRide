@@ -191,9 +191,9 @@ export class RideProvider {
 
 	/*
 		*
-		* This function is used to PUT the ride on the server.
+		* This function is used to POST the ride on the server.
 		*
-		* It uses the entrypoint PUT /api/rides/:id
+		* It uses the entrypoint POST /api/rides
 		* After being computed, it leaves the ride as currentRide	
 		*
 		*/
@@ -205,7 +205,7 @@ export class RideProvider {
 
 			return new Promise((resolve, reject) => {
 
-				this.httpClient.put<Ride>(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, ride).subscribe(data => resolve(data), error => reject(error))
+				this.httpClient.post<Ride>(`${ settings.apiEndpoint }/api/rides`, ride).subscribe(data => resolve(data), error => reject(error))
 
 			}).then((answer: any) => {
 
@@ -219,10 +219,37 @@ export class RideProvider {
 
 					return answer;
 
-
 				})
 
 			})
+		}
+
+	/*
+		*
+		* This function is used to edit (PUT) a ride on the server.
+		*
+		* It uses the entrypoint PUT /api/rides/:id
+		* After being computed, it leaves the ride as currentRide	
+		*
+		*/
+		editRide(ride: Ride) : Promise<any> {
+
+			if(ride.type === undefined) throw Error('ride.type cannot be undefined');
+
+			return new Promise((resolve, reject) => {
+
+				this.httpClient.put<Ride>(
+					`${ settings.apiEndpoint }/api/rides/${ ride._id }`, {ride: ride})
+					.subscribe(data => resolve(data), error => reject(error))
+
+			}).then((answer: any) => {
+
+				this._currentRide = ride;  
+
+				return answer;
+
+			})
+
 		}
 
 	/*
@@ -350,7 +377,7 @@ export class RideProvider {
 	 *	The user want to edit a ride
 	 *
 	 */
-	editRide(ride: Ride){
+	startRideEdition(ride: Ride){
 
 		this.mode = EditMode.EDIT;
 		this.currentRide = ride;

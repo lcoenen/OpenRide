@@ -187,7 +187,7 @@ export class RideBoardPage {
 	 */
 	edit_ride() {
 
-		this.rideProvider.editRide(this.rideProvider.currentRide);
+		this.rideProvider.startRideEdition(this.rideProvider.currentRide);
 		this.navCtrl.push(EditRidePage);
 
 	}
