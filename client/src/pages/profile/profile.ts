@@ -45,4 +45,10 @@ export class ProfilePage {
 
 	}
 
+	me(user: User) : boolean { 
+	
+		return user == this.userProvider.me;	
+	
+	}
+
 }

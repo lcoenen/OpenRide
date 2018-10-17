@@ -1,48 +1,77 @@
 <!--
-  Generated template for the ProfilePage page.
+	Generated template for the ProfilePage page.
 
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
+	See http://ionicframework.com/docs/components/#navigation for more info on
+	Ionic pages and navigation.
 -->
 <ion-header>
 
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title><ion-icon name="body"></ion-icon> Profile</ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<button ion-button menuToggle>
+			<ion-icon name="menu"></ion-icon>
+		</button>
+		<ion-title><ion-icon name="body"></ion-icon> Profile</ion-title>
+	</ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content css="profile-content" padding>
 
-<ion-card>
-  <ion-item>
-    <ion-avatar item-start>
-			<img src="assets/imgs/avatar_{{user.name}}.png">
-    </ion-avatar>
-		<h2>{{user.name}}</h2>
-		<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
-  </ion-item>
 
-	<ion-item>
+	<ion-card class="summary">
+		<ion-item>
+			<ion-avatar item-start>
+				<img src="assets/imgs/avatar_{{user.name}}.png">
+			</ion-avatar>
+			<ion-title>{{user.name}}</ion-title>
+			<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
+		</ion-item>
+
+	</ion-card>
+
+	<ion-card>
 		<ion-card-content>
-			<p>{{user.presentation}}</p>
-		</ion-card-content>
-	</ion-item>
+			<ion-list>
+				<ion-list-header>
+					<ion-icon name="body" item-start></ion-icon>
+					Presentation
+				</ion-list-header>
 
-	<ion-item>
-		<ion-card-content>
-			<ion-title>My vehicle</ion-title>
-			<p>{{user.vehicle}}</p>
-			<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note>
-		</ion-card-content>
-	</ion-item>
-</ion-card>
+				<ion-item text-wrap>
+					<ion-label>{{user.presentation}}</ion-label>
+				</ion-item>
 
-  <ion-fab right bottom>
-    <button ion-fab (click)="edit(user)" color="secondary"><ion-icon name="more"></ion-icon></button>
-</ion-fab>
+				<ion-list-header>
+					<ion-icon name="car" item-start></ion-icon>
+					Vehicle
+				</ion-list-header>
+
+				<ion-item text-wrap>
+					<ion-label>{{user.vehicle}}</ion-label>
+					<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note>
+				</ion-item>
+			</ion-list>
+
+		</ion-card-content>
+	</ion-card>
+
+	<!-- <ion-card> -->
+
+	<!-- 	<ion-item> -->
+	<!-- 		<ion-title>Vehicle</ion-title> -->
+	<!-- 	</ion-item> -->
+
+	<!-- 	<ion-item> -->
+	<!-- 		<ion-card-content> -->
+	<!-- 			<ion-title>My vehicle</ion-title> -->
+	<!-- 			<p>{{user.vehicle}}</p> -->
+	<!-- 			<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note> -->
+	<!-- 		</ion-card-content> -->
+	<!-- 	</ion-item> -->
+	<!-- </ion-card> -->
+
+	<ion-fab *ngIf="me(user)" right bottom>
+		<button ion-fab (click)="edit(user)" color="secondary"><ion-icon name="more"></ion-icon></button>
+	</ion-fab>
 </ion-content>
