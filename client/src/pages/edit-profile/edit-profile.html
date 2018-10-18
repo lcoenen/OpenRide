@@ -56,10 +56,14 @@
 			<ion-textarea [(ngModel)]="user.presentation"></ion-textarea>
 		</ion-item>
 		<ion-item>
+			<ion-label><ion-note>Do you have a car?</ion-note></ion-label>
+			<ion-toggle [(ngModel)]="user.has_car" checked="false"></ion-toggle>
+		</ion-item>
+		<ion-item *ngIf="user.has_car">
 			<ion-label stacked>Describe your vehicle</ion-label>
 			<ion-textarea [(ngModel)]="user.vehicle"></ion-textarea>
 		</ion-item>
-		<ion-item>
+		<ion-item *ngIf="user.has_car">
 			<ion-label stacked>How much do you pay (in &euro;) per 100 kilometer? (Please be honest)</ion-label>
 			<ion-input [(ngModel)]="user.charge_per_km"></ion-input>
 		</ion-item>

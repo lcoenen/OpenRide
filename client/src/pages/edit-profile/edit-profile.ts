@@ -24,7 +24,6 @@ export class EditProfilePage {
 	 */
 	public mode: EditMode;
 
-
 	/*
 	 *
 	 *	This user will be two ways bounded to
@@ -63,7 +62,6 @@ export class EditProfilePage {
 	}
 
 	ionViewWillEnter() {
-
 
 	}
 

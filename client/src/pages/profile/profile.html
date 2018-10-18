@@ -20,10 +20,12 @@
 
 
 	<ion-card class="summary">
-		<ion-item>
-			<ion-avatar item-start>
+		<ion-item class="avatar-item">
+			<ion-avatar class="avatar" item-start>
 				<img src="assets/imgs/avatar_{{user.name}}.png">
 			</ion-avatar>
+		</ion-item>
+		<ion-item>
 			<ion-title>{{user.name}}</ion-title>
 			<p>{{user.age}} years old, from {{user.place_of_origin}}</p>
 		</ion-item>
@@ -42,13 +44,15 @@
 					<ion-label>{{user.presentation}}</ion-label>
 				</ion-item>
 
-				<ion-list-header>
+				<ion-list-header *ngIf="user.has_car">
 					<ion-icon name="car" item-start></ion-icon>
 					Vehicle
 				</ion-list-header>
 
-				<ion-item text-wrap>
+				<ion-item text-wrap *ngIf="user.has_car">
 					<ion-label>{{user.vehicle}}</ion-label>
+				</ion-item>
+				<ion-item >
 					<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note>
 				</ion-item>
 			</ion-list>
@@ -56,22 +60,8 @@
 		</ion-card-content>
 	</ion-card>
 
-	<!-- <ion-card> -->
-
-	<!-- 	<ion-item> -->
-	<!-- 		<ion-title>Vehicle</ion-title> -->
-	<!-- 	</ion-item> -->
-
-	<!-- 	<ion-item> -->
-	<!-- 		<ion-card-content> -->
-	<!-- 			<ion-title>My vehicle</ion-title> -->
-	<!-- 			<p>{{user.vehicle}}</p> -->
-	<!-- 			<ion-note>I pay {{user.charge_per_km}}&euro; per 100km</ion-note> -->
-	<!-- 		</ion-card-content> -->
-	<!-- 	</ion-item> -->
-	<!-- </ion-card> -->
-
 	<ion-fab *ngIf="me(user)" right bottom>
 		<button ion-fab (click)="edit(user)" color="secondary"><ion-icon name="more"></ion-icon></button>
 	</ion-fab>
+
 </ion-content>

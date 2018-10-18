@@ -17,8 +17,9 @@ export interface User {
   reputation: number;
 	email: string;
 	presentation: string;
-	vehicle: string;
-	charge_per_km: number;
+	has_car?: boolean;
+	vehicle?: string;
+	charge_per_km?: number;
 }
 
 export function isUser(x: any) : x is User {
