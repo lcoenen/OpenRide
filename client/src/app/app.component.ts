@@ -77,4 +77,12 @@ export class MyApp {
 		this.userProvider.getUser()).then( () =>
     this.nav.push(ProfilePage))
   }
+
+	logOut() {
+	
+		this.userProvider.logOut()
+		this.nav.popToRoot()
+	
+	}
+
 }
