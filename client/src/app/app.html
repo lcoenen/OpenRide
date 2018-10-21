@@ -26,7 +26,7 @@
 				<ion-icon name="body"></ion-icon>
 			 	My profile	
       </button>
-      <button menuClose ion-item (click)="logOut()">
+      <button *ngIf="me" menuClose ion-item (click)="logOut()">
 				<ion-icon name="log-out"></ion-icon>
 			 Log out
       </button>

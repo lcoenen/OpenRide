@@ -2,9 +2,9 @@ import * as restify from 'restify';
 import * as cat from 'catnapify';
 import { ObjectID } from 'mongodb';
 
-import { logger, logged } from '../services/logger';
 import { db } from '../services/db';
 import { session, keyName, sessionRequest } from '../services/session';
+import { logger, logged } from '../services/logger'
 
 import { Promise } from 'es6-promise';
 
@@ -32,15 +32,9 @@ export class usersController extends cat.Controller {
 
 	static findUser = cat.before((request: userRequest) => {
 
-		logger.trace('Trying to find an user')
-		logger.trace(request.params)
-
 		return db.db.collection('users')
 			.findOne({_id: request.params.id})
 			.then((user: User) => {
-
-				logger.trace('Found the user:')
-				logger.trace(user)
 
 				if(!user) throw {code: 404, response: 'No such user'}  
 				else request.user = user;	
@@ -120,9 +114,6 @@ export class usersController extends cat.Controller {
 
 			}).then((key: Signature) => {
 
-				logger.trace(`TRACE: Recieved the API key`)
-				logger.trace(key)
-
 				/*
 				 *
 				 *	It it worked, answer the API KEY as a header
@@ -141,14 +132,6 @@ export class usersController extends cat.Controller {
 			})
 
 	}
-
-	// @cat.catnapify('del', '/api/users/:id')
-	// @logged
-	// public del(request: cat.Request) {
-
-	// 	throw {code: 501, response: 'Not implemented'}
-
-	// }
 
 	/*
 	 *
@@ -228,11 +211,6 @@ export class usersController extends cat.Controller {
 	@session.needAuthentification
 	public edit(request: sessionRequest) {
 
-		logger.debug('request.user', request.user)
-		logger.debug('request.params.updatedUser', request.params.updatedUser)
-
-		logger.debug('criteria', { _id: request.params.updatedUser._id })
-
 		return db.db.collection('users').updateOne({ _id: request.user._id }, { '$set': request.params.updatedUser }).then((answer: any) => {
 		
 			return { status: 'ok', user: request.params.updatedUser };
@@ -249,7 +227,8 @@ export class usersController extends cat.Controller {
 	@cat.catnapify('get', '/api/session/me')
 	@logged
 	@cat.give(isUser)
-	@session.needAuthentification public connected_user(request: sessionRequest) {
+	@session.needAuthentification 
+	public connected_user(request: sessionRequest) {
 
 		return {code: 200, response: sanitize(request.user)};
 
@@ -287,6 +266,21 @@ export class usersController extends cat.Controller {
 
 		})
 
+	}
+
+	/*
+	 *
+	 * This will sign out the user
+	 *
+	 */
+	@cat.catnapify('del', `/api/session/me`)
+	@logged
+	@session.needAuthentification
+	public logOut(request: sessionRequest){
+	
+		return session.logOut(request.key).then(() =>
+			{ message: 'All right' })
+	
 	}
 
 }

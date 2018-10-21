@@ -71,7 +71,7 @@ export class EditProfilePage {
 	 *	appropriate toast if needed
 	 *
 	 */
-	public signup( ) {
+	public signUp( ) {
 
 		// Check the password confirmation
 		if(this.user.password == 'password' && this.mode == EditMode.CREATE)  {
@@ -95,7 +95,7 @@ export class EditProfilePage {
 		else {
 
 			// Sending the user to the service
-			this.userProvider.signup(this.user).then((user: User) => {
+			this.userProvider.signUp(this.user).then((user: User) => {
 
 				this.events.publish('user:signedIn', user)
 				this.navCtrl.pop()
@@ -160,13 +160,12 @@ export class EditProfilePage {
 
 	/*
 	 *
-	 *	This will change the page to the login page
+	 *	This will change the page to the sign in page
 	 *
 	 */
 	toSignIn() {
 
 		this.navCtrl.pop()
-	
 		this.navCtrl.push(SignInPage)
 	
 	}

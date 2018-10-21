@@ -8,8 +8,6 @@ import { Promise } from 'es6-promise'
 import { Link } from 'shared/models/link';
 import { User, Signature, Credentials } from 'shared/models/user';
 
-import { UsersMock } from 'shared/mocks/user'
-
 import { db } from '../services/db';
 import { logger } from '../services/logger';
 import { settings } from '../config/config';
@@ -28,6 +26,7 @@ let redis_client = redis.createClient()
 export interface sessionRequest extends cat.Request {
 
 	user: User;
+	key: Signature;
 
 }
 
@@ -46,14 +45,10 @@ export namespace session {
 	 */
 	export function authentify (user: User): Promise<Signature> {
 
-		logger.trace(`TRACE: session.authentify()`)
-
 		return new Promise((resolve, reject) => {
 
 			let first_hash: string = hash(`${ salt }user ${ user._id } / ${ user.password } ${ (new Date()).toString() }`)
 			let client_key = hash(first_hash.substr(0,20))		
-
-			logger.info(`INFO: hashed ${ client_key }`)
 
 			/*
 			 *
@@ -62,8 +57,6 @@ export namespace session {
 			 *
 			 */
 			redis_client.set(`keys:${ client_key }`, JSON.stringify(user), (err: Error) => {
-
-				logger.trace(`TRACE: Included into redis`)
 
 				if(err) {
 
@@ -100,14 +93,19 @@ export namespace session {
 	 */
 	export let needAuthentification = cat.before((request: cat.Request) => {
 
-		logger.trace(`The key is ${ keyName }`)
-
 		/*
 		 *
 		 * Casting the request so it can accept an user
 		 *
 		 */
 		let sessRequest = <sessionRequest>request;
+
+		/*
+		 *
+		 * Grab the signature from the headers
+		 *
+		 */
+		let signature = <Signature>request.req.headers[keyName];
 
 		/* 
 		 *
@@ -116,10 +114,11 @@ export namespace session {
 		 *
 		 */
 		
-		return session.check(<Signature>request.req.headers[keyName])
+		return session.check(signature)
 				.then((user: User) => {
 
 					sessRequest.user = user;
+					sessRequest.key = signature;
 					return sessRequest;
 
 				}).catch((err: RangeError) => {
@@ -167,9 +166,10 @@ export namespace session {
 	 * Log out the user
 	 *
 	 */
-	export function logout (sign: Signature): Promise<any> {
+	export function logOut (sign: Signature): Promise<any> {
 
-		return null; 
+		return new Promise((resolve, reject) => 
+			redis_client.del(`keys:${ sign }`, resolve))
 
 	}
 

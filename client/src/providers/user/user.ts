@@ -58,7 +58,6 @@ export class UserProvider {
 	private _me: User;
 
 	constructor(public http: HttpClient) {
-		console.log('Hello UsersProvider Provider');
 	}
 
 	public currentUser: User;
@@ -126,7 +125,7 @@ export class UserProvider {
 	 *	It will PUT the user to /api/session/me
 	 *
 	 */
-	public signup(user: User) {
+	public signUp(user: User) {
 
 		/*
 		 *
@@ -176,7 +175,7 @@ export class UserProvider {
 	 *	All outbound API call will be issued with the key
 	 *
 	 */
-	public login(credentials: Credentials)  {
+	public signIn(credentials: Credentials)  {
 
 
 		/*
@@ -227,8 +226,6 @@ export class UserProvider {
 
 		let key = Cookie.get(KEY_NAME);	
 
-		console.log('key: ', key);
-
 		// If there's no cookie, return a failed promise
 		if(key === null) 
 		return Promise.reject('There is no session cookie')	
@@ -249,19 +246,6 @@ export class UserProvider {
 			throw error;
 
 		});
-
-	}
-
-	/*
-	 *
-	 *	This function will logout the user
-	 *
-	 *	It will issue a DELETE request on /api/session/me
-	 *
-	 */
-	public logout( ) {
-
-		ApiKeyInterceptor._key = undefined;
 
 	}
 
@@ -335,8 +319,12 @@ export class UserProvider {
 	 */
 	public logOut() {
 	
-		this.currentUser = null;
-		this._me = null;
+		this.currentUser = undefined;
+		this._me = undefined;
+
+		ApiKeyInterceptor._key = undefined;
+
+		Cookie.set(KEY_NAME, undefined);
 
 		return this.http.delete(`${ settings.apiEndpoint }/api/session/me`).toPromise().catch((err: any) => {
 		

@@ -23,8 +23,19 @@ import { identify } from '../pages/home/need-auth';
   templateUrl: 'app.html'
 })
 export class MyApp {
+
+	/*
+	 *
+	 * This is the navigation tree
+	 *
+	 */
   @ViewChild(Nav) nav: Nav;
 
+	/*
+	 *
+	 * This is the root view
+	 *
+	 */
   rootPage: any = HomePage;
 
 	constructor(public platform: Platform, 
@@ -38,6 +49,11 @@ export class MyApp {
 		
   }
 
+	/*
+	 *
+	 * This will initialise the app
+	 *
+	 */
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
@@ -45,43 +61,64 @@ export class MyApp {
     });
   }
 
+
+	/*
+	 *
+	 * Those will bring the different views
+	 *
+	 */
   home() {
+
     this.nav.setRoot(HomePage);
+
   }
 
   myRides() {
+
 		identify(this.userProvider, this.nav, this.events).then( () => 
     this.nav.push(MyRidesPage))
+
   }
 
   offer() {
-		identify(this.userProvider, this.nav, this.events).then( () => {
+
+		identify(this.userProvider, this.nav, this.events).then( () => 
+			this.rideProvider.createRide(RideType.OFFER)).then( () => 
+    	this.nav.push(EditRidePage))
 		
-			return this.rideProvider.createRide(RideType.OFFER);
-		
-		}).then( () => 
-    this.nav.push(EditRidePage))
   }
 
   request() {
-		identify(this.userProvider, this.nav, this.events).then( () => {
-		
-			return this.rideProvider.createRide(RideType.REQUEST)
-		
-		}).then( () => 
-    this.nav.push(EditRidePage))
+
+		identify(this.userProvider, this.nav, this.events).then( () => 		
+			this.rideProvider.createRide(RideType.REQUEST)).then( () => 
+	    this.nav.push(EditRidePage))
+
   }
 
   profile() {
+
 		identify(this.userProvider, this.nav, this.events).then( () => 
 		this.userProvider.getUser()).then( () =>
     this.nav.push(ProfilePage))
+
   }
 
 	logOut() {
 	
-		this.userProvider.logOut()
 		this.nav.popToRoot()
+		this.userProvider.logOut()
+	
+	}
+
+	/*
+	 *
+	 * This will tell if an user is logged in
+	 *
+	 */
+	get me() {
+	
+		return this.userProvider.me;	
 	
 	}
 

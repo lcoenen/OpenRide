@@ -98,8 +98,6 @@ export class MyRidesPage {
 		let owner: User = <User>(ride.type == RideType.OFFER?
 			ride.driver: ride.riders[0]);
 
-		console.log('owner is', owner)
-
 		return owner._id == this.userProvider.me._id;
 
 	}

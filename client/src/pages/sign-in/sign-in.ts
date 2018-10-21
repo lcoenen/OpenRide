@@ -52,9 +52,9 @@ export class SignInPage {
 	 * 	signal the overlying modal to close.
 	 *
 	 */
-	signin() {
+	signIn() {
 
-		this.userProvider.login(this.credentials).then((user: User) => {
+		this.userProvider.signIn(this.credentials).then((user: User) => {
 
 			this.events.publish('user:signedIn', user)
 			this.navCtrl.pop()
@@ -100,7 +100,7 @@ export class SignInPage {
 	 *	This will change the page to the signup page
 	 *
 	 */
-	tosignup() {
+	toSignUp() {
 
 	
 		this.userProvider.newUser()

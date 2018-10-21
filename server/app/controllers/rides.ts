@@ -77,33 +77,6 @@ export class ridesController extends cat.Controller {
 
 	/*
 	 *
-	 * Route allowing to get all rides
-	 *
-	 * @return array An array of rides
-	 *
-	 */
-	@cat.catnapify('get', '/api/rides')
-	@logged
-	@cat.give(isArrayOfRides)
-	public getAll(request: cat.Request) {
-
-		throw {code: 401, response: 'Guru meditation' }
-
-		return db
-			.db
-			.collection('rides')
-			.find()
-			.toArray()
-			.then((rides: Ride[]) => {
-
-				return {code: 200, response: rides}
-
-			}) /* It should work without this, but out of security, I return a proper Answer object */
-
-	}
-
-	/*
-	 *
 	 * This route allow to publish a new ride.
 	 *
 	 * In order to do that, the user have to POST a new ride
@@ -314,9 +287,6 @@ export class ridesController extends cat.Controller {
 
 						// Check that the users ID checks out
 
-						logger.debug('Trying to check that a previous connection exists')
-						logger.debug(populatedProspects);
-
 						populatedProspects = populatedProspects.filter((prospect: any) => {
 
 							// rider is the link to the rider in the prospect 
@@ -337,12 +307,6 @@ export class ridesController extends cat.Controller {
 							// Keep all the prospect with a rider equal to the user supposed to enter the ride
 							// Exclude it if the request doesn't come from the person being invited / requested
 							
-							logger.debug(`TRACE: requestor ${ requestor }`)
-							logger.debug(`DEBUG: prospectTarget ${ prospectTarget }`)
-
-							logger.debug(`rider:`, rider)
-							logger.debug(`target:`, target)
-
 							return rider == target && requestor == prospectTarget;
 
 						})
@@ -392,8 +356,6 @@ export class ridesController extends cat.Controller {
 
 					}).then(() => {
 
-						logger.debug('This prospect will be accepted', prospect);
-					
 					/*
 					 *
 					 * The corresponding prospect will be accepted 
@@ -449,7 +411,6 @@ export class ridesController extends cat.Controller {
 			.deleteOne({'_id': request.params['id']})
 			.then(( ) => {
 
-				logger.debug(`Deleting ${ request.params['id'] }`)
 				return {code: 204, response: 'deleted'};  
 
 			})
@@ -728,9 +689,6 @@ export class ridesController extends cat.Controller {
 				let owner: Link = withRide.type == RideType.REQUEST?
 					(<Link[]>withRide.riders)[0] : <Link>withRide.driver;
 
-				logger.debug(`owner is ${ owner['@id'] }`)
-				logger.debug(`connected user is ${ req.user._id }`)
-
 				if(idLink(owner) != req.user._id) {
 
 					throw { code: 401, response: 'It is not your ride, sorry' };
@@ -749,9 +707,6 @@ export class ridesController extends cat.Controller {
 			.then((withRide: Ride ) => {
 
 
-				logger.debug('Found a withRide: ', withRide)
-				logger.debug('withRide type: ', withRide.type == RideType.REQUEST ? 'Request' : 'Offer')
-
 				let toInsert: Prospect = {
 					ride: <Link>{'@id': `/api/rides/${ req.params.ride }`},
 					with: req.params.with, // 'with' is already a Link
@@ -759,9 +714,6 @@ export class ridesController extends cat.Controller {
 						ProspectType.APPLY: ProspectType.INVITE),
 						accepted: false
 				};
-
-				logger.debug('toInsert', toInsert);
-				logger.debug('toInsert type', toInsert.type == ProspectType.INVITE? 'Invite': 'Apply')
 
 				return db.db.collection('prospects')
 					.insertOne(toInsert).then((ans: any) => {
@@ -786,8 +738,6 @@ export class ridesController extends cat.Controller {
 	public my_rides(req: sessionRequest) {
 	
 
-		logger.info(`INFO: req.user`, req.user)
-
 		let request = {
 			'$or': [
 				{'driver': { '@id': `/api/users/${ req.user._id }`}},
@@ -796,14 +746,8 @@ export class ridesController extends cat.Controller {
 
 		}
 
-		logger.info(`INFO: Trying to find `, request)
-		logger.info(request)
-		
 		return db.db.collection('rides').find(request).toArray()
 		.then((rides: Ride[]) => {
-
-		 	logger.info(`INFO: returned`) 
-			logger.info(rides)
 
 			return rides;
 
