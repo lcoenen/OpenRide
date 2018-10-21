@@ -121,72 +121,72 @@ export class ridesController extends cat.Controller {
 	@session.needAuthentification
 	public put(request: sessionRequest) {
 
-	// First check that the ride is owned by the requestor
+		// First check that the ride is owned by the requestor
 
-	//	return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
+		//	return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
 		return db
 			.db
 			.collection('rides')
 			.findOne({ _id: request.params.id }).then( (ans: any) => {
 
-			if(ans === undefined) throw { code: 404, response: 'No such ride' };
+				if(ans === undefined) throw { code: 404, response: 'No such ride' };
 
-			let ride: Ride = <Ride>ans;
-			let ride_creator: Link = <Link>(ride.type == RideType.OFFER? ride.driver: ride.riders[0])
+				let ride: Ride = <Ride>ans;
+				let ride_creator: Link = <Link>(ride.type == RideType.OFFER? ride.driver: ride.riders[0])
 
-			if(idLink(ride_creator) != request.user._id) throw { code: 401, response: 'You cannot update this ride. It\'s not yours!'}
+				if(idLink(ride_creator) != request.user._id) throw { code: 401, response: 'You cannot update this ride. It\'s not yours!'}
 
-			//	If it's a confirmation
-			if(request.params.ride.confirmed) {
+				//	If it's a confirmation
+				if(request.params.ride.confirmed) {
 
-				// Remove users from other rides in rides that share a request 
-				return Promise.all(ride.requests.map( (requestLink: Link) => {
+					// Remove users from other rides in rides that share a request 
+					return Promise.all(ride.requests.map( (requestLink: Link) => {
 
 						return db.db.collection('rides').findOne({ '_id': idLink(requestLink)})
-						.then( (request: Ride) =>
-							db.db.collection('rides').updateMany( 
-								{ requests: requestLink, _id: { '$ne': ride._id }}, 
-								{ '$pull': { 'riders' : request.riders[0] }}))
-								
-						}
-							
+							.then( (request: Ride) =>
+								db.db.collection('rides').updateMany( 
+									{ requests: requestLink, _id: { '$ne': ride._id }}, 
+									{ '$pull': { 'riders' : request.riders[0] }}))
+
+					}
+
 					)).then( () => {
-					
+
 						// Remove every requests	
 						let requests_ids = (<Link[]>ride.requests).map( (request: Link) => idLink(request)) 
 						return db.db.collection('rides').remove({_id: { '$in': requests_ids }}).then((ans) => 
 
-								// Remove every prospects for this ride
-								db.db.collection('prospects').remove(
-									{ '$or': [
-										{ with: { '@id': `/api/rides/${ride._id}` }},
-										{ ride: { '@id': `/api/rides/${ride._id}` }}
-									]}).then((ans) => {})
+							// Remove every prospects for this ride
+							db.db.collection('prospects').remove(
+								{ '$or': [
+									{ with: { '@id': `/api/rides/${ride._id}` }},
+									{ ride: { '@id': `/api/rides/${ride._id}` }}
+								]}).then((ans) => {})
 
-							).then( () => {})
-					
+						).then( () => {})
+
 					} )	
 
-			}	
-			else return Promise.resolve()
+				}	
+				else return Promise.resolve()
 
-		}).then( () => {
+			}).then( () => {
 
-			let updatable_properties = ['origin', 'destination', 'riding_time', 'confirmed', 'payement']
-			let toUpdate:any = {}
-			for(let prop of updatable_properties) 
-				(request.params.ride[prop] !== undefined) ? toUpdate[prop] = request.params.ride[prop] : null;
-			
-			let promise = db.db.collection('rides').updateOne({_id: request.params.id}, {'$set': toUpdate } ).then((ans) => {
+				let updatable_properties = ['origin', 'destination', 'riding_time', 'confirmed', 'payement']
+				let toUpdate:any = {}
+				for(let prop of updatable_properties) 
+					(request.params.ride[prop] !== undefined) ? toUpdate[prop] = request.params.ride[prop] : null;
 
-				return { code: 200, response: 'updated' };
+				let promise = db.db.collection('rides').updateOne({_id: request.params.id}, {'$set': toUpdate } ).then((ans) => {
+
+					return { code: 200, response: 'updated' };
+
+				})
+
+
+				return promise;
 
 			})
-			
-
-			return promise;
-
-		})
 
 	}
 
@@ -220,7 +220,7 @@ export class ridesController extends cat.Controller {
 				 *
 				 */
 
-				if(!ans) throw `ERROR: I could not find the ride ID ${request.req.params.id}`;
+				if(!ans) throw {code: 404, response: `ERROR: I could not find the ride ID ${request.req.params.id}`};
 
 				return ans;
 
@@ -306,7 +306,7 @@ export class ridesController extends cat.Controller {
 
 							// Keep all the prospect with a rider equal to the user supposed to enter the ride
 							// Exclude it if the request doesn't come from the person being invited / requested
-							
+
 							return rider == target && requestor == prospectTarget;
 
 						})
@@ -342,11 +342,11 @@ export class ridesController extends cat.Controller {
 						$addToSet: { riders: { '@id': `/api/users/${request.req.params.join}`}},
 					}).then(() => {
 
-					/*
-					 * 
-					 * The request will also be added to the 'requests' property
-					 *
-					 */
+						/*
+						 * 
+						 * The request will also be added to the 'requests' property
+						 *
+						 */
 
 						return <Promise<any>> db.db.collection('rides').updateOne({
 							_id: request.req.params.id
@@ -356,21 +356,21 @@ export class ridesController extends cat.Controller {
 
 					}).then(() => {
 
-					/*
-					 *
-					 * The corresponding prospect will be accepted 
-					 *
-					 */
-					 return db.db.collection('prospects').updateOne(
-						 { '_id': prospect._id },
-						 {'$set': { 'accepted': true }})
-					
+						/*
+						 *
+						 * The corresponding prospect will be accepted 
+						 *
+						 */
+						return db.db.collection('prospects').updateOne(
+							{ '_id': prospect._id },
+							{'$set': { 'accepted': true }})
+
 					}).then(() : cat.Answer<string> => {
 
 						return {code: 204, response: 'The user have been added'} 
 
 					})
-						
+
 				}
 				else {
 
@@ -402,18 +402,44 @@ export class ridesController extends cat.Controller {
 	 */
 	@cat.catnapify('del', '/api/rides/:id')
 	@logged
+	@session.needAuthentification
 	@cat.need('id')
-	public del(request: cat.Request) {
+	public del(request: sessionRequest) {
 
-		return db
-			.db
-			.collection('rides')
-			.deleteOne({'_id': request.params['id']})
-			.then(( ) => {
+		// Check that the requestor is the owner of the ride
+		return db.db.collection('rides').findOne({'_id': request.params.id}).then((ride: Ride) => {
 
-				return {code: 204, response: 'deleted'};  
+			if(ride === null) 
+				throw { code: 404, response: { message: 'No such ride'}}
+			
+			if(idLink(<Link>ride.driver) != request.user._id)
+				throw { code: 403, response: { message: 'This is not your ride, sorry' }}
 
+			if(ride.confirmed)
+				throw { code: 403, response: { message: 'This ride have already been confirmed. Too late to cancel it.'}}
+
+		}).then(() => {
+
+			return db
+				.db
+				.collection('rides')
+				.deleteOne({'_id': request.params['id']})
+
+		}).then(() => {
+	
+			return db.db.collection('prospects').deleteMany({
+				'$or' : [
+					{ with: `/api/rides/${ request.params.id }`},
+					{ ride: `/api/rides/${ request.params.id }`}	
+				]		
 			})
+
+		})
+		.then(( ) => {
+
+			return {code: 204, response: 'Deleted'};  
+
+		})
 
 	}
 
@@ -528,57 +554,57 @@ export class ridesController extends cat.Controller {
 				.find(criterias)
 				.toArray();
 
-			}).then((rides: Ride[]) => {
+		}).then((rides: Ride[]) => {
 
-				/*
-				 * 
-				 * Filter the ride pair for which no prospects exists yet
-				 *
-				 */	 
+			/*
+			 * 
+			 * Filter the ride pair for which no prospects exists yet
+			 *
+			 */	 
 
-				 let ridesLinks: Link[] = rides.map( (ride: Ride) =>
-				 	({ '@id' : `/api/rides/${ride._id}` }));
+			let ridesLinks: Link[] = rides.map( (ride: Ride) =>
+				({ '@id' : `/api/rides/${ride._id}` }));
 
-				// Find all the prospects that could match
-			
-				let request = {
-			 		'$or': [
-						{
-							'with': { '@id': `/api/rides/${targetRide._id}`},
-							'ride': { '$in': ridesLinks }
-						},
-						{
-							'with': { '$in': ridesLinks },
-							'ride': {'@id': `/api/rides/${targetRide._id}`}
-						}],
-					'accepted': true
-					}
+			// Find all the prospects that could match
 
-					return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
-					
-					// Extract the adjacent ride (the one that is not the target)
-			
-						return prospects.map( (prospect: Prospect) =>
-							(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ?
-							<Link>prospect.ride: <Link>prospect.with)
+			let request = {
+				'$or': [
+					{
+						'with': { '@id': `/api/rides/${targetRide._id}`},
+						'ride': { '$in': ridesLinks }
+					},
+					{
+						'with': { '$in': ridesLinks },
+						'ride': {'@id': `/api/rides/${targetRide._id}`}
+					}],
+				'accepted': true
+			}
 
-					}).then( (adjacents: Link[]) =>  
+			return db.db.collection('prospects').find(request).toArray().then( (prospects: Prospect[]) : Link[] => {
 
-					// Remove rides that already have been prospected
+				// Extract the adjacent ride (the one that is not the target)
 
-						rides.filter( (ride: Ride) => 
+				return prospects.map( (prospect: Prospect) =>
+					(<Link>prospect.with)['@id'] == `/api/rides/${targetRide._id}` ?
+					<Link>prospect.ride: <Link>prospect.with)
 
-							adjacents.filter( (adj: Link) => 
+			}).then( (adjacents: Link[]) =>  
 
-								adj['@id'] == `/api/rides/${ride._id}`	
+				// Remove rides that already have been prospected
 
-							).length == 0
+				rides.filter( (ride: Ride) => 
 
-						)
+					adjacents.filter( (adj: Link) => 
 
-					)
-			
-			}).then((rides: Ride[]) => {
+						adj['@id'] == `/api/rides/${ride._id}`	
+
+					).length == 0
+
+				)
+
+			)
+
+		}).then((rides: Ride[]) => {
 
 			/*
 			 *
@@ -655,7 +681,7 @@ export class ridesController extends cat.Controller {
 			.find({'$or': [
 				{with: {'@id': `/api/rides/${ req.params.id }`}},
 				{ride: {'@id': `/api/rides/${ req.params.id }`}}
-				],
+			],
 				accepted: false})
 			.toArray()
 
@@ -691,7 +717,7 @@ export class ridesController extends cat.Controller {
 
 				if(idLink(owner) != req.user._id) {
 
-					throw { code: 401, response: 'It is not your ride, sorry' };
+					throw { code: 403, response: 'It is not your ride, sorry' };
 
 				}	
 
@@ -712,7 +738,7 @@ export class ridesController extends cat.Controller {
 					with: req.params.with, // 'with' is already a Link
 					type: ((withRide.type == RideType.REQUEST) ? 
 						ProspectType.APPLY: ProspectType.INVITE),
-						accepted: false
+					accepted: false
 				};
 
 				return db.db.collection('prospects')
@@ -736,7 +762,7 @@ export class ridesController extends cat.Controller {
 	@logged
 	@session.needAuthentification
 	public my_rides(req: sessionRequest) {
-	
+
 
 		let request = {
 			'$or': [
@@ -747,11 +773,11 @@ export class ridesController extends cat.Controller {
 		}
 
 		return db.db.collection('rides').find(request).toArray()
-		.then((rides: Ride[]) => {
+			.then((rides: Ride[]) => {
 
-			return rides;
+				return rides;
 
-		})
+			})
 
 	}
 

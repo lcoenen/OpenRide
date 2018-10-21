@@ -31,10 +31,34 @@ export class RideBoardPage {
 
 	EditMode: any = EditMode;
 
+	/*
+	 *
+	 * This will store the message before it is send
+	 *
+	 */
 	messageBuffer: string;
+
+	/*
+	 *
+	 * These are the messages sent to the ride channel
+	 *
+	 */
 	messages: Message[];
+
+	
+	/*
+	 *
+	 * This is the selected page
+	 *
+	 */
   boardpage: string;
-	currentRide: Ride;
+	
+	/*
+	 *
+	 * This is the current loaded ride
+	 *
+	 */
+	ride: Ride;
 
 	constructor(public navCtrl: NavController, 
 		public navParams: NavParams,
@@ -47,7 +71,7 @@ export class RideBoardPage {
 
     this.boardpage = 'riders';
 
-		this.currentRide = this.rideProvider.currentRide;
+		this.ride = this.rideProvider.currentRide;
 
 		this.messages = []
 
@@ -56,10 +80,12 @@ export class RideBoardPage {
 
 	/*
 	 * 
-	 * This will refresh the messages
+	 * This will refresh the view
 	 *
 	 */
-	refreshMessages() {
+	refresh() {
+
+		this.ride = this.rideProvider.currentRide;
 
 		let loading = this.loadingCtrl.create({
 			content: 'Please wait...'
@@ -67,7 +93,7 @@ export class RideBoardPage {
 
 		loading.present()
 	
-		this.messageProvider.getMessages(this.currentRide).then((messages: Message[]) => {
+		this.messageProvider.getMessages(this.ride).then((messages: Message[]) => {
 
 			loading.dismiss();
 
@@ -84,8 +110,7 @@ export class RideBoardPage {
 	 */
   ionViewWillEnter() {
 
-		this.currentRide = this.rideProvider.currentRide;
-		this.refreshMessages()
+		this.refresh();
 
   }
 
@@ -122,7 +147,7 @@ export class RideBoardPage {
 		let to_insert: Message = {
 		
 			_id: '',
-			ride: { '@id' : `/api/rides/${ this.currentRide._id }`},
+			ride: { '@id' : `/api/rides/${ this.ride._id }`},
 			author: { '@id' : `/api/users/${ this.userProvider.me._id }`},
 			date: (new Date),
 			message: this.messageBuffer		
@@ -131,11 +156,11 @@ export class RideBoardPage {
 
 		to_insert._id = hashMessage(to_insert)
 
-		this.messageProvider.postMessage(to_insert, this.currentRide).then((answer: any) => {
+		this.messageProvider.postMessage(to_insert, this.ride).then((answer: any) => {
 
 			if(answer == 'OK') {
 			
-				this.refreshMessages()			
+				this.refresh()			
 				this.messageBuffer = '';
 			
 			}
@@ -163,8 +188,6 @@ export class RideBoardPage {
 
 		let owner: User = <User>(ride.type == RideType.OFFER?
 			ride.driver: ride.riders[0]);
-
-		console.log('owner is', owner)
 
 		return owner._id == this.userProvider.me._id;
 
@@ -212,5 +235,42 @@ export class RideBoardPage {
 		confirm_modal.present()
 
 	}
+
+	/*
+	 *
+	 * This will make the user leave the ride
+	 *
+	 */
+	depart(user: User = this.userProvider.me) {
+	
+		this.rideProvider.depart(this.ride, user).then( () => {
+		
+			if(user == this.userProvider.me) 
+				this.navCtrl.pop()	
+			else {
+			
+				let riders: User[] = <User[]>this.ride.riders;
+				riders.splice(riders.indexOf(user), 1)
+
+			}
+
+		})
+
+	}
+
+	/*
+	 *
+	 * This means the user want to cancel the ride
+	 *
+	 */
+	cancel() {
+	
+		this.rideProvider.cancel(this.ride).then( () => {
+		
+			this.navCtrl.pop();	
+		
+		})
+	
+	}	
 
 }

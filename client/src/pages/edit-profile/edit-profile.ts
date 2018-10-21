@@ -99,7 +99,6 @@ export class EditProfilePage {
 
 				this.events.publish('user:signedIn', user)
 				this.navCtrl.pop()
-			  console.log('User have been signed up')  
 
 			}).catch((error) => {
 
@@ -152,7 +151,6 @@ export class EditProfilePage {
 		this.userProvider.editUser(this.user).then((user: User) => {
 
 			this.navCtrl.pop();
-			console.log('The user have been edited')
 
 		})
 

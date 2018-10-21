@@ -62,8 +62,12 @@ export class EditRidePage  {
 	valid() {
 
 		if(this.mode == EditMode.CREATE)
-			return this.rideProvider.sendRide(this.ride).then(() => 
+			return this.rideProvider.sendRide(this.ride).then(() => {
+
+				this.navCtrl.pop();
 				this.navCtrl.push(MatchesPage)
+
+			}
 			).catch((err) => {
 
 				console.error(`ERROR: cannot put ride`)  
@@ -72,7 +76,8 @@ export class EditRidePage  {
 			})
 		else 
 			return this.rideProvider.editRide(this.ride).then(() => 
-			this.navCtrl.pop() ).catch( (err) => {
+				this.navCtrl.pop() )
+				.catch( (err) => {
 				
 				console.error('ERROR: cannot edit ride')
 				console.error(err)

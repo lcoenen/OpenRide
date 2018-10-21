@@ -106,16 +106,13 @@ export class MatchesPage {
 	 */
   continue() {
 
-		if(this.rideProvider.mode == EditMode.EDIT)
-			this.navCtrl.pop()
-		else {
+		this.navCtrl.pop()
 
-			if(this.rideProvider.currentRide.type == RideType.OFFER) 
-				this.navCtrl.push(RideBoardPage);
-			else
-				this.navCtrl.push(MyRidesPage);
+		if(this.rideProvider.currentRide.type == RideType.OFFER) 
+			this.navCtrl.push(RideBoardPage);
+		else
+			this.navCtrl.push(MyRidesPage);
 
-		}
   
   }
 

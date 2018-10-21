@@ -31,7 +31,7 @@ Ionic pages and navigation.
 	<div [ngSwitch]="boardpage">
 		<div *ngSwitchCase="'summary'">
 
-			<ride-widget [mine]="mine(currentRide)" [type]="board" (matches)="matches(currentRide)" [ride]="currentRide" (edit)="edit_ride(ride)"></ride-widget>
+			<ride-widget [mine]="mine(ride)" [type]="board" (matches)="matches(ride)" [ride]="ride" (edit)="edit_ride(ride)"></ride-widget>
 
 		</div>
 
@@ -47,13 +47,13 @@ Ionic pages and navigation.
 					<ion-item>
 
 						<ion-avatar item-start>
-							<img src="assets/imgs/avatar_{{currentRide.driver.name}}.png">
+							<img src="assets/imgs/avatar_{{ride.driver.name}}.png">
 						</ion-avatar>
-						<h2>{{currentRide.driver.name}}</h2>
+						<h2>{{ride.driver.name}}</h2>
 					</ion-item>
 
 					<ion-item-options side="left">
-						<button (click)="profile(currentRide.driver)" ion-button color="primary">
+						<button (click)="profile(ride.driver)" ion-button color="primary">
 							<ion-icon name="body"></ion-icon>
 							Profile
 						</button>
@@ -62,13 +62,13 @@ Ionic pages and navigation.
 
 				<ion-list-header>
 					Riders
-					<ion-badge *ngIf="currentRide.riders.length != 0" item-end>
-						{{currentRide.riders.length}}</ion-badge>
+					<ion-badge *ngIf="ride.riders.length != 0" item-end>
+						{{ride.riders.length}}</ion-badge>
 				</ion-list-header>
 
-				<ion-item *ngIf="currentRide.riders.length == 0"><ion-note>No riders yet!</ion-note></ion-item>
+				<ion-item *ngIf="ride.riders.length == 0"><ion-note>No riders yet!</ion-note></ion-item>
 
-				<ion-item-sliding *ngFor="let rider of currentRide.riders">
+				<ion-item-sliding *ngFor="let rider of ride.riders">
 					<ion-item>
 						<ion-avatar item-start>
 							<img src="assets/imgs/avatar_{{rider.name}}.png">
@@ -80,22 +80,30 @@ Ionic pages and navigation.
 							<ion-icon name="body"></ion-icon>&nbsp;
 							Profile
 						</button>
-						<button *ngIf="mine(currentRide) || me(rider)" ion-button color="secondary">
+						<button (click)="depart(rider)" *ngIf="mine(ride) && ride.confirmed" ion-button color="danger">
 							<ion-icon name="close"></ion-icon>&nbsp;
-							Confirm
+							Kick	
 						</button>
 					</ion-item-options>
 				</ion-item-sliding>
 			</ion-list>
 
 
-			<button ion-button full *ngIf="mine(currentRide) && !currentRide.confirmed" (click)="matches(currentRide)">
+			<button ion-button full *ngIf="mine(ride) && !ride.confirmed" (click)="matches(ride)">
 				<ion-icon name="add" item-start></ion-icon>
-				Invite
+				Invite riders
 			</button>
-			<button ion-button full *ngIf="mine(currentRide) && !currentRide.confirmed" color="danger" (click)="confirm(currentRide)">
+			<button ion-button full *ngIf="mine(ride) && ride.riders.length > 1 && !ride.confirmed" color="danger" (click)="confirm(ride)">
 				<ion-icon name="checkmark-circle" item-start></ion-icon>
-				Confirm
+				Confirm the ride
+			</button>
+			<button ion-button full *ngIf="!mine(ride) && !ride.confirmed" color="secondary" (click)="depart()">
+				<ion-icon name="close" item-start></ion-icon>
+				Quit this ride
+			</button>
+			<button ion-button full *ngIf="mine(ride) && !ride.confirmed" color="dark" (click)="cancel()">
+				<ion-icon name="close" item-start></ion-icon>
+				Cancel this ride
 			</button>
 
 		</div>
@@ -120,10 +128,10 @@ Ionic pages and navigation.
 		</div>
 	</div>
 
-<ion-fab *ngIf="boardpage == 'summary' && mine(currentRide)" left bottom>
+<ion-fab *ngIf="boardpage == 'summary' && mine(ride)" left bottom>
     <button ion-fab color="danger"><ion-icon name="close"></ion-icon></button>
 </ion-fab>
-<ion-fab *ngIf="boardpage == 'summary' && mine(currentRide)" right bottom>
+<ion-fab *ngIf="boardpage == 'summary' && mine(ride)" right bottom>
     <button ion-fab color="secondary" (click)="edit_ride()"><ion-icon name="create"></ion-icon></button>
 </ion-fab>
 </ion-content>

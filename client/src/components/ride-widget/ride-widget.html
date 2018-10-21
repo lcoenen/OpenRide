@@ -67,8 +67,8 @@
       </button>
 			<button *ngIf="mine && !ride.confirmed" (click)="matches.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="add-circle"></ion-icon>
-        <div *ngIf="ride.type == RideType.OFFER">Find drivers</div>
-        <div *ngIf="ride.type == RideType.REQUEST">Find riders</div>
+        <div *ngIf="ride.type == RideType.OFFER">Find riders</div>
+        <div *ngIf="ride.type == RideType.REQUEST">Find drivers</div>
 			</button>
 			<button *ngIf="mine && !ride.confirmed" (click)="edit.emit(ride)" ion-button icon-left clear small>
 				<ion-icon name="build"></ion-icon>
