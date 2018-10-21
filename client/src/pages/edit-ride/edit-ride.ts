@@ -13,6 +13,8 @@ import { ModalController, NavParams, IonicPage, NavController } from 'ionic-angu
 import { Component } from '@angular/core';
 
 import { MatchesPage } from '../matches/matches'; 
+import { MyRidesPage } from '../my-rides/my-rides'; 
+import { RideBoardPage } from '../ride-board/ride-board'; 
 
 import { RideProvider, EditMode } from '../../providers/ride/ride';
 
@@ -65,6 +67,10 @@ export class EditRidePage  {
 			return this.rideProvider.sendRide(this.ride).then(() => {
 
 				this.navCtrl.pop();
+				if(this.ride.type == RideType.OFFER)
+					this.navCtrl.push(RideBoardPage)
+				else 
+					this.navCtrl.push(MyRidesPage)
 				this.navCtrl.push(MatchesPage)
 
 			}
