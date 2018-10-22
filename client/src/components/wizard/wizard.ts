@@ -117,12 +117,8 @@ export class WizardComponent {
 
 		if(this.slides._slides === undefined) return true;
 
-		let show = this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  {
-			
-				console.log(page.is_defined())
-				return defined && page.is_defined()
-
-			}), true)
+		let show = this.wizardPages.reduce(((defined: boolean, page: WizardPageComponent) =>  
+				defined && page.is_defined()), true)
 
 		return show;
 

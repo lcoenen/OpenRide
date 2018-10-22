@@ -14,6 +14,7 @@ import { ProfilePage } from '../profile/profile';
 import { MatchesPage } from '../matches/matches';
 import { EditRidePage } from '../edit-ride/edit-ride';
 import { ConfirmConfirmationPage } from '../confirm-confirmation/confirm-confirmation';
+import { ConfirmFinalizePage } from '../confirm-finalize/confirm-finalize';
 
 /**
  * Generated class for the RideBoardPage page.
@@ -272,5 +273,37 @@ export class RideBoardPage {
 		})
 	
 	}	
+
+	/*
+	 *
+	 * This will tell if the ride is in the past
+	 *
+	 */
+	finalizable(ride: Ride) {
+	
+		return ride.confirmed && 
+			(ride.riding_time == 'asap' ? true :
+				new Date(ride.riding_time) > new Date())
+	
+	}
+
+	/*
+	 *
+	 * This will be called when the user want to finalize a ride
+	 *
+	 */
+	finalize(ride: Ride) {
+	
+		let finalize_modal = this.modalCtrl.create(ConfirmFinalizePage);
+
+		finalize_modal.onDidDismiss((confirm: boolean) => {
+
+			this.rideProvider.finalize(ride)	
+
+		});
+
+		finalize_modal.present()
+	
+	}
 
 }

@@ -25,7 +25,7 @@ function flatten_arrays_of_arrays<T>(ts: T[][]) : T[] {
 export enum EditMode {
 
 	EDIT,
-		CREATE
+	CREATE
 
 }
 
@@ -38,8 +38,6 @@ export class RideProvider {
 	constructor(
 		public httpClient: HttpClient,
 		public userProvider: UserProvider) {
-
-		console.log('Hello RidersProvider Provider');
 
 	}
 
@@ -283,6 +281,7 @@ export class RideProvider {
 		let find_prospect_rides_from_ride = (ride: Ride) : Promise<Ride[]> =>
 		this.httpClient.get(`${ settings.apiEndpoint }/api/rides/${ ride._id }/prospects`).toPromise()
 		.then((prospects: Prospect[]) : Promise<Ride[]> => (
+
 			//	Only take the prospect I have not created
 			Promise.all(prospects.filter((prospect: Prospect) => prospect.ride['@id'] == `/api/rides/${ ride._id }`)
 				.map(
@@ -293,6 +292,7 @@ export class RideProvider {
 		// Find the list of prospects
 		// Takes a list of rides and return a Promise<Ride[]>
 		let find_prospect_list = (rides: Ride[]) : Promise<Ride[]> => (
+
 			Promise.all(rides.map((ride: Ride): Promise<Ride[]> => find_prospect_rides_from_ride(ride)))
 			.then((adjacents_rides_per_ride: Ride[][]): Ride[] => (
 				flatten_arrays_of_arrays(adjacents_rides_per_ride)		
@@ -326,8 +326,6 @@ export class RideProvider {
 	 *
 	 */
 	join(ride: Ride) {
-
-		console.log('ride: ', ride)
 
 		/*
 					The user to add will be me if I'm accepting an offer.
@@ -418,6 +416,29 @@ export class RideProvider {
 	
 		return this.httpClient.delete(`${ settings.apiEndpoint}/api/rides/${ ride._id }`)
 			.toPromise();
+	
+	}
+
+	/*
+	 *
+	 * This will finalize the ride and release the fund
+	 *
+	 */
+	finalize(ride: Ride) {
+	
+		console.log('Finalizing the ride')	
+	
+	}
+
+	/*
+	 *
+	 * This will return a list of user to rate
+	 *
+	 */
+	toRate() : User[] {
+
+		let ride = this.currentRide;
+		return [<User>ride.driver].concat(<User[]>ride.riders)
 	
 	}
 

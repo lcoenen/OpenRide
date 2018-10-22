@@ -1,0 +1,37 @@
+<ion-header>
+
+	<ion-navbar>
+		<ion-title><ion-icon name="checkmark-circle"></ion-icon> Finalize</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+		<p>This will signal that the ride happened as planned and finalize the transaction (release the fund). Please take the time to note your co-riders.</p>
+
+		<users-rater [users]="users" [(rated)]="rated"></users-rater>
+
+		<p *ngIf="rated"><strong>Are you sure you want to proceed?</strong></p>
+
+		<button *ngIf="rated" ion-button color="dark" (click)="finalize()">
+			<ion-icon name="done-all"></ion-icon>
+			Finalize
+		</button>
+
+</ion-content>
+
+<ion-footer>
+	<ion-toolbar>
+		<ion-buttons>
+			<button ion-button (click)="cancel()">
+				Cancel
+			</button>
+			<button ion-button color="dark" (click)="finalize()">
+				<ion-icon name="done-all"></ion-icon>
+				Finalize
+			</button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-footer>

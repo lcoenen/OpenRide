@@ -33,6 +33,23 @@ Ionic pages and navigation.
 
 			<ride-widget [mine]="mine(ride)" [type]="board" (matches)="matches(ride)" [ride]="ride" (edit)="edit_ride(ride)"></ride-widget>
 
+			<button ion-button full *ngIf="mine(ride) && ride.riders.length > 0 && !ride.confirmed" color="danger" (click)="confirm(ride)">
+				<ion-icon name="checkmark-circle" item-start></ion-icon>
+				Confirm the ride
+			</button>
+			<button ion-button full *ngIf="finalizable(ride)" color="dark" (click)="finalize(ride)">
+				<ion-icon name="done-all" item-start></ion-icon>
+				Finalize
+			</button>
+			<button ion-button full *ngIf="!mine(ride) && !ride.confirmed" color="secondary" (click)="depart()">
+				<ion-icon name="close" item-start></ion-icon>
+				Quit this ride
+			</button>
+			<button ion-button full *ngIf="mine(ride) && !ride.confirmed" color="dark" (click)="cancel()">
+				<ion-icon name="close" item-start></ion-icon>
+				Cancel this ride
+			</button>
+
 		</div>
 
 		<div *ngSwitchCase="'riders'">
@@ -80,7 +97,7 @@ Ionic pages and navigation.
 							<ion-icon name="body"></ion-icon>&nbsp;
 							Profile
 						</button>
-						<button (click)="depart(rider)" *ngIf="mine(ride) && ride.confirmed" ion-button color="danger">
+						<button (click)="depart(rider)" *ngIf="mine(ride) && !ride.confirmed" ion-button color="danger">
 							<ion-icon name="close"></ion-icon>&nbsp;
 							Kick	
 						</button>
@@ -92,18 +109,6 @@ Ionic pages and navigation.
 			<button ion-button full *ngIf="mine(ride) && !ride.confirmed" (click)="matches(ride)">
 				<ion-icon name="add" item-start></ion-icon>
 				Invite riders
-			</button>
-			<button ion-button full *ngIf="mine(ride) && ride.riders.length > 1 && !ride.confirmed" color="danger" (click)="confirm(ride)">
-				<ion-icon name="checkmark-circle" item-start></ion-icon>
-				Confirm the ride
-			</button>
-			<button ion-button full *ngIf="!mine(ride) && !ride.confirmed" color="secondary" (click)="depart()">
-				<ion-icon name="close" item-start></ion-icon>
-				Quit this ride
-			</button>
-			<button ion-button full *ngIf="mine(ride) && !ride.confirmed" color="dark" (click)="cancel()">
-				<ion-icon name="close" item-start></ion-icon>
-				Cancel this ride
 			</button>
 
 		</div>

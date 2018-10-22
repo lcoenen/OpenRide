@@ -13,6 +13,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { SignInPage } from '../pages/sign-in/sign-in'
 import { EditProfilePage } from '../pages/edit-profile/edit-profile'
 import { ConfirmConfirmationPage } from '../pages/confirm-confirmation/confirm-confirmation'
+import { ConfirmFinalizePage } from '../pages/confirm-finalize/confirm-finalize'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -29,6 +30,9 @@ import { RideWidgetComponent } from '../components/ride-widget/ride-widget'
 import { MessageWhenEmptyComponent } from '../components/message-when-empty/message-when-empty';
 import { WizardComponent } from '../components/wizard/wizard' 
 import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
+import { UsersRaterComponent } from '../components/users-rater/users-rater' 
+
+import { Ionic2RatingModule } from 'ionic2-rating';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
@@ -50,13 +54,15 @@ import { MomentModule } from 'ngx-moment';
 		SignInPage,
 		EditProfilePage,
 		ConfirmConfirmationPage,
+		ConfirmFinalizePage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,
 		TimeSelectorComponent,
 		PayementSelectorComponent,
 		WizardComponent,
 		WizardPageComponent,
-		MessageWhenEmptyComponent
+		MessageWhenEmptyComponent,
+		UsersRaterComponent
 	],
 	imports: [
 		BrowserModule,
@@ -64,7 +70,8 @@ import { MomentModule } from 'ngx-moment';
 		HttpClientModule,
 		LeafletModule,
 		AutoCompleteModule,
-		MomentModule
+		MomentModule,
+		Ionic2RatingModule
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -78,6 +85,7 @@ import { MomentModule } from 'ngx-moment';
 		ProfilePage,
 		SignInPage,
 		ConfirmConfirmationPage,
+		ConfirmFinalizePage,
 		EditProfilePage,
 		RideWidgetComponent,
 		PlaceSelectorComponent,
@@ -85,7 +93,8 @@ import { MomentModule } from 'ngx-moment';
 		PayementSelectorComponent,
 		WizardComponent,
 		WizardPageComponent,
-		MessageWhenEmptyComponent
+		MessageWhenEmptyComponent,
+		UsersRaterComponent
 	],
 	providers: [
 		StatusBar,
