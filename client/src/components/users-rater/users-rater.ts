@@ -52,11 +52,8 @@ export class UsersRaterComponent {
 
 		this.i++;
 
-		if(this.i == this.users.length) {
-			
+		if(this.i == this.users.length) 
 			this.rated = true;
-
-		}
 	
 	}
 
@@ -68,6 +65,7 @@ export class UsersRaterComponent {
 	reset() {
 	
 		this.rated = false;
+		this.i = 0;
 	
 	}
 

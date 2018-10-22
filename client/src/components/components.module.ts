@@ -6,6 +6,8 @@ import { PayementSelectorComponent } from './payement-selector/payement-selector
 import { WizardComponent } from './wizard/wizard';
 import { WizardPageComponent } from './wizard-page/wizard-page';
 import { UsersRaterComponent } from './users-rater/users-rater';
+import { CenteredMessageComponent } from './centered-message/centered-message';
+import { CenteredMessageRowComponent } from './centered-message-row/centered-message-row';
 @NgModule({
 	declarations: [RideWidgetComponent,
     PlaceSelectorComponent,
@@ -13,7 +15,9 @@ import { UsersRaterComponent } from './users-rater/users-rater';
     PayementSelectorComponent,
     WizardComponent,
     WizardPageComponent,
-    UsersRaterComponent],
+    UsersRaterComponent,
+    CenteredMessageComponent,
+    CenteredMessageRowComponent],
 	imports: [],
 	exports: [RideWidgetComponent,
     PlaceSelectorComponent,
@@ -21,6 +25,8 @@ import { UsersRaterComponent } from './users-rater/users-rater';
     PayementSelectorComponent,
     WizardComponent,
     WizardPageComponent,
-    UsersRaterComponent]
+    UsersRaterComponent,
+    CenteredMessageComponent,
+    CenteredMessageRowComponent]
 })
 export class ComponentsModule {}

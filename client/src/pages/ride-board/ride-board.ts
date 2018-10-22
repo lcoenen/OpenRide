@@ -296,9 +296,9 @@ export class RideBoardPage {
 	
 		let finalize_modal = this.modalCtrl.create(ConfirmFinalizePage);
 
-		finalize_modal.onDidDismiss((confirm: boolean) => {
+		finalize_modal.onDidDismiss(() => {
 
-			this.rideProvider.finalize(ride)	
+			this.navCtrl.pop()	
 
 		});
 

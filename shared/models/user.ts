@@ -20,6 +20,7 @@ export interface User {
 	has_car?: boolean;
 	vehicle?: string;
 	charge_per_km?: number;
+	rate?: number;
 }
 
 export function isUser(x: any) : x is User {

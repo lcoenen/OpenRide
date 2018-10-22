@@ -31,6 +31,7 @@ import { MessageWhenEmptyComponent } from '../components/message-when-empty/mess
 import { WizardComponent } from '../components/wizard/wizard' 
 import { WizardPageComponent } from '../components/wizard-page/wizard-page' 
 import { UsersRaterComponent } from '../components/users-rater/users-rater' 
+import { CenteredMessageComponent } from '../components/centered-message/centered-message' 
 
 import { Ionic2RatingModule } from 'ionic2-rating';
 
@@ -62,7 +63,8 @@ import { MomentModule } from 'ngx-moment';
 		WizardComponent,
 		WizardPageComponent,
 		MessageWhenEmptyComponent,
-		UsersRaterComponent
+		UsersRaterComponent,
+		CenteredMessageComponent
 	],
 	imports: [
 		BrowserModule,
@@ -94,7 +96,8 @@ import { MomentModule } from 'ngx-moment';
 		WizardComponent,
 		WizardPageComponent,
 		MessageWhenEmptyComponent,
-		UsersRaterComponent
+		UsersRaterComponent,
+		CenteredMessageComponent
 	],
 	providers: [
 		StatusBar,

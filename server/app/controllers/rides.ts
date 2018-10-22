@@ -11,10 +11,10 @@ import { session, sessionRequest } from '../services/session';
 
 import { Ride, RideType, isRide } from 'shared/models/ride';
 import { Link, idLink } from 'shared/models/link';
+import { Rating, isRating } from 'shared/models/rating';
 import { Prospect, ProspectType } from 'shared/models/prospect';
 
 const maxDistance: number = 30;
-
 
 function isArrayOfRides(x: any): x is Ride[] {
 	return x.filter != undefined &&
@@ -123,7 +123,6 @@ export class ridesController extends cat.Controller {
 
 		// First check that the ride is owned by the requestor
 
-		//	return db.db.collection('rides').findOne({_id: request.params.id}).then((ride: Ride) => {
 		return db
 			.db
 			.collection('rides')
@@ -182,7 +181,6 @@ export class ridesController extends cat.Controller {
 					return { code: 200, response: 'updated' };
 
 				})
-
 
 				return promise;
 
@@ -754,6 +752,93 @@ export class ridesController extends cat.Controller {
 	}
 
 	/*
+	 *
+	 * Rate the co-riders of a ride
+	 *
+	 */
+	@cat.catnapify('put', '/api/rides/:rideId/ratings/:userId')
+	@logged
+	@cat.need('ratings', (args: any) => 
+
+		<boolean>Array.isArray(args.ratings) && 
+			(args.ratings.filter((rating: any) => isRating(rating)).length != 0 
+			)
+	)
+	@session.needAuthentification
+	public ratings(req: sessionRequest) {
+
+		// Check that the userID is the same as the caller
+		if(req.user._id != req.params.userId) 
+			throw { code: 403, response: 'Please rate on your allocated resource (/api/rides/:rideId/ratings/YOUR_ID)'}
+
+		// Check that the route matches with the ratings
+		if(req.params.ratings.filter((rating: Rating) => {
+		
+			return idLink(rating.from) != req.user._id || 
+				idLink(rating.ride) != req.params.rideId
+		
+		}).length != 0) throw {code: 400, response: 'The ride and users are not matching'};
+	
+		// Check that the user is voting for the first time
+		return db.db.collection('ratings').findOne({
+			'ride': { '@id': `/api/rides/${ req.params.rideId }`},
+			'from': { '@id': `/api/users/${ req.user._id }` }
+		}).then( (rating: Rating) => {
+
+			if(rating !== null) throw { code: 403, response: 'You already voted for this ride. Keep trying...'}	
+		
+		}).then(() => {
+		
+
+		// Check that every rated user are in the ride
+			return db.db.collection('rides')
+				.findOne({_id: req.params.rideId})
+				.then((ride: Ride) => {
+
+					let excluded = req.params.ratings.filter((rating: Rating) => {
+					
+						logger.trace('Checking that this rating should not be excluded')
+						logger.trace(rating)
+						
+						let in_riders = (<Link[]>ride.riders).indexOf(rating.to) != -1;
+
+						logger.trace('in_riders', in_riders)
+
+						let is_driver = ride.driver != rating.to;
+
+						logger.trace('is_driver', is_driver)
+
+						let is_me = rating.to['@id'] == `/api/users/${ req.user._id }`;
+
+						logger.trace('req.user._id', req.user._id)
+
+						logger.trace('is_me', is_me)
+						logger.trace('is_me || !(is_driver || in_riders)', is_me || !(is_driver || in_riders))
+						// Must be excluded if it's me or if not in the ride
+						return is_me || !(is_driver || in_riders);
+					
+					})
+
+					logger.trace('excluded', excluded)
+					
+					if(excluded.length != 0) throw { code: 403, response: {message: 'Guru meditation.', excluded}}	
+
+		// Check that the ride is confirmed
+
+					if(!ride.confirmed) throw { code: 403, response: 'The ride is not even confirmed yet!' }
+				
+				})
+		
+		}).then(() => {
+		
+		// Add the ratings
+			return db.db.collection('ratings').insertMany(req.params.ratings)
+		
+		})
+
+	}
+
+	/*
 	 * 
 	 * Return the myRides object for the my-rides view
 	 *
@@ -762,7 +847,6 @@ export class ridesController extends cat.Controller {
 	@logged
 	@session.needAuthentification
 	public my_rides(req: sessionRequest) {
-
 
 		let request = {
 			'$or': [
