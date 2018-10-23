@@ -56,7 +56,7 @@ export class ConfirmFinalizePage {
 	finalize() {
 	
 		this.rideProvider.finalize(this.rideProvider.currentRide, this.users);	
-		this.navCtrl.pop()
+		this.navCtrl.pop();
 	
 	}
 

@@ -34,6 +34,7 @@ export interface Ride {
 	type: RideType;
 	requests?: Link[];
 	confirmed?: boolean;
+	finalized?: boolean;
 };
 
 /*

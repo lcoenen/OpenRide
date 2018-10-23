@@ -413,8 +413,21 @@ export class ridesController extends cat.Controller {
 			if(idLink(<Link>ride.driver) != request.user._id)
 				throw { code: 403, response: { message: 'This is not your ride, sorry' }}
 
-			if(ride.confirmed)
-				throw { code: 403, response: { message: 'This ride have already been confirmed. Too late to cancel it.'}}
+			if(ride.confirmed) {
+			
+				return db.db.collection('ratings').find({
+					ride: {'@id': `/api/rides/${ride._id}`}}).toArray().then((ratings: Rating[]) => {
+					
+						let n_riders = ride.riders.length;
+
+						if(ratings.length != n_riders * (n_riders + 1))
+							throw { code: 403, response: { message: 'This ride have already been confirmed. Too late to cancel it.'}}
+					
+					})
+			
+			}
+
+			return Promise.resolve()
 
 		}).then(() => {
 
@@ -788,7 +801,6 @@ export class ridesController extends cat.Controller {
 			if(rating !== null) throw { code: 403, response: 'You already voted for this ride. Keep trying...'}	
 		
 		}).then(() => {
-		
 
 		// Check that every rated user are in the ride
 			return db.db.collection('rides')
@@ -797,23 +809,10 @@ export class ridesController extends cat.Controller {
 
 					let excluded = req.params.ratings.filter((rating: Rating) => {
 					
-						logger.trace('Checking that this rating should not be excluded')
-						logger.trace(rating)
-						
 						let in_riders = (<Link[]>ride.riders).indexOf(rating.to) != -1;
-
-						logger.trace('in_riders', in_riders)
-
 						let is_driver = ride.driver != rating.to;
-
-						logger.trace('is_driver', is_driver)
-
 						let is_me = rating.to['@id'] == `/api/users/${ req.user._id }`;
 
-						logger.trace('req.user._id', req.user._id)
-
-						logger.trace('is_me', is_me)
-						logger.trace('is_me || !(is_driver || in_riders)', is_me || !(is_driver || in_riders))
 						// Must be excluded if it's me or if not in the ride
 						return is_me || !(is_driver || in_riders);
 					
@@ -836,6 +835,49 @@ export class ridesController extends cat.Controller {
 		
 		})
 
+	}
+
+	/*
+	 *
+	 * This will return the ratings
+	 *
+	 */
+	@cat.catnapify('get', '/api/rides/:rideId/ratings')
+	@logged
+	@session.needAuthentification
+	@cat.give((args: any) => 
+		<boolean>Array.isArray(args) && 
+			(args.filter((rating: any) => !isRating(rating)).length == 0 
+			)
+	)
+	@cat.need('rideId')
+	public get_ratings(req: sessionRequest) {
+	
+		return db.db.collection('rides').findOne({_id: req.params.rideId	})
+			.then((ride: Ride) => {
+
+		// Check that the ride exists
+
+				if(!ride) throw {code: 404, response: 'No such ride.'}
+
+		// Check that the requestor is in the ride
+
+				if([<Link>ride.driver].concat(<Link[]>ride.riders).filter((link: Link) => 
+					idLink(link) == req.user._id		
+				).length != 1) throw {code: 403, response: 'You\'re not in the ride}'};
+
+			}).then(() => 
+				db.db.collection('ratings').find({
+					ride: {
+						'@id': `/api/rides/${ req.params.rideId }`
+					}
+				}).toArray().then((ratings: Rating[]) => {
+				
+					return ratings == null ? []: ratings;	
+				
+				})
+			)
+	
 	}
 
 	/*
@@ -864,5 +906,42 @@ export class ridesController extends cat.Controller {
 			})
 
 	}
+
+	/*
+	 *
+	 * This will attempt to finalize the ride
+	 *
+	@cat.catnapify('put', '/api/rides/:rideId/finalize')
+	@logged
+	@need('finalized', (args:any) => 
+	
+		<boolean>Array.isArray(args.finalized) && 
+			(args.finalized.filter((link: any) => isLink(link)).length != 0)
+	
+	)
+	@give('finalized')
+	@session.needAuthentification
+	public finalize(req: sessionRequest){ 
+	
+		return db.db.collection('rides').findOne({_id: req.params._id	})
+			.then((ride: Ride) => {
+		// Check that the ride is confirmed
+				if(!ride.confirmed) throw {code: 403, response: 'The ride is not confirmed.'};
+				if(!ride) throw {code: 404, response: 'No such ride.'}
+
+		// Check that the requestor is in the ride
+				if([<Link>ride.driver].concat(<Link[]>ride.riders).filter((link: Link) => 
+					idLink(link) == req.user._id;			
+				}).length != 1) throw {code: 403, response: 'You\'re not in the ride}'};
+
+		// Check that the requestor only added himself
+				let already_finalized: Link[] = ride.finalized? ride.finalized: [];
+				let added = req.params.finalized.filter()
+
+			})
+		// Add the requestor to the finalize property of the ride
+	
+	}
+	 */
 
 }

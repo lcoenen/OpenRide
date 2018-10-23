@@ -11,6 +11,8 @@ import { Link, idLink } from 'shared/models/link'
 import { Prospect, ProspectType } from 'shared/models/prospect'
 import { Rating } from 'shared/models/rating'
 
+import 'rxjs/add/operator/toPromise';
+
 function flatten_arrays_of_arrays<T>(ts: T[][]) : T[] {
 
 	return [].concat.apply([], ts) 
@@ -303,6 +305,33 @@ export class RideProvider {
 				}	
 			))
 
+		).then((myRides: MyRides) => 
+		
+		// Filter my rides to check if any of them are finalised
+
+			Promise.all(myRides.myRides.map((ride: Ride) =>
+			
+				this.httpClient.get(
+					`${ settings.apiEndpoint }/api/rides/${ride._id}/ratings`)
+					.toPromise().then( (ratings: Rating[]) =>{
+				
+						if(ratings.filter((rating) => 
+							idLink(rating.ride) == ride._id && 
+							idLink(rating.from) == this.userProvider.me._id).length)
+
+							ride.finalized = true;
+
+						return ride; 
+
+				})	
+			
+			)).then((rides: Ride[]) => {
+			
+				myRides.myRides = rides;
+				return myRides;
+			
+			})
+		
 		)
 
 	}
@@ -376,6 +405,8 @@ export class RideProvider {
 	 */
 	confirm(ride: Ride){
 
+		this.currentRide.confirmed = true;
+
 		this.httpClient.put(`${ settings.apiEndpoint }/api/rides/${ ride._id }`, 
 			{ ride: {confirmed: true } }).toPromise().catch((err) =>
 				console.error('Could not confirm the ride', err))
@@ -413,6 +444,8 @@ export class RideProvider {
 	 */
 	finalize(ride: Ride, users: User[]) {
 
+		ride.finalized = true;
+
 		let ratings : Rating[] = users.map((user: User) => ({
 		
 			ride: {'@id' : `/api/rides/${ ride._id }`},
@@ -425,7 +458,22 @@ export class RideProvider {
 		return this.httpClient.put(
 				`${ settings.apiEndpoint}/api/rides/${ ride._id }/ratings/${ this.userProvider.me._id}`,
 				{	ratings })
-			.toPromise();
+		.toPromise().then(() => {
+			
+			return this.httpClient.get(
+				`${ settings.apiEndpoint}/api/rides/${ ride._id }/ratings`,
+			).toPromise().then((ratings: Rating[]) => {
+
+				let n_rides = ride.riders.length;
+				if(ratings.length == n_rides * n_rides + 1)
+					return this.httpClient.delete(
+						`${ settings.apiEndpoint}/api/rides/${ ride._id }`,
+					).toPromise()
+				else
+					return Promise.resolve(null)
+			})
+			
+		})
 	
 	
 	}

@@ -16,8 +16,11 @@
 	<ion-card-content>
 
 		<ion-grid class="ride-widget-grid" >
-			<ion-row *ngIf="ride.confirmed" align-items-center justify-content-center>
+			<ion-row *ngIf="ride.confirmed && ! ride.finalized" align-items-center justify-content-center>
 				<ion-col><ion-badge color="danger">CONFIRMED</ion-badge></ion-col>	
+			</ion-row>
+			<ion-row *ngIf="ride.finalized" align-items-center justify-content-center>
+				<ion-col><ion-badge color="dark">FINALIZED</ion-badge></ion-col>	
 			</ion-row>
 			<ion-row align-items-center justify-content-center>
 				<ion-col col-1><img src="assets/imgs/origin.png" alt="Origin" /></ion-col>
