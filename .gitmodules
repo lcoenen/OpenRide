@@ -1,0 +1,9 @@
+[submodule "server"]
+	path = server
+	url = https://github.com/lcoenen/openride-server
+[submodule "client"]
+	path = client
+	url = https://github.com/lcoenen/openride-client
+[submodule "shared"]
+	path = shared
+	url = https://github.com/lcoenen/openride-shared

@@ -1,7 +1,0 @@
-{
-  "name": "openride",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
-}
