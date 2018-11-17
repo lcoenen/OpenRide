@@ -7,3 +7,6 @@
 [submodule "shared"]
 	path = shared
 	url = https://github.com/lcoenen/openride-shared
+[submodule "web"]
+	path = web
+	url = https://github.com/lcoenen/openride-web.git
