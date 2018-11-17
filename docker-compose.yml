@@ -1,0 +1,33 @@
+version: "3"
+services:
+    redis:
+        image: redis
+        restart: always
+        networks:
+            - back
+    mongo:
+        image: mongo
+        volumes:
+            - '/home/jt/mongo:/data/db'
+        networks:
+            - back
+        restart: always
+    openride-api:
+        restart: always
+        build: server/
+        networks:
+            - back
+            - nginx-proxy
+        environment:
+            - MONGO_HOST=mongo
+            - REDIS_HOST=redis    
+    openride-web:
+        build: web/
+        networks:
+            - nginx-proxy
+networks:
+    back:
+    nginx-proxy:
+        external:
+            name: radia-map_nginx-proxy
+
